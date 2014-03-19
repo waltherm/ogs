@@ -110,7 +110,8 @@ public:
 	{}
 
 	void operator()(const MeshLib::Element& e, NodalMatrixType &localA,
-			NodalVectorType & /*rhs*/, typename FeQuad4::ShapeMatricesType &shape)
+			NodalVectorType & /*rhs*/,
+			ShapeMatricesType& shape)
 	{
 		localA.setZero();
 
@@ -284,7 +285,7 @@ int main(int argc, char *argv[])
 	std::fill_n(std::back_inserter(shape_matrix_vec), mesh.getNElements(), typename FeQuad4::ShapeMatricesType(3,4));
 	
 	// Call global assembler for each mesh element.
-	global_setup.execute(global_assembler, mesh.getElements());
+	global_setup.execute(global_assembler, mesh.getElements(), shape_matrix_vec);
 
 	// apply Dirichlet BC
 	MathLib::applyKnownSolution(*A, *rhs, bc_mesh_node_ids, bc_values);
