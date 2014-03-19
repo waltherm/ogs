@@ -102,6 +102,8 @@ public:
 		NodalMatrixType,
 		DimMatrixType>::type FeQuad4;
 
+	typedef typename FeQuad4::ShapeMatricesType ShapeMatricesType;
+
 public:
 	LocalGWAssembler() :
 			_integration_method(2)
