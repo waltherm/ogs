@@ -83,6 +83,34 @@
 #include "ProjectData.h"
 
 template <typename ElemType>
+class LocalFeQuad4AssemblyItem
+{
+public:
+	// definition of vector and matrix types
+	typedef Eigen::Matrix<double, ElemType::NPOINTS, 1> NodalVectorType;
+    typedef Eigen::Matrix<double, ElemType::DIM, ElemType::DIM, Eigen::RowMajor> DimMatrixType;
+	// Dynamic size local matrices are much slower.
+    typedef Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor> NodalMatrixType;
+
+	// type definition of FeQuad4 type
+	typedef typename NumLib::FeQUAD4<
+		NodalVectorType,
+		NodalMatrixType,
+		DimMatrixType>::type FeQuad4;
+
+	// type definition of ShapeMatricesType
+	typedef typename FeQuad4::ShapeMatricesType ShapeMatricesType;
+
+	LocalFeQuad4AssemblyItem() :
+		_shape_mat(ShapeMatricesType(3,4)),
+		_material(1.0)
+	{}
+
+	ShapeMatricesType _shape_mat;
+	double _material;
+};
+
+template <typename ElemType>
 class LocalGWAssembler
 {
 
