@@ -272,6 +272,15 @@ int main(int argc, char *argv[])
 	GlobalAssembler global_assembler(*A.get(), *rhs.get(), local_gw_assembler,
 			AssemblerLib::LocalToGlobalIndexMap(map_ele_nodes2vec_entries));
 
+	// create data structures for shape matrices
+	typedef typename NumLib::FeQUAD4<
+		LocalVectorType,
+		LocalMatrixType,
+		LocalDimMatrixType>::type FeQuad4;
+
+	std::vector<typename FeQuad4::ShapeMatricesType> shape_matrix_vec;
+	shape_matrix_vec.resize(mesh.getNElements());
+
 	// Call global assembler for each mesh element.
 	global_setup.execute(global_assembler, mesh.getElements());
 
