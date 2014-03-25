@@ -19,7 +19,10 @@
 #endif
 
 // AssemblerLib
-#include "AssemblerLib/SerialDenseSetup.h"
+//#include "AssemblerLib/SerialDenseSetup.h"
+#include "AssemblerLib/GlobalSetup.h"
+#include "AssemblerLib/SerialExecutor.h"
+#include "AssemblerLib/SerialLisVectorMatrixBuilder.h"
 #include "AssemblerLib/VectorMatrixAssembler.h"
 
 // ThirdParty/logog
@@ -43,7 +46,8 @@
 #include "GeoObject.h"
 
 // MathLib
-#include "MathLib/LinAlg/Solvers/GaussAlgorithm.h"
+//#include "MathLib/LinAlg/Solvers/GaussAlgorithm.h"
+#include "MathLib/LinAlg/Lis/LisLinearSolver.h"
 #include "MathLib/TemplateWeightedPoint.h"
 
 // MeshGeoToolsLib
@@ -204,7 +208,10 @@ int main(int argc, char *argv[])
 	//--------------------------------------------------------------------------
 	// Choose implementation type
 	//--------------------------------------------------------------------------
-	typedef AssemblerLib::SerialDenseSetup GlobalSetup;
+	//typedef AssemblerLib::SerialDenseSetup GlobalSetup;
+	typedef AssemblerLib::GlobalSetup<
+		AssemblerLib::SerialLisVectorMatrixBuilder,
+		AssemblerLib::SerialExecutor> GlobalSetup;
 	const GlobalSetup global_setup;
 
 	// allocate a vector and matrix
@@ -258,8 +265,8 @@ int main(int argc, char *argv[])
 	global_setup.execute(global_assembler, mesh.getElements());
 
 	// apply Dirichlet BC
-//	MathLib::applyKnownSolution(*A, *rhs, ex1.vec_DirichletBC_id,
-//	                                ex1.vec_DirichletBC_value);
+	//MathLib::applyKnownSolution(*A, *rhs, ex1.vec_DirichletBC_id,
+	                                //ex1.vec_DirichletBC_value);
 	//--------------------------------------------------------------------------
 	// solve x=A^-1 rhs
 	//--------------------------------------------------------------------------
@@ -270,7 +277,9 @@ int main(int argc, char *argv[])
 //		std::cout << std::endl;
 //	}
 
-	MathLib::GaussAlgorithm<GlobalMatrix, GlobalVector> ls(*A);
+	MathLib::finalizeMatrixAssembly(*A);
+	//MathLib::GaussAlgorithm<GlobalMatrix, GlobalVector> ls(*A);
+	MathLib::LisLinearSolver ls(*A);
 	ls.solve(*rhs, *x);
 
 	if (x->size() > 1000) {
