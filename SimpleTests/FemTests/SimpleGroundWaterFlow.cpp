@@ -139,13 +139,14 @@ public:
 
 	void operator()(const MeshLib::Element& e, NodalMatrixType &localA,
 			NodalVectorType & /*rhs*/,
-			ShapeMatricesType& shape)
+			LocalFeQuad4AssemblyItem<ElemType>& data)
 	{
 		localA.setZero();
 
 		// init FeQUAD4
 		_fe_quad4.setMeshElement(*static_cast<const MeshLib::Quad*>(&e));
 
+		ShapeMatricesType& shape = data._shape_mat;
 		for (std::size_t ip(0); ip < _integration_method.getNPoints(); ip++) { // ip == number of gauss point
 
 			MathLib::WeightedPoint2D const& wp = _integration_method.getWeightedPoint(ip);
@@ -302,18 +303,12 @@ int main(int argc, char *argv[])
 	GlobalAssembler global_assembler(*A.get(), *rhs.get(), local_gw_assembler,
 			AssemblerLib::LocalToGlobalIndexMap(map_ele_nodes2vec_entries));
 
-	// create data structures for shape matrices
-	typedef typename NumLib::FeQUAD4<
-		LocalVectorType,
-		LocalMatrixType,
-		LocalDimMatrixType>::type FeQuad4;
+	// create data structures for properties
+	std::vector<LocalFeQuad4AssemblyItem<NumLib::ShapeQuad4>> local_assembly_item_vec;
+	local_assembly_item_vec.resize(mesh.getNElements());
 
-	std::vector<typename FeQuad4::ShapeMatricesType> shape_matrix_vec;
-	shape_matrix_vec.reserve(mesh.getNElements());
-	std::fill_n(std::back_inserter(shape_matrix_vec), mesh.getNElements(), typename FeQuad4::ShapeMatricesType(3,4));
-	
 	// Call global assembler for each mesh element.
-	global_setup.execute(global_assembler, mesh.getElements(), shape_matrix_vec);
+	global_setup.execute(global_assembler, mesh.getElements(), local_assembly_item_vec);
 
 	// apply Dirichlet BC
 	MathLib::applyKnownSolution(*A, *rhs, bc_mesh_node_ids, bc_values);
