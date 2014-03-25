@@ -86,21 +86,25 @@ template <typename ElemType>
 class LocalFeQuad4AssemblyItem
 {
 public:
-	// definition of vector and matrix types
+	typedef Eigen::Matrix<double, ElemType::NPOINTS, ElemType::NPOINTS, Eigen::RowMajor> NodalMatrixType;
 	typedef Eigen::Matrix<double, ElemType::NPOINTS, 1> NodalVectorType;
-    typedef Eigen::Matrix<double, ElemType::DIM, ElemType::DIM, Eigen::RowMajor> DimMatrixType;
-	// Dynamic size local matrices are much slower.
-    typedef Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor> NodalMatrixType;
+	typedef Eigen::Matrix<double, ElemType::DIM, ElemType::NPOINTS, Eigen::RowMajor> DimNodalMatrixType;
+	typedef Eigen::Matrix<double, ElemType::DIM, ElemType::DIM, Eigen::RowMajor> DimMatrixType;
 
-	// type definition of FeQuad4 type
+	// Dynamic size local matrices are much slower.
+	//typedef Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor> NodalMatrixType;
+	//typedef Eigen::Matrix<double, Eigen::Dynamic, 1> NodalVectorType;
+	//typedef Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor> DimNodalMatrixType;
+	//typedef Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor> DimMatrixType;
+
 	typedef typename NumLib::FeQUAD4<
 		NodalVectorType,
-		NodalMatrixType,
+		DimNodalMatrixType,
 		DimMatrixType>::type FeQuad4;
 
-	// type definition of ShapeMatricesType
 	typedef typename FeQuad4::ShapeMatricesType ShapeMatricesType;
 
+public:
 	LocalFeQuad4AssemblyItem() :
 		_shape_mat(ShapeMatricesType(3,4)),
 		_material(1.0)
@@ -113,24 +117,10 @@ public:
 template <typename ElemType>
 class LocalGWAssembler
 {
-
 public:
-    //typedef Eigen::Matrix<double, ElemType::NPOINTS, ElemType::NPOINTS, Eigen::RowMajor> NodalMatrixType;
-    typedef Eigen::Matrix<double, ElemType::NPOINTS, 1> NodalVectorType;
-    typedef Eigen::Matrix<double, ElemType::DIM, ElemType::NPOINTS, Eigen::RowMajor> DimNodalMatrixType;
-    typedef Eigen::Matrix<double, ElemType::DIM, ElemType::DIM, Eigen::RowMajor> DimMatrixType;
-
-	// Dynamic size local matrices are much slower.
-    typedef Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor> NodalMatrixType;
-    //typedef Eigen::Matrix<double, Eigen::Dynamic, 1> NodalVectorType;
-    //typedef Eigen::Matrix<double, Eigen::Dynamic, Eigen::RowMajor> DimNodalMatrixType;
-    //typedef Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor> DimMatrixType;
-	typedef typename NumLib::FeQUAD4<
-		NodalVectorType,
-		NodalMatrixType,
-		DimMatrixType>::type FeQuad4;
-
-	typedef typename FeQuad4::ShapeMatricesType ShapeMatricesType;
+	typedef LocalFeQuad4AssemblyItem<ElemType> ItemType;
+	typedef typename ItemType::NodalMatrixType NodalMatrixType;
+	typedef typename ItemType::NodalVectorType NodalVectorType;
 
 public:
 	LocalGWAssembler() :
@@ -156,8 +146,8 @@ public:
 	}
 
 private:
-	typename FeQuad4::IntegrationMethod _integration_method;
-	FeQuad4 _fe_quad4;
+	typename ItemType::FeQuad4::IntegrationMethod _integration_method;
+	typename ItemType::FeQuad4 _fe_quad4;
 };
 
 
