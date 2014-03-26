@@ -20,6 +20,7 @@
 
 // AssemblerLib
 #include "AssemblerLib/GlobalSetup.h"
+#include "AssemblerLib/SimpleAssembler.h"
 #include "AssemblerLib/VectorMatrixAssembler.h"
 
 // ThirdParty/logog
@@ -145,8 +146,7 @@ public:
 		_integration_method(2)
 	{}
 
-	void operator()(const MeshLib::Element& e, NodalMatrixType & /*localA*/,
-		NodalVectorType & /*rhs*/,
+	void operator()(const MeshLib::Element& e,
 		LocalFeQuad4AssemblyItem<ElemType>& data)
 	{
 		// create FeQuad4
@@ -329,16 +329,12 @@ int main(int argc, char *argv[])
 	typedef typename SMI::NodalMatrixType LocalMatrix;
 	typedef typename SMI::NodalVectorType LocalVector;
 
-	typedef AssemblerLib::VectorMatrixAssembler<
-			GlobalMatrix,
-			GlobalVector,
+	typedef AssemblerLib::SimpleAssembler<
 			MeshLib::Element,
-			ShapeMatricesInitializer<NumLib::ShapeQuad4>,
-			LocalMatrix,
-			LocalVector > GlobalInitializer;
+			ShapeMatricesInitializer<NumLib::ShapeQuad4>
+			> GlobalInitializer;
 
-	GlobalInitializer global_initializer(*A.get(), *rhs.get(), shape_matrices_initializer,
-			AssemblerLib::LocalToGlobalIndexMap(map_ele_nodes2vec_entries));
+	GlobalInitializer global_initializer(shape_matrices_initializer);
 
 	// Call global initializer for each mesh element.
 	global_setup.execute(global_initializer, mesh.getElements(), local_assembly_item_vec);
