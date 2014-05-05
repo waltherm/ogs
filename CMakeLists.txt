@@ -19,6 +19,8 @@ SET (OGS_VERSION "${OGS_VERSION_MAJOR}.${OGS_VERSION_MINOR}.${OGS_VERSION_PATCH}
 SET (OGS_VERSION_AND_PERSONS "${OGS_VERSION} (${OGS_RELEASE_PERSONS})")
 SET (OGS_DATE "2012-08-20")
 
+add_definitions(-DGFORTRAN)
+ADD_SUBDIRECTORY( mhm )
 
 ###########################
 ### Preliminary Options ###

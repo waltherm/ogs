@@ -22,7 +22,7 @@ LisOption::LisOption()
     solver_type = SolverType::CG;
     precon_type = PreconType::NONE;
     matrix_type = MatrixType::CRS;
-    max_iterations = 500;
+    max_iterations = 2500;
     error_tolerance = 1.e-15;
 }
 
