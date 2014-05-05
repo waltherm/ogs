@@ -6,6 +6,8 @@ IF (OGS_USE_EIGEN)
 	INCLUDE_DIRECTORIES (SYSTEM ${EIGEN3_INCLUDE_DIR})
 ENDIF()
 
+
+
 INCLUDE_DIRECTORIES(
 	.
 	${CMAKE_SOURCE_DIR}/BaseLib/
@@ -18,7 +20,11 @@ INCLUDE_DIRECTORIES(
 	${CMAKE_SOURCE_DIR}/OGS/
 )
 
+
+
+
 ADD_EXECUTABLE(SimpleGroundWaterFlow
+	mHM_Communication.h
 	SimpleGroundWaterFlow.cpp
 	${SOURCES}
 	${HEADERS}
@@ -37,7 +43,11 @@ TARGET_LINK_LIBRARIES (SimpleGroundWaterFlow
 	zlib
 	${ADDITIONAL_LIBS}
 	${BOOST_LIBRARIES}
+	${mhm_com}
+	gfortran
 )
+
+# ${mhm_module}
 
 IF(OGS_BUILD_GUI)
 	INCLUDE(${VTK_USE_FILE})

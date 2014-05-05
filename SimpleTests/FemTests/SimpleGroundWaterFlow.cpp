@@ -67,6 +67,10 @@
 #include "BoundaryCondition.h"
 #include "ProjectData.h"
 
+
+// mHM
+#include "mHM_Communication.h"
+
 // The following defines types depending on Lis or DirectSolver choice.
 // Right includes are also made.
 
@@ -185,6 +189,7 @@ public:
 
 			MathLib::WeightedPoint2D const& wp = _integration_method.getWeightedPoint(ip);
 			localA += data._shape_matrices[ip].dNdx.transpose() * data._material * data._shape_matrices[ip].dNdx * data._shape_matrices[ip].detJ * wp.getWeight();
+			//localA += 1e-10;
 		}
 	}
 
@@ -314,7 +319,7 @@ int main(int argc, char *argv[])
 	std::vector<LocalFeQuad4AssemblyItem<NumLib::ShapeQuad4>> local_assembly_item_vec;
 	local_assembly_item_vec.resize(mesh.getNElements());
 
-	std::array<double,4> mat_values({{1e-10, 2e-10, 4e-10, 8e-10}});
+	std::array<double,4> mat_values({{1e-3, 2e-3, 4e-3, 8e-3}});
 
 	// set properties according to materials in mesh elements
 	for (std::size_t k(0); k<mesh.getNElements(); k++) {
@@ -395,6 +400,12 @@ int main(int argc, char *argv[])
 	vtu_io.addScalarPointProperty("Head", heads);
 	std::string res_mesh_name(BaseLib::dropFileExtension(mesh_arg.getValue()));
 	vtu_io.writeToFile(res_mesh_name+"_with_results.vtu");
+
+	// MW Test call mHM
+
+	hello=false;
+	call_main_mHM();
+	//test_func();
 
 	std::remove_if(vec_comp_dis.begin(), vec_comp_dis.end(),
 			[](MeshLib::MeshSubsets* v) { delete v; return true; });
