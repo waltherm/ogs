@@ -5,7 +5,7 @@
 !> \details This module provides routines to open, close and position namelist files.
 
 !> \authors Matthias Cuntz
-!> \date Jan 2011 
+!> \date Jan 2011
 
 MODULE mo_nml
 
@@ -82,7 +82,7 @@ CONTAINS
 
   !     CALLING SEQUENCE
   !         call open_nml(file, unit, quiet=quiet)
-  
+
   !     INTENT(IN)
   !>        \param[in] "character(len=*) :: file"   namelist filename
   !>        \param[in] "integer          :: unit"   namelist unit
@@ -132,13 +132,9 @@ CONTAINS
 
 
 !   MW test, where mhm searches for files now
-!    integer :: ok
-!    real :: x
-!    character(len=80) :: name
-!    name='test.dat'
-!    open(1,file=name,status='replace',iostat=ok)
-!    write(1,*) 1.234
-!    close(1)
+!    open(unit=991, file="here.txt")
+!    write(991,*) "hallo"
+!    close(991)
 
 
     iquiet = .false.
@@ -165,7 +161,7 @@ CONTAINS
 
   !     CALLING SEQUENCE
   !         call close_nml(unit=unit)
-  
+
   !     INTENT(IN)
   !         None
 
@@ -212,7 +208,7 @@ CONTAINS
 
     nnml = nunitnml
     if (present(unit)) nnml = unit
-    
+
     IF (nnml .lt. 0) CALL finish('CLOSE_NML','No namelist file opened.')
 
     CLOSE(nnml, IOSTAT=istat)
@@ -237,7 +233,7 @@ CONTAINS
 
   !     CALLING SEQUENCE
   !         call position_nml(name, unit=unit, status=status, first=first)
-  
+
   !     INTENT(IN)
   !>        \param[in] "character(len=*) :: name"     namelist name (case independent)
 
@@ -277,7 +273,7 @@ CONTAINS
   !     HISTORY
   !>        \author Matthias Cuntz - modified from Echam5, (C) MPI-MET, Hamburg, Germany
   !>        \date Dec 2011
-  !         Modified, Matthias Cuntz, Jan 2013 - swap first and status in call list 
+  !         Modified, Matthias Cuntz, Jan 2013 - swap first and status in call list
 
   SUBROUTINE position_nml(name, unit, status, first)
 
@@ -303,7 +299,7 @@ CONTAINS
     lrew  = .TRUE.
     IF (PRESENT(first)) lrew  = first
     iunit =  nunitnml
-    IF (PRESENT(unit)) iunit = unit   
+    IF (PRESENT(unit)) iunit = unit
     stat  =  MISSING
     code  = 'MISSING'
 
@@ -353,7 +349,7 @@ CONTAINS
             ytest .eq. '_'                         .OR. &
             (LGE(ytest,'A') .AND. LLE(ytest,'Z'))) THEN
           CYCLE
-       ELSE 
+       ELSE
           stat = POSITIONED
           BACKSPACE(iunit)
           EXIT
