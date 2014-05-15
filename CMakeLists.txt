@@ -64,7 +64,7 @@ OPTION(OGS_BUILD_UTILS "Should the utilities programms be built?" OFF)
 OPTION(OGS_NO_EXTERNAL_LIBS "Builds OGS without any external dependencies." OFF)
 
 # Linear solvers
-OPTION(OGS_USE_LIS "Use Lis" OFF)
+OPTION(OGS_USE_LIS "Use Lis" ON)
 OPTION(OGS_USE_PETSC "Use PETSc routines" OFF)
 
 # Eigen
