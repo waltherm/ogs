@@ -122,7 +122,8 @@ CONTAINS
        WRITE (*,'(a)') separator
     ENDIF
 
-    STOP
+    ! MW remove stop
+    !STOP
 
   END SUBROUTINE finish
 
