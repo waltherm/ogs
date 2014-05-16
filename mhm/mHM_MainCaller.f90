@@ -16,6 +16,8 @@ subroutine call_main_mHM() bind(C, NAME="call_main_mHM")
 
     call mhm_driver
 
+    print*, "|F| done with mHM"
+
 end subroutine call_main_mHM
 
 

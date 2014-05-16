@@ -403,9 +403,11 @@ int main(int argc, char *argv[])
 
 	// MW Test call mHM
 
-	hello=false;
 	call_main_mHM();
+	
 	//test_func();
+	std::cout << "|C| back here" << std::endl;
+
 
 	std::remove_if(vec_comp_dis.begin(), vec_comp_dis.end(),
 			[](MeshLib::MeshSubsets* v) { delete v; return true; });
