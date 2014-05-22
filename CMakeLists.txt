@@ -162,6 +162,7 @@ IF(OGS_BUILD_UTILS AND NOT IS_SUBPROJECT)
 	ADD_SUBDIRECTORY( Utils/SimpleMeshCreation )
 	ADD_SUBDIRECTORY( Utils/FileConverter )
 	ADD_SUBDIRECTORY( Utils/MeshEdit )
+	ADD_SUBDIRECTORY( Utils/MeshGeoTools )
 ENDIF() # OGS_BUILD_UTILS
 
 CONFIGURE_FILE (BaseLib/BuildInfo.h.in ${PROJECT_BINARY_DIR}/BaseLib/BuildInfo.h)
