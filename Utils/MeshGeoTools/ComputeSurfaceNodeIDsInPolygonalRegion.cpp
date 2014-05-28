@@ -136,10 +136,10 @@ int main (int argc, char* argv[])
 		);
 		std::string id_and_area_fname(out_path.getValue() + polygon_name);
 		std::string gli_fname(out_path.getValue() + polygon_name);
-		if (polygon_name.empty()) {
+		//if (polygon_name.empty()) {
 			id_and_area_fname += BaseLib::number2str(j) + ".txt";
 			gli_fname += BaseLib::number2str(j) + ".gli";
-		}
+		//}
 		writeToFile(id_and_area_fname, gli_fname, ids_and_areas, mesh_nodes);
 	}
 
