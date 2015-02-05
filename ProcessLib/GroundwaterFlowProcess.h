@@ -28,10 +28,13 @@
 #include "MeshLib/MeshSubset.h"
 #include "MeshLib/MeshSubsets.h"
 #include "MeshLib/NodeAdjacencyTable.h"
+#include "MeshLib/MeshSearcher.h"
 #include "MeshGeoToolsLib/MeshNodeSearcher.h"
 
 #include "BoundaryCondition.h"
 #include "GroundwaterFlowFEM.h"
+#include "NeumannBCAssembler.h"
+#include "NeumannBC.h"
 #include "ProcessVariable.h"
 
 namespace ProcessLib
@@ -133,6 +136,30 @@ public:
         _hydraulic_head->initializeDirichletBCs(
                 hydraulic_head_mesh_node_searcher,
                 _dirichlet_bc.global_ids, _dirichlet_bc.values);
+
+        //
+        // Neumann
+        //
+        {
+            MeshGeoToolsLib::BoundaryElementsSearcher hydraulic_head_mesh_element_searcher(
+                _hydraulic_head->getMesh(), hydraulic_head_mesh_node_searcher);
+
+            std::vector<MeshLib::Element*> elements;
+            std::vector<double> values;
+            _hydraulic_head->initializeNeumannBCs(
+                    hydraulic_head_mesh_element_searcher,
+                    elements, values);
+
+            _neumann_bc.reset(
+                new NeumannBC<GlobalSetup>(
+                    _global_setup,
+                    _integration_order,
+                    elements, values,
+                    *_local_to_global_index_map,
+                    *_mesh_subset_all_nodes));
+        }
+        _neumann_bc->initialize(*_A, *_rhs);
+
     }
 
     void solve()
@@ -145,6 +172,9 @@ public:
 
         // Call global assembler for each local assembly item.
         _global_setup.execute(*_global_assembler, _local_assemblers);
+
+        // Call global assembler for each Neumann boundary local assembler.
+        _neumann_bc->integrate();
 
         // Apply known values from the Dirichlet boundary conditions.
         MathLib::applyKnownSolution(*_A, *_rhs, _dirichlet_bc.global_ids, _dirichlet_bc.values);
@@ -184,9 +214,10 @@ private:
     std::unique_ptr<typename GlobalSetup::VectorType> _rhs;
     std::unique_ptr<typename GlobalSetup::VectorType> _x;
 
-    std::vector<GroundwaterFlow::LocalAssemblerDataInterface<
-        typename GlobalSetup::MatrixType, typename GlobalSetup::VectorType>*>
-            _local_assemblers;
+    using LocalAssembler = GroundwaterFlow::LocalAssemblerDataInterface<
+        typename GlobalSetup::MatrixType, typename GlobalSetup::VectorType>;
+
+    std::vector<LocalAssembler*> _local_assemblers;
 
     using GlobalAssembler =
         AssemblerLib::VectorMatrixAssembler<
@@ -204,6 +235,8 @@ private:
         std::vector<std::size_t> global_ids;
         std::vector<double> values;
     } _dirichlet_bc;
+
+    std::unique_ptr<NeumannBC<GlobalSetup>> _neumann_bc;
 
     MeshLib::NodeAdjacencyTable _node_adjacency_table;
 };
