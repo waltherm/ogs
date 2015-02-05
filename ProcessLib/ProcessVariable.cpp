@@ -80,6 +80,12 @@ ProcessVariable::ProcessVariable(
                     new UniformDirichletBoundaryCondition(
                         geometry, bc_config));
             }
+            else if (type == "UniformNeumann")
+            {
+                _neumann_bcs.emplace_back(
+                    new UniformNeumannBoundaryCondition(
+                        geometry, bc_config));
+            }
             else
             {
                 ERR("Unknown type \'%s\' of the boundary condition.",
@@ -95,6 +101,9 @@ ProcessVariable::~ProcessVariable()
     delete _initial_condition;
 
     for(auto p : _dirichlet_bcs)
+        delete p;
+
+    for(auto p : _neumann_bcs)
         delete p;
 }
 
@@ -116,4 +125,11 @@ void ProcessVariable::initializeDirichletBCs(
         bc->initialize(searcher, global_ids, values);
 }
 
+void ProcessVariable::initializeNeumannBCs(
+    MeshGeoToolsLib::BoundaryElementsSearcher& searcher,
+    std::vector<MeshLib::Element*>& elements, std::vector<double>& values)
+{
+    for (UniformNeumannBoundaryCondition* bc : _neumann_bcs)
+        bc->initialize(searcher, elements, values);
+}
 }   // namespace ProcessLib

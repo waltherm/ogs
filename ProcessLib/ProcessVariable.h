@@ -16,11 +16,13 @@
 #include "MeshLib/Mesh.h"
 
 #include "MeshGeoToolsLib/MeshNodeSearcher.h"
+#include "MeshGeoToolsLib/BoundaryElementsSearcher.h"
 
 namespace ProcessLib
 {
     class InitialCondition;
     class UniformDirichletBoundaryCondition;
+    class UniformNeumannBoundaryCondition;
 }
 
 namespace ProcessLib
@@ -45,12 +47,15 @@ public:
     void initializeDirichletBCs(MeshGeoToolsLib::MeshNodeSearcher& searcher,
             std::vector<std::size_t>& global_ids, std::vector<double>& values);
 
+    void initializeNeumannBCs(MeshGeoToolsLib::BoundaryElementsSearcher& searcher,
+            std::vector<MeshLib::Element*>& elements, std::vector<double>& values);
 
 private:
     std::string const _name;
     MeshLib::Mesh const& _mesh;
     InitialCondition* _initial_condition;
     std::vector<UniformDirichletBoundaryCondition*> _dirichlet_bcs;
+    std::vector<UniformNeumannBoundaryCondition*> _neumann_bcs;
 };
 
 }   // namespace ProcessLib
