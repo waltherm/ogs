@@ -16,7 +16,9 @@
 #include <boost/property_tree/ptree.hpp>
 #include "logog/include/logog.hpp"
 
+#include "MeshLib/Elements/Element.h"
 #include "MeshGeoToolsLib/MeshNodeSearcher.h"
+#include "MeshGeoToolsLib/BoundaryElementsSearcher.h"
 
 namespace GeoLib
 {
@@ -76,6 +78,47 @@ public:
         // Fill values.
         values.reserve(values.size() + ids.size());
         std::fill_n(std::back_inserter(values), ids.size(), _value);
+    }
+
+private:
+    double _value;
+};
+
+/// The UniformNeumannBoundaryCondition class describes a constant in space
+/// and time Neumann boundary condition.
+/// The expected parameter in the passed configuration is "value" which, when
+/// not present defaults to zero.
+class UniformNeumannBoundaryCondition : public BoundaryCondition
+{
+    using ConfigTree = boost::property_tree::ptree;
+public:
+    UniformNeumannBoundaryCondition(GeoLib::GeoObject const* const geometry,
+            ConfigTree const& config)
+        : BoundaryCondition(geometry)
+    {
+        DBUG("Constructing UniformNeumannBoundaryCondition from config.");
+
+        _value = config.get<double>("value", 0);
+        DBUG("Using value %g", _value);
+    }
+
+    /// Initialize Neumann type boundary conditions.
+    /// Fills in elements of the particular geometry of the boundary condition
+    /// and the corresponding values.
+    /// The elements are appended to the \c elements vector and the values are
+    /// filled with the constant _value.
+    void initialize(MeshGeoToolsLib::BoundaryElementsSearcher& searcher,
+            std::vector<MeshLib::Element*>& elements, std::vector<double>& values)
+    {
+        std::vector<MeshLib::Element*> elems = searcher.getBoundaryElements(*_geometry);
+
+        // Append node ids.
+        elements.reserve(elements.size() + elems.size());
+        std::move(elems.begin(), elems.end(), std::back_inserter(elements));
+
+        // Fill values.
+        values.reserve(elements.size());
+        std::fill_n(std::back_inserter(values), elems.size(), _value);
     }
 
 private:
