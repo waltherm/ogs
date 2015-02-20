@@ -10,6 +10,7 @@
 #ifndef PROCESS_LIB_NEUMANN_BC_H_
 #define PROCESS_LIB_NEUMANN_BC_H_
 
+#include <functional>
 #include <memory>
 #include <vector>
 
@@ -90,7 +91,7 @@ public:
                 local_asm_builder,
                 _elements,
                 _local_assemblers,
-                1e-6,   // bc value
+                [this](double const*) { return this->_values.front(); },
                 _integration_order);
 
         DBUG("Create global assembler.");
@@ -103,7 +104,6 @@ public:
     {
         _global_setup.execute(*_global_assembler, _local_assemblers);
     }
-
 
 private:
     std::vector<MeshLib::Element*> _elements;

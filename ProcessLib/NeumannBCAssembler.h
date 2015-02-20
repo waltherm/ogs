@@ -27,7 +27,7 @@ public:
 
     virtual void init(MeshLib::Element const& e,
             std::size_t const local_matrix_size,
-            double const neumann_bc_value,
+            std::function<double (double const*)> const& neumann_bc_value,
             unsigned const integration_order) = 0;
 
     virtual void assemble() = 0;
@@ -55,7 +55,7 @@ public:
     void
     init(MeshLib::Element const& e,
         std::size_t const local_matrix_size,
-        double const neumann_bc_value,
+        std::function<double (double const*)> const& neumann_bc_value,
         unsigned const integration_order)
     {
         using FemType = NumLib::TemplateIsoparametric<
@@ -82,7 +82,8 @@ public:
         _localRhs.reset(new NodalVectorType(local_matrix_size));
     }
 
-    void assemble()
+    void
+    assemble()
     {
         _localA->setZero();
         _localRhs->setZero();
@@ -93,7 +94,7 @@ public:
         for (std::size_t ip(0); ip < n_integration_points; ip++) {
             auto const& sm = _shape_matrices[ip];
             auto const& wp = integration_method.getWeightedPoint(ip);
-            _localRhs->noalias() += sm.N * _neumann_bc_value
+            _localRhs->noalias() += sm.N * _neumann_bc_value(wp.getCoords())
                         * sm.detJ * wp.getWeight();
         }
     }
@@ -107,7 +108,7 @@ public:
 
 private:
     std::vector<ShapeMatrices> _shape_matrices;
-    double _neumann_bc_value;
+    std::function<double (double const*)> _neumann_bc_value;
 
     std::unique_ptr<NodalMatrixType> _localA;
     std::unique_ptr<NodalVectorType> _localRhs;
