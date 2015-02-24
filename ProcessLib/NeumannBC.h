@@ -88,12 +88,18 @@ public:
         LocalAssemblerBuilder local_asm_builder(
             initializer, *_local_to_global_index_map);
 
+        auto f = [this](MeshLib::Element const& e)
+        {
+            auto it = std::find(_elements.cbegin(), _elements.cend(), &e);
+            return _values[std::distance(_elements.cbegin(), it)]*_scaling_value;
+        };
+
         DBUG("Calling local Neumann assembler builder for neumann boundary elements.");
         _global_setup.execute(
                 local_asm_builder,
                 _elements,
                 _local_assemblers,
-                [this](double const*) { return this->_values.front(); },
+                f,
                 _integration_order);
 
         DBUG("Create global assembler.");
