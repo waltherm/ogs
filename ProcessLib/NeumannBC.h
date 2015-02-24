@@ -31,10 +31,12 @@ public:
         unsigned const integration_order,
         std::vector<MeshLib::Element*> elements,
         std::vector<double> values,
+        double const scaling_value,
         AssemblerLib::LocalToGlobalIndexMap const& local_to_global_index_map,
         MeshLib::MeshSubset const& mesh_subset_all_nodes
         )
         : _values(values),
+          _scaling_value(scaling_value),
           _global_setup(global_setup),
           _integration_order(integration_order)
     {
@@ -108,6 +110,7 @@ public:
 private:
     std::vector<MeshLib::Element*> _elements;
     std::vector<double> _values;
+    double const _scaling_value;
 
     MeshLib::MeshSubset const* _mesh_subset_all_nodes = nullptr;
     std::vector<MeshLib::MeshSubsets*> _all_mesh_subsets;

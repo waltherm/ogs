@@ -121,7 +121,7 @@ public:
                 local_asm_builder,
                 _mesh.getElements(),
                 _local_assemblers,
-                1e-6,   // hydraulic conductivity
+                _hydraulic_conductivity,
                 _integration_order);
 
         DBUG("Create global assembler.");
@@ -154,7 +154,7 @@ public:
                 new NeumannBC<GlobalSetup>(
                     _global_setup,
                     _integration_order,
-                    elements, values,
+                    elements, values, _hydraulic_conductivity,
                     *_local_to_global_index_map,
                     *_mesh_subset_all_nodes));
         }
@@ -204,6 +204,8 @@ public:
 
 private:
     ProcessVariable* _hydraulic_head = nullptr;
+
+    double const _hydraulic_conductivity = 1e-6;
 
     MeshLib::MeshSubset const* _mesh_subset_all_nodes = nullptr;
     std::vector<MeshLib::MeshSubsets*> _all_mesh_subsets;
