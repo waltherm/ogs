@@ -138,7 +138,14 @@
 !
 ! --------------------------------------------------------------------------
 
-PROGRAM mhm_driver
+! MW change to module to be library called by ogs
+module mhm_base
+
+contains
+
+    subroutine mhm_driver
+
+!PROGRAM mhm_driver
 
   USE mo_anneal,              ONLY : anneal                         ! Optimise with Simulated Annealing SA
   USE mo_dds,                 ONLY : dds                            ! Optimise with Dynam. Dimens. Search DDS
@@ -553,4 +560,7 @@ PROGRAM mhm_driver
   call message()
   call finish('mHM','Finished!')
 
-END PROGRAM mhm_driver
+!END PROGRAM mhm_driver
+    end subroutine mhm_driver
+
+end module mhm_base
