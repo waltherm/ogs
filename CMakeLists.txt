@@ -14,6 +14,11 @@ endif()
 # Project name
 project( OGS-6 )
 
+# mHM
+add_definitions(-DGFORTRAN)
+ADD_SUBDIRECTORY( mhm )
+
+
 ###########################
 ### Preliminary Options ###
 ###########################
@@ -108,10 +113,6 @@ include_directories( SYSTEM ${Boost_INCLUDE_DIRS} )
 if(OGS_USE_EIGEN)
 	include(scripts/cmake/ExternalProjectEigen.cmake)
 endif()
-
-# mHM
-add_definitions(-DGFORTRAN)
-ADD_SUBDIRECTORY( mhm )
 
 # Add subdirectories with the projects
 add_subdirectory( ThirdParty )
