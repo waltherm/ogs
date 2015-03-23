@@ -23,6 +23,7 @@ add_subdirectory(src)
 
 
 set(SOURCES
+	mHMCommunication.h
 	mHM_MainCaller.f90
 )
 

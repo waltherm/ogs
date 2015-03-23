@@ -37,6 +37,8 @@
 #include "NeumannBC.h"
 #include "ProcessVariable.h"
 
+#include "mhm/mHMCommunication.h"
+
 namespace ProcessLib
 {
 
@@ -159,6 +161,13 @@ public:
                     *_mesh_subset_all_nodes));
         }
         _neumann_bc->initialize(*_A, *_rhs);
+
+
+        // call mHM
+        test_func();
+        call_main_mHM();
+
+        // fill RCH source terms
 
     }
 
