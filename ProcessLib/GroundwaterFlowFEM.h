@@ -99,6 +99,9 @@ public:
             _localA->noalias() += sm.dNdx.transpose() * _hydraulic_conductivity *
                         sm.dNdx * sm.detJ * wp.getWeight();
         }
+        const double test_dbl(1e-10);
+        _localRhs->setConstant(test_dbl);
+
     }
 
     void addToGlobal(GlobalMatrix& A, GlobalVector& rhs,
