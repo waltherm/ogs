@@ -165,7 +165,7 @@ public:
 
         // call mHM
         test_func();
-        call_main_mHM();
+        //call_main_mHM();
 
         // fill RCH source terms
 

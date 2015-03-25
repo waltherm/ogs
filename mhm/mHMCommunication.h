@@ -18,7 +18,7 @@ inline void test_func()
 
 	std::cout << "| C |" << std::endl;
 
-	//call_main_mHM();
+	call_main_mHM();
 
 }
 

@@ -8,6 +8,7 @@ target_link_libraries(ogs
     BaseLib
     FileIO
     MeshLib
+    ${mhm_com}
     ${Boost_LIBRARIES}
 )
 if(NOT OGS_DONT_USE_VTK)

@@ -30,4 +30,7 @@ add_library(mhm-base ${SOURCES})
 # Enable C preprocessor on all files to enable #ifdefs
 set_source_files_properties(${SOURCES} PROPERTIES COMPILE_FLAGS -cpp)
 
-target_link_libraries (mhm-base ${NETCDF_LIBRARIES})
+target_link_libraries (mhm-base 
+	${NETCDF_LIBRARIES}
+	gfortran
+)
