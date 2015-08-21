@@ -19,6 +19,7 @@
 #include "logog/include/logog.hpp"
 
 #include "BaseLib/FileTools.h"
+#include "BaseLib/CPUTime.h"
 
 #include "MeshLib/Mesh.h"
 
@@ -41,11 +42,17 @@ void readGeometry(std::string const& fname, GeoLib::GEOObjects & geo_objects)
 ProjectData::ProjectData(ConfigTree const& project_config,
 	std::string const& path)
 {
+	BaseLib::CPUTime timer;
+        timer.start();
+
 	// geometry
 	std::string const geometry_file = BaseLib::copyPathToFileName(
 			project_config.get<std::string>("geometry"), path
 		);
 	detail::readGeometry(geometry_file, *_geoObjects);
+	
+	INFO("Time: Read geometry (sec): %g", timer.elapsed());
+        timer.start();
 
 	// mesh
 	std::string const mesh_file = BaseLib::copyPathToFileName(
@@ -57,6 +64,8 @@ ProjectData::ProjectData(ConfigTree const& project_config,
 		ERR("Could not read mesh from \'%s\' file. No mesh added.",
 			mesh_file.c_str());
 	_mesh_vec.push_back(mesh);
+	
+	INFO("Time: Read mesh (sec): %g", timer.elapsed());
 
 	// process variables
 	parseProcessVariables(project_config.get_child("process_variables"));

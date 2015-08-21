@@ -23,6 +23,7 @@
 #include "BaseLib/BuildInfo.h"
 #include "BaseLib/FileTools.h"
 #include "BaseLib/LogogSimpleFormatter.h"
+#include "BaseLib/CPUTime.h"
 
 #include "Applications/ApplicationsLib/ProjectData.h"
 
@@ -33,6 +34,9 @@ int main(int argc, char *argv[])
 {
 
 	using ConfigTree = boost::property_tree::ptree;
+
+	BaseLib::CPUTime timer_total;
+	timer_total.start();
 
 	// logog
 	LOGOG_INITIALIZE();
@@ -64,6 +68,9 @@ int main(int argc, char *argv[])
 	lis_initialize(&argc, &argv);
 #endif
 
+	BaseLib::CPUTime timer;
+	timer.start();
+
 	// Project's configuration
 	ConfigTree project_config;
 
@@ -77,6 +84,8 @@ int main(int argc, char *argv[])
 
 	ProjectData project(project_config,
 			BaseLib::extractPath(project_arg.getValue()));
+	INFO("Time: Read project data (sec): %g", timer.elapsed());
+	timer.start();
 
 	// Create processes.
 	project.buildProcesses<GlobalSetupType>();
@@ -86,6 +95,8 @@ int main(int argc, char *argv[])
 	{
 		(*p_it)->initialize();
 	}
+	INFO("Time: Initialize processes (sec): %g", timer.elapsed());
+	timer.start();
 
 	std::string const output_file_name(project.getOutputFilePrefix() + ".vtu");
 
@@ -96,6 +107,9 @@ int main(int argc, char *argv[])
 		(*p_it)->post(output_file_name);
 	}
 
+	INFO("Time: Solve processes (sec): %g", timer.elapsed());
+	timer.start();
+	
 	delete fmt;
 	delete logog_cout;
 	LOGOG_SHUTDOWN();
@@ -103,6 +117,8 @@ int main(int argc, char *argv[])
 #ifdef USE_LIS
 	lis_finalize();
 #endif
+
+	INFO("Time: Total simulation time (sec): %g", timer_total.elapsed());
 
 	return 0;
 }
