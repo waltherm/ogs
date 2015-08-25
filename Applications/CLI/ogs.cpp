@@ -108,7 +108,8 @@ int main(int argc, char *argv[])
 	}
 
 	INFO("Time: Solve processes (sec): %g", timer.elapsed());
-	timer.start();
+
+	INFO("Time: Total simulation time (sec): %g", timer_total.elapsed());
 	
 	delete fmt;
 	delete logog_cout;
@@ -117,8 +118,6 @@ int main(int argc, char *argv[])
 #ifdef USE_LIS
 	lis_finalize();
 #endif
-
-	INFO("Time: Total simulation time (sec): %g", timer_total.elapsed());
 
 	return 0;
 }

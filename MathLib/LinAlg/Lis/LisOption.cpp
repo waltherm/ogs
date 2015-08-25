@@ -20,10 +20,10 @@ namespace MathLib
 LisOption::LisOption()
 {
     solver_type = SolverType::CG;
-    precon_type = PreconType::NONE;
+    precon_type = PreconType::ILUT;
     matrix_type = MatrixType::CRS;
     max_iterations = 1e6;
-    error_tolerance = 1.e-16;
+    error_tolerance = 1.e-1;
 }
 
 LisOption::SolverType LisOption::getSolverType(const std::string &solver_name)
