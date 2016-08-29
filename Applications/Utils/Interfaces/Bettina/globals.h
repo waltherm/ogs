@@ -30,6 +30,11 @@ public:
 	double _rcd3;
 
 	unsigned int _countDead;
+
+	double _k_geom;	// what does this do?
+
+private:
+	int _timeStep;
 };
 
 #endif /* GLOBALS_H_ */

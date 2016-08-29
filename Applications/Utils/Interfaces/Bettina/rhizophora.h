@@ -12,7 +12,7 @@
 
 class rhizophora: public tree {
 public:
-	rhizophora();
+	rhizophora(GeoLib::Point point, double salinity);
 	virtual ~rhizophora();
 };
 

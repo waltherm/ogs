@@ -7,7 +7,15 @@
 
 #include "tree.h"
 
-tree::tree() {
+
+
+tree::tree():
+	_stepFrac(0),
+	_aboveGroundCompetitionCoefficient(1),
+	_belowGroundCompetitionCoefficient(1),
+	_deathFlag(0),
+	_sizeFactor(4)
+{
 	// TODO Auto-generated constructor stub
 
 }

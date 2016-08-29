@@ -12,6 +12,7 @@
 #include <memory>
 
 #include "MeshLib/Mesh.h"
+#include "GeoLib/GEOObjects.h"
 
 
 class land {
@@ -19,10 +20,12 @@ public:
 	land(std::string const &fileName);
 	virtual ~land();
 
+	double getSalinityAtPoint(GeoLib::Point const point);
+
 private:
 	void readMesh(std::string const &fileName);
 
-	std::unique_ptr<MeshLib::Mesh> _mesh;
+	MeshLib::Mesh *_mesh;
 };
 
 #endif /* LAND_H_ */

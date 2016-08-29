@@ -14,6 +14,7 @@ ADD_EXECUTABLE( Bettina
 SET_TARGET_PROPERTIES( Bettina PROPERTIES FOLDER Utilities)
 TARGET_LINK_LIBRARIES( Bettina
     MeshLib
+    MeshGeoToolsLib
     GeoLib
     MathLib
     ${OGS_VTK_REQUIRED_LIBS}

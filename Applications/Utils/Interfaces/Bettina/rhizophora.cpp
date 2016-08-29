@@ -7,9 +7,10 @@
 
 #include "rhizophora.h"
 
-rhizophora::rhizophora() {
+rhizophora::rhizophora(GeoLib::Point point, double salinity)
+{
 	// TODO Auto-generated constructor stub
-
+	setPosition(point);
 }
 
 rhizophora::~rhizophora() {
