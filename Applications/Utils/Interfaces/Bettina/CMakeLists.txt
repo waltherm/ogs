@@ -1,5 +1,7 @@
 ADD_EXECUTABLE( Bettina 
     bettina.cpp
+    Flora.cpp
+    Flora.h
     Globals.cpp
     Globals.h
     Land.cpp

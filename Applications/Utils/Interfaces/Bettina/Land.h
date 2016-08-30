@@ -5,8 +5,8 @@
  *      Author: waltherm
  */
 
-#ifndef APPLICATIONS_UTILS_INTERFACES_BETTINA_LAND_H_
-#define APPLICATIONS_UTILS_INTERFACES_BETTINA_LAND_H_
+#ifndef LAND_H_
+#define LAND_H_
 
 #include <string>
 #include <memory>
@@ -14,6 +14,7 @@
 #include "MeshLib/Mesh.h"
 #include "GeoLib/GEOObjects.h"
 
+class Flora;
 
 class Land {
 public:
@@ -24,19 +25,15 @@ public:
 	double getSalinityAtNodeID(std::size_t nodeID) const;
 	void updateSalinityAtPoint();
 
-	const MeshLib::Mesh* getMesh() const {
-		return _mesh;
-	}
-
-	void setMesh(MeshLib::Mesh* const mesh) {
-		_mesh = mesh;
+	const MeshLib::Mesh* getSubsurface() const {
+		return _subsurface;
 	}
 
 private:
 	void readMesh(std::string const &fileName);
 
-	MeshLib::Mesh *_mesh;
+	MeshLib::Mesh *_subsurface;
 
 };
 
-#endif /* APPLICATIONS_UTILS_INTERFACES_BETTINA_LAND_H_ */
+#endif /* LAND_H_ */

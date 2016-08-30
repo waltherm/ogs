@@ -5,12 +5,12 @@
  *      Author: waltherm
  */
 
-#ifndef APPLICATIONS_UTILS_INTERFACES_BETTINA_TREE_H_
-#define APPLICATIONS_UTILS_INTERFACES_BETTINA_TREE_H_
+#ifndef TREE_H_
+#define TREE_H_
 
-#include <Land.h>
 #include "GeoLib/GEOObjects.h"
 
+class Land;
 
 class Tree {
 public:
@@ -101,4 +101,4 @@ private:
 
 };
 
-#endif /* APPLICATIONS_UTILS_INTERFACES_BETTINA_TREE_H_ */
+#endif /* TREE_H_ */

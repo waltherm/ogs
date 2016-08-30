@@ -5,8 +5,8 @@
  *      Author: waltherm
  */
 
-#ifndef APPLICATIONS_UTILS_INTERFACES_BETTINA_AVICENNIA_H_
-#define APPLICATIONS_UTILS_INTERFACES_BETTINA_AVICENNIA_H_
+#ifndef AVICENNIA_H_
+#define AVICENNIA_H_
 
 #include <Tree.h>
 
@@ -16,4 +16,4 @@ public:
 	virtual ~Avicennia();
 };
 
-#endif /* APPLICATIONS_UTILS_INTERFACES_BETTINA_AVICENNIA_H_ */
+#endif /* AVICENNIA_H_ */

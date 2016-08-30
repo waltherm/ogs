@@ -5,8 +5,8 @@
  *      Author: waltherm
  */
 
-#ifndef APPLICATIONS_UTILS_INTERFACES_BETTINA_GLOBALS_H_
-#define APPLICATIONS_UTILS_INTERFACES_BETTINA_GLOBALS_H_
+#ifndef GLOBALS_H_
+#define GLOBALS_H_
 
 #include <boost/math/constants/constants.hpp>
 
@@ -82,4 +82,4 @@ private:
 
 };
 
-#endif /* APPLICATIONS_UTILS_INTERFACES_BETTINA_GLOBALS_H_ */
+#endif /* GLOBALS_H_ */

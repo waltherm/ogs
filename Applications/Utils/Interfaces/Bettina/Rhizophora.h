@@ -5,8 +5,8 @@
  *      Author: waltherm
  */
 
-#ifndef APPLICATIONS_UTILS_INTERFACES_BETTINA_RHIZOPHORA_H_
-#define APPLICATIONS_UTILS_INTERFACES_BETTINA_RHIZOPHORA_H_
+#ifndef RHIZOPHORA_H_
+#define RHIZOPHORA_H_
 
 #include <Tree.h>
 
@@ -16,4 +16,4 @@ public:
 	virtual ~Rhizophora();
 };
 
-#endif /* APPLICATIONS_UTILS_INTERFACES_BETTINA_RHIZOPHORA_H_ */
+#endif /* RHIZOPHORA_H_ */

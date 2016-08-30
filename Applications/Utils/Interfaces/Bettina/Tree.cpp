@@ -7,7 +7,10 @@
 
 #include <Globals.h>
 #include <Tree.h>
+#include "Land.h"
+
 #include <cmath>
+
 
 #include "MeshGeoToolsLib/MeshNodeSearcher.h"
 
@@ -26,7 +29,7 @@ Tree::Tree(GeoLib::Point const &point, unsigned int id, Land const &aLand,
 				-1), _growth(-1), _stemHeightGrowth(-1), _crownRadiusGrowth(-1), _rootRadiusGrowth(
 				-1), _stemRadiusGrowth(-1), _stepFrac(0), countabove(-1), win_countabove(
 				-1), countbelow(-1), win_countbelow(-1), _aboveGroundCompetitionCoefficient(
-				1), _belowGroundCompetitionCoefficient(1), _deathFlag(true), mindist(
+				1), _belowGroundCompetitionCoefficient(1), _deathFlag(false), mindist(
 				-1), _fineRootPermeability(fineRootPermeability), _minimumLeafWaterPotential(
 				minimumLeafWaterPotential), _xylemConductivity(
 				xylemConductivity), _halfMaxHeightGrowthWeigth(
@@ -90,7 +93,7 @@ void Tree::grow() {
 			calcGrowth();
 		}
 	} else {
-		updateGrowLengths();
+	//	updateGrowLengths();
 		growTree();
 	}
 
@@ -258,8 +261,8 @@ double Tree::stemRadiusGrowth() {
 
 std::size_t Tree::findNearestNodeToTree() {
 	MeshGeoToolsLib::SearchLength searchLength(
-			_thisLand.getMesh()->getMinEdgeLength());
-	MeshGeoToolsLib::MeshNodeSearcher _meshSearcher(*_thisLand.getMesh(),
+			_thisLand.getSubsurface()->getMinEdgeLength());
+	MeshGeoToolsLib::MeshNodeSearcher _meshSearcher(*_thisLand.getSubsurface(),
 			searchLength);
 	auto idVector(_meshSearcher.getMeshNodeIDs(_position));
 	std::size_t nearestNodeID(-1);
