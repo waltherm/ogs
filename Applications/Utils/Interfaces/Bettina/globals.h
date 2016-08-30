@@ -24,7 +24,8 @@ namespace BettinaConstants {
 	double const sigmo_slope_hg(0.15);
 	double const sigmo_slope(0.02);
 
-	double const generalGrowthLimitCoefficient(50);
+	double const growthLimitCoefficient(50);
+	double const deathTreshhold(0.004);
 	double const solarRadiation(0.038);
 
 	double const aviSizeFactor(4);

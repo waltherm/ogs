@@ -26,6 +26,10 @@ public:
 	void grow();
 	double getSalinity() const;
 
+	bool getDeathFlag() const {
+		return _deathFlag;
+	}
+
 private:
 	GeoLib::Point _position;
 	double _stemRadius;	//r_stem
@@ -61,7 +65,7 @@ private:
 	double win_countbelow;
 	double _aboveGroundCompetitionCoefficient;	//above_c
 	double _belowGroundCompetitionCoefficient;	//below_c
-	double _deathFlag;	//deathflag
+	bool _deathFlag;	//deathflag
 	double mindist;
 	double _fineRootPermeability;	//L_p
 	double _minimumLeafWaterPotential;	//psi_leaf
@@ -69,6 +73,7 @@ private:
 	double _halfMaxHeightGrowthWeigth;	//max_h, meaning of this parameter?
 	double const _maintanceFactor;	//k_maint
 	double const _growthLimitCoefficient;	//50 in "if growth > v_tree / 50 ["
+	double const _deathThreshold;	//death.tresh, 0.004
 	double _size;	//size
 	double const _sizeFactor;	//size-factor
 

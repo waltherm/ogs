@@ -26,12 +26,13 @@ tree::tree(GeoLib::Point const &point, unsigned int id, land const &aLand,
 				-1), _growth(-1), _stemHeightGrowth(-1), _crownRadiusGrowth(-1), _rootRadiusGrowth(
 				-1), _stemRadiusGrowth(-1), _stepFrac(0), countabove(-1), win_countabove(
 				-1), countbelow(-1), win_countbelow(-1), _aboveGroundCompetitionCoefficient(
-				1), _belowGroundCompetitionCoefficient(1), _deathFlag(0), mindist(
+				1), _belowGroundCompetitionCoefficient(1), _deathFlag(true), mindist(
 				-1), _fineRootPermeability(fineRootPermeability), _minimumLeafWaterPotential(
 				minimumLeafWaterPotential), _xylemConductivity(
 				xylemConductivity), _halfMaxHeightGrowthWeigth(
 				halfMaxHeightGrowthWeight), _maintanceFactor(maintanceFactor), _growthLimitCoefficient(
-				BettinaConstants::generalGrowthLimitCoefficient), _size(-1), _sizeFactor(
+				BettinaConstants::growthLimitCoefficient), _deathThreshold(
+				BettinaConstants::deathTreshhold), _size(-1), _sizeFactor(
 				BettinaConstants::aviSizeFactor), _id(id + 1), _thisLand(aLand), _nearestNodeID(
 				findNearestNodeToTree()) {
 	// TODO Auto-generated constructor stub
@@ -161,7 +162,9 @@ void tree::gatherResources() {
 	_growth = BettinaConstants::k_grow
 			* (_availableResources - _maintanceFactor * _treeVolume);
 //	  if growth < (v_tree / 100 * death.thresh / 100) [set deathflag 1]
-	// TODO add death.tresh
+	if (_growth < (_treeVolume * _deathThreshold)) {
+		_deathFlag = true;
+	}
 }
 
 void tree::updateWeights() {
