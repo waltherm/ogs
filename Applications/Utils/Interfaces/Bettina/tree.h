@@ -23,6 +23,8 @@ public:
 
 	virtual ~tree();
 
+	void recruitment();
+	void competition();
 	void grow();
 	double getSalinity() const;
 

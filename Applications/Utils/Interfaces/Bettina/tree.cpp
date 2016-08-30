@@ -60,6 +60,19 @@ tree::~tree() {
 	// TODO Auto-generated destructor stub
 }
 
+
+void tree::recruitment()
+{
+	// TODO: implement recruitment
+}
+
+
+void tree::competition()
+{
+
+}
+
+
 void tree::grow() {
 
 	calcGrowth();

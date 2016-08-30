@@ -36,7 +36,12 @@ int main() {
 
 		for (std::size_t i(0); i < aliveTrees.size(); i++) {
 			tree* thisTree = aliveTrees[i];
-			//thisTree->competition();
+			thisTree->recruitment();
+		}
+
+		for (std::size_t i(0); i < aliveTrees.size(); i++) {
+			tree* thisTree = aliveTrees[i];
+			thisTree->competition();
 		}
 
 		for (std::size_t i(0); i < aliveTrees.size(); i++) {
