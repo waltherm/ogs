@@ -8,35 +8,77 @@
 #ifndef GLOBALS_H_
 #define GLOBALS_H_
 
+#include <boost/math/constants/constants.hpp>
+
+namespace BettinaConstants {
+
+	double const pi (boost::math::constants::pi<double>());
+
+	double const gravityConstant(9.81);
+
+	// what do the following parameters mean and do?
+	double const k_geom(1);
+	double const k_rel(1);
+	double const k_grow(1);
+	double const Qr0(0);
+	double const sigmo_slope_hg(0.15);
+	double const sigmo_slope(0.02);
+
+	double const generalGrowthLimitCoefficient(50);
+	double const solarRadiation(0.038);
+
+	double const aviSizeFactor(4);
+
+	double const oneOverSQRTTwo(std::pow(2, -0.5));
+
+//	double const salRand;
+//	double const rrd1;
+//	double const rrd2;
+//	double const rrd3;
+//	double const rsd1;
+//	double const rsd2;
+//	double const rsd3;
+//	double const hsd1;
+//	double const hsd2;
+//	double const hsd3;
+//	double const rcd1;
+//	double const rcd2;
+//	double const rcd3;
+
+	//unsigned int _countDead;
+
+};
+
+
 class globals {
 public:
 	globals();
 	virtual ~globals();
 
-	double _clarkEvans;
-	double _mce;
-	double _salRand;
-	double _rrd1;
-	double _rrd2;
-	double _rrd3;
-	double _rsd1;
-	double _rsd2;
-	double _rsd3;
-	double _hsd1;
-	double _hsd2;
-	double _hsd3;
-	double _rcd1;
-	double _rcd2;
-	double _rcd3;
+	void calculateClarkEvansIndex();
 
-	unsigned int _countDead;
 
-	double _k_geom;	// what does this do?
+	double getClarkEvans() const {
+		return _clarkEvans;
+	}
+
+	void setClarkEvans(double clarkEvans) {
+		this->_clarkEvans = clarkEvans;
+	}
+
+	double getMce() const {
+		return _mce;
+	}
+
+	void setMce(double mce) {
+		this->_mce = mce;
+	}
 
 private:
-	int _timeStep;
+	double _clarkEvans;
+	double _mce;
+	double _currentTimeStep;
 
-	void calculateClarkEvansIndex();
 };
 
 #endif /* GLOBALS_H_ */

@@ -30,7 +30,7 @@ void land::readMesh(std::string const &fileName)
 	_mesh = MeshLib::IO::readMeshFromFile(fileName);
 }
 
-double land::getSalinityAtPoint(GeoLib::Point const point)
+double land::getSalinityAtPoint(GeoLib::Point const &point) const
 {
 	//GeoLib::Point const point(x, y, z);
 	MeshGeoToolsLib::SearchLength searchLength(_mesh->getMinEdgeLength()/5);
@@ -40,6 +40,13 @@ double land::getSalinityAtPoint(GeoLib::Point const point)
 	std::string const property ("Salinity");	//TODO: check if "Salinity" available as property
 	boost::optional<MeshLib::PropertyVector<double>&> const salinities(_mesh->getProperties().getPropertyVector<double>(property));
 	return (*salinities)[nearestNode];
+}
+
+double land::getSalinityAtNodeID(std::size_t nodeID) const
+{
+	std::string const property ("Salinity");	//TODO: check if "Salinity" available as property
+	boost::optional<MeshLib::PropertyVector<double>&> const salinities(_mesh->getProperties().getPropertyVector<double>(property));
+	return (*salinities)[nodeID];
 }
 
 void land::updateSalinityAtPoint()

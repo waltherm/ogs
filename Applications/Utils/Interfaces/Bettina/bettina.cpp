@@ -24,28 +24,26 @@ int main() {
 	ApplicationsLib::LogogSetup logog_setup;
 
 	// reading
-	std::string _fileName("/home/waltherm/03_scientific_work/mangroven/BETTINA/test/test.vtu");
-	land _thisLand(_fileName);
+	std::string fileName("/home/waltherm/03_scientific_work/mangroven/BETTINA/test/test.vtu");
+	land thisLand(fileName);
 
 
 	// create trees
-	vector<tree*>_allTrees;
-
+	vector<tree*>allTrees;
 	GeoLib::Point const newPoint(30, 30, 0);	//TODO random sampling
-	avicennia _singleAvi(newPoint, _thisLand.getSalinityAtPoint(newPoint), _allTrees.size(), _thisLand);
-	_allTrees.push_back(&_singleAvi);
+	allTrees.push_back(new avicennia(newPoint, allTrees.size(), thisLand));
 
 	// run through time steps
-	for (unsigned int time(0); time < 10; time++)
+	for (std::size_t time(0); time < 10; time++)
 	{
-		for (unsigned int currentTree(0); currentTree < _allTrees.size(); currentTree++)
+		for (std::size_t currentTree(0); currentTree < allTrees.size(); currentTree++)
 		{
-			//_allTrees[currentTree]->competition();
-			_allTrees[currentTree]->grow();
+			//allTrees[currentTree]->competition();
+			allTrees[currentTree]->grow();
 		}
 
 		//TODO calculate Clark-Evans-Index
-		_thisLand.updateSalinityAtPoint();	//TODO do for all trees
+		//thisLand.updateSalinityAtPoint();	//TODO do for all trees
 	}
 
 	return 0;

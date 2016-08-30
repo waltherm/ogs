@@ -20,7 +20,8 @@ public:
 	land(std::string const &fileName);
 	virtual ~land();
 
-	double getSalinityAtPoint(GeoLib::Point const point);
+	double getSalinityAtPoint(GeoLib::Point const &point) const;
+	double getSalinityAtNodeID(std::size_t nodeID) const;
 	void updateSalinityAtPoint();
 
 	const MeshLib::Mesh* getMesh() const {
