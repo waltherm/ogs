@@ -10,11 +10,16 @@
 
 #include "GeoLib/GEOObjects.h"
 
+#include "land.h"
+
 class tree {
 public:
 	tree();
 	virtual ~tree();
 
+	void grow();
+
+	void findNearestNodeToTree(land const &aLand);
 
 	const GeoLib::Point& getPosition() const {
 		return position;
@@ -360,6 +365,14 @@ public:
 		_size = size;
 	}
 
+	unsigned int getId() const {
+		return _id;
+	}
+
+	void setId(unsigned int id) {
+		_id = id;
+	}
+
 protected:
 	GeoLib::Point position;
 	double _stemRadius;
@@ -403,6 +416,9 @@ protected:
 	double _solarRadiation;
 	double _halfMaxHeightGrowthWeigth;	// meaning of this parameter?
 	double _maintanceFactor;
+
+	unsigned int _id;
+	std::size_t _nearestNode;
 
 	double _size;
 	double _sizeFactor;

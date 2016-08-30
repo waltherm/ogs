@@ -20,3 +20,7 @@ globals::~globals() {
 	// TODO Auto-generated destructor stub
 }
 
+void globals::calculateClarkEvansIndex()
+{
+	//TODO only do, if tree number > 1
+}

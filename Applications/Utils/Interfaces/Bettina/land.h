@@ -21,11 +21,21 @@ public:
 	virtual ~land();
 
 	double getSalinityAtPoint(GeoLib::Point const point);
+	void updateSalinityAtPoint();
+
+	const MeshLib::Mesh* getMesh() const {
+		return _mesh;
+	}
+
+	void setMesh(MeshLib::Mesh* const mesh) {
+		_mesh = mesh;
+	}
 
 private:
 	void readMesh(std::string const &fileName);
 
 	MeshLib::Mesh *_mesh;
+
 };
 
 #endif /* LAND_H_ */

@@ -12,9 +12,10 @@
 #include "globals.h"
 
 
-avicennia::avicennia(GeoLib::Point point, double salinity)
+avicennia::avicennia(GeoLib::Point const &point, double salinity, unsigned int id, land const &aLand)
 {
 	// TODO Auto-generated constructor stub
+	setId(id+1);
 	setPosition(point);
 	setStemHeight(0.0001);
 	setCrownHeight(0.004);
@@ -38,6 +39,11 @@ avicennia::avicennia(GeoLib::Point point, double salinity)
 	setRootRadius( 1.05 / std::pow(_fineRootPermeability * global._k_geom * pi * hir * _rootDepth, 0.5) );	//TODO: double-check functions
 	setStemRadius( std::pow( (_stemHeight + std::pow(2 , -0.5) * _rootRadius + 2 * _crownRadius) / (_xylemConductivity * pi * hir), 0.5) );	//TODO: double-check functions
 	setSize(_crownRadius * _sizeFactor);
+
+	// find nearest node
+	// TODO interpolate position
+	this->findNearestNodeToTree(aLand);
+
 }
 
 avicennia::~avicennia() {

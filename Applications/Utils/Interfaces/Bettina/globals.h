@@ -35,6 +35,8 @@ public:
 
 private:
 	int _timeStep;
+
+	void calculateClarkEvansIndex();
 };
 
 #endif /* GLOBALS_H_ */

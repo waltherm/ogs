@@ -5,8 +5,9 @@
  *      Author: waltherm
  */
 
-#include "tree.h"
+#include "MeshGeoToolsLib/MeshNodeSearcher.h"
 
+#include "tree.h"
 
 
 tree::tree():
@@ -24,3 +25,27 @@ tree::~tree() {
 	// TODO Auto-generated destructor stub
 }
 
+void tree::grow()
+{
+
+}
+
+void tree::findNearestNodeToTree(land const &aLand)
+{
+	MeshGeoToolsLib::SearchLength searchLength(aLand.getMesh()->getMinEdgeLength());
+	MeshGeoToolsLib::MeshNodeSearcher _meshSearcher(*aLand.getMesh(), searchLength);
+	auto idVector(_meshSearcher.getMeshNodeIDs(this->getPosition()));
+	if (idVector.size() == 0)
+	{
+		ERR("No nodes found near tree no. %u.", this->getId());
+	}
+	else
+	{
+		if (idVector.size() == 1)
+			_nearestNode = idVector[0];
+		else
+		{
+			_nearestNode = idVector[0];	//TODO: get nearest point from list of points
+		}
+	}
+}

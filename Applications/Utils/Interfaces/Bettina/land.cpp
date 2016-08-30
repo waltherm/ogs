@@ -41,3 +41,8 @@ double land::getSalinityAtPoint(GeoLib::Point const point)
 	boost::optional<MeshLib::PropertyVector<double>&> const salinities(_mesh->getProperties().getPropertyVector<double>(property));
 	return (*salinities)[nearestNode];
 }
+
+void land::updateSalinityAtPoint()
+{
+	// TODO
+}

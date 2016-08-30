@@ -12,7 +12,7 @@
 
 class avicennia: public tree {
 public:
-	avicennia(GeoLib::Point point, double salinity);
+	avicennia(GeoLib::Point const &point, double salinity, unsigned int id, land const &aLand);
 	virtual ~avicennia();
 };
 
