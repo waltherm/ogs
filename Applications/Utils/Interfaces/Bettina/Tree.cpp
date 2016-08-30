@@ -5,14 +5,14 @@
  *      Author: waltherm
  */
 
+#include <Globals.h>
+#include <Tree.h>
 #include <cmath>
 
 #include "MeshGeoToolsLib/MeshNodeSearcher.h"
 
-#include "globals.h"
-#include "tree.h"
 
-tree::tree(GeoLib::Point const &point, unsigned int id, land const &aLand,
+Tree::Tree(GeoLib::Point const &point, unsigned int id, Land const &aLand,
 		double stemHeight, double crownHeight, double rootDepth,
 		double crownRadius, double fineRootPermeability,
 		double minimumLeafWaterPotential, double xylemConductivity,
@@ -49,31 +49,31 @@ tree::tree(GeoLib::Point const &point, unsigned int id, land const &aLand,
 					_fineRootPermeability * BettinaConstants::k_geom
 							* BettinaConstants::pi * hir * _rootDepth, 0.5); //TODO: double-check functions
 	_stemRadius = std::pow(
-			(_stemHeight + BettinaConstants::oneOverSQRTTwo * _rootRadius
+			(_stemHeight + BettinaConstants::oneOverSqrtTwo * _rootRadius
 					+ 2 * _crownRadius)
 					/ (_xylemConductivity * BettinaConstants::pi * hir), 0.5); //TODO: double-check functions
 	_size = _crownRadius * _sizeFactor;
 
 }
 
-tree::~tree() {
+Tree::~Tree() {
 	// TODO Auto-generated destructor stub
 }
 
 
-void tree::recruitment()
+void Tree::recruitment()
 {
 	// TODO: implement recruitment
 }
 
 
-void tree::competition()
+void Tree::competition()
 {
 
 }
 
 
-void tree::grow() {
+void Tree::grow() {
 
 	calcGrowth();
 	_stepFrac = 0;
@@ -96,14 +96,14 @@ void tree::grow() {
 
 }
 
-void tree::growTree() {
+void Tree::growTree() {
 	_rootRadius += _rootRadiusGrowth;
 	_crownRadius += _crownRadiusGrowth;
 	_stemHeight += _stemHeightGrowth;
 	_stemRadius += _stemRadiusGrowth;
 }
 
-void tree::calcGrowth() {
+void Tree::calcGrowth() {
 
 	growInVolume();
 	updateResistances();
@@ -113,7 +113,7 @@ void tree::calcGrowth() {
 
 }
 
-void tree::growInVolume() {
+void Tree::growInVolume() {
 
 	//	  set v_leaf pi * h_crown * r_crown ^ 2
 	_leafVolume = BettinaConstants::pi * _crownHeight
@@ -124,7 +124,7 @@ void tree::growInVolume() {
 	//	  set v_stem pi * h_stem * r_stem ^ 2
 	_stemVolume = BettinaConstants::pi * _stemHeight * std::pow(_stemRadius, 2);
 	//	  set v_croot pi * 2 ^ (-0.5) * r_root * r_stem ^ 2
-	_cableRootVolume = BettinaConstants::pi * BettinaConstants::oneOverSQRTTwo
+	_cableRootVolume = BettinaConstants::pi * BettinaConstants::oneOverSqrtTwo
 			* _rootRadius * std::pow(_stemRadius, 2);
 	//	  set v_froot pi * h_root * r_root ^ 2
 	_fineRootVolume = BettinaConstants::pi * _rootDepth
@@ -135,7 +135,7 @@ void tree::growInVolume() {
 
 }
 
-void tree::updateResistances() {
+void Tree::updateResistances() {
 
 	//	  set r1 1 / (L_p * k_geom * pi * r_root ^ 2 * h_root)
 	_radialFluxResistence = 1
@@ -144,13 +144,13 @@ void tree::updateResistances() {
 					* _rootDepth);
 	//	  set r2 (h_stem + 2 ^(-0.5) * r_root + 2 * r_crown) / (k_f_sap * pi * r_stem ^ 2)
 	_lateralFluxResistence = (_stemHeight
-			+ BettinaConstants::oneOverSQRTTwo * _rootRadius + 2 * _crownRadius)
+			+ BettinaConstants::oneOverSqrtTwo * _rootRadius + 2 * _crownRadius)
 			/ (_xylemConductivity * BettinaConstants::pi
 					* std::pow(_stemRadius, 2));
 
 }
 
-void tree::gatherResources() {
+void Tree::gatherResources() {
 
 	//TODO compute competition
 
@@ -180,7 +180,7 @@ void tree::gatherResources() {
 	}
 }
 
-void tree::updateWeights() {
+void Tree::updateWeights() {
 
 //	  let Q_res (k_rel * res_a - res_b) / (k_rel * res_a + res_b)
 	double const qRes(
@@ -216,7 +216,7 @@ void tree::updateWeights() {
 
 }
 
-void tree::updateGrowLengths() {
+void Tree::updateGrowLengths() {
 
 	//TODO functions for individual equations
 	_stemHeightGrowth = stemHeightGrowth();
@@ -226,37 +226,37 @@ void tree::updateGrowLengths() {
 
 }
 
-double tree::stemHeightGrowth() {
+double Tree::stemHeightGrowth() {
 	//	  set hg wa2 * growth / (pi * r_stem ^ 2)
 	return _stemHeightGrowthWeight * _growth
 			/ (BettinaConstants::pi * std::pow(_stemRadius, 2));
 }
 
-double tree::crownRadiusGrowth() {
+double Tree::crownRadiusGrowth() {
 	//	  set cg wa1 * growth / (2 * pi * (r_crown * h_crown + r_stem ^ 2))
 	return _crownRadiusGrowthWeight * _growth
 			/ (2 * BettinaConstants::pi
 					* (_crownRadius * _crownHeight + std::pow(_stemRadius, 2)));
 }
 
-double tree::rootRadiusGrowth() {
+double Tree::rootRadiusGrowth() {
 	//	  set rg wb1 * growth / (2 * pi * r_root * h_root + 2 ^ (-0.5) * pi * r_stem ^ 2)
 	return _fineRootGrowthWeight * _growth
 			/ (2 * BettinaConstants::pi * _rootRadius * _rootDepth
-					+ BettinaConstants::oneOverSQRTTwo * BettinaConstants::pi
+					+ BettinaConstants::oneOverSqrtTwo * BettinaConstants::pi
 							* std::pow(_stemRadius, 2));
 }
 
-double tree::stemRadiusGrowth() {
+double Tree::stemRadiusGrowth() {
 	//	  set dg wb2 * growth / (2 * pi * r_stem * (h_stem + 2 ^ (-0.5) * r_root + 2 * r_crown))
 	return _stemRadiusGrowthWeight * _growth
 			/ (2 * BettinaConstants::pi * _stemRadius
 					* (_stemHeight
-							+ BettinaConstants::oneOverSQRTTwo * _rootRadius
+							+ BettinaConstants::oneOverSqrtTwo * _rootRadius
 							+ 2 * _crownRadius));
 }
 
-std::size_t tree::findNearestNodeToTree() {
+std::size_t Tree::findNearestNodeToTree() {
 	MeshGeoToolsLib::SearchLength searchLength(
 			_thisLand.getMesh()->getMinEdgeLength());
 	MeshGeoToolsLib::MeshNodeSearcher _meshSearcher(*_thisLand.getMesh(),
@@ -276,10 +276,10 @@ std::size_t tree::findNearestNodeToTree() {
 	return nearestNodeID;
 }
 
-double tree::getSalinity() const {
+double Tree::getSalinity() const {
 	return getSalinityAtNearestNode();
 }
 
-double tree::getSalinityAtNearestNode() const {
+double Tree::getSalinityAtNearestNode() const {
 	return _thisLand.getSalinityAtNodeID(_nearestNodeID);
 }

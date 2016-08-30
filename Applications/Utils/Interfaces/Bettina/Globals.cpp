@@ -5,18 +5,18 @@
  *      Author: waltherm
  */
 
-#include "globals.h"
+#include <Globals.h>
 
-globals::globals() :
+Globals::Globals() :
 		_clarkEvans(0), _mce(1), _currentTimeStep(0) {
 	// TODO Auto-generated constructor stub
 
 }
 
-globals::~globals() {
+Globals::~Globals() {
 	// TODO Auto-generated destructor stub
 }
 
-void globals::calculateClarkEvansIndex() {
+void Globals::calculateClarkEvansIndex() {
 	//TODO only do, if tree number > 1
 }

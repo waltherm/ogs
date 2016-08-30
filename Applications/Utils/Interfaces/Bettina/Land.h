@@ -5,8 +5,8 @@
  *      Author: waltherm
  */
 
-#ifndef LAND_H_
-#define LAND_H_
+#ifndef APPLICATIONS_UTILS_INTERFACES_BETTINA_LAND_H_
+#define APPLICATIONS_UTILS_INTERFACES_BETTINA_LAND_H_
 
 #include <string>
 #include <memory>
@@ -15,10 +15,10 @@
 #include "GeoLib/GEOObjects.h"
 
 
-class land {
+class Land {
 public:
-	land(std::string const &fileName);
-	virtual ~land();
+	Land(std::string const &fileName);
+	virtual ~Land();
 
 	double getSalinityAtPoint(GeoLib::Point const &point) const;
 	double getSalinityAtNodeID(std::size_t nodeID) const;
@@ -39,4 +39,4 @@ private:
 
 };
 
-#endif /* LAND_H_ */
+#endif /* APPLICATIONS_UTILS_INTERFACES_BETTINA_LAND_H_ */

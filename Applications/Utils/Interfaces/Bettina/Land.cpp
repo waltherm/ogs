@@ -7,8 +7,7 @@
 
 #include <iostream>
 #include <boost/optional.hpp>
-
-#include "land.h"
+#include <Land.h>
 
 #include "MeshLib/IO/readMeshFromFile.h"
 #include "MeshLib/IO/writeMeshToFile.h"
@@ -16,21 +15,21 @@
 #include "MeshGeoToolsLib/MeshNodeSearcher.h"
 
 
-land::land(std::string const &fileName) {
+Land::Land(std::string const &fileName) {
 	// TODO Auto-generated constructor stub
 	readMesh(fileName);
 }
 
-land::~land() {
+Land::~Land() {
 	// TODO Auto-generated destructor stub
 }
 
-void land::readMesh(std::string const &fileName)
+void Land::readMesh(std::string const &fileName)
 {
 	_mesh = MeshLib::IO::readMeshFromFile(fileName);
 }
 
-double land::getSalinityAtPoint(GeoLib::Point const &point) const
+double Land::getSalinityAtPoint(GeoLib::Point const &point) const
 {
 	//GeoLib::Point const point(x, y, z);
 	MeshGeoToolsLib::SearchLength searchLength(_mesh->getMinEdgeLength()/5);
@@ -42,14 +41,14 @@ double land::getSalinityAtPoint(GeoLib::Point const &point) const
 	return (*salinities)[nearestNode];
 }
 
-double land::getSalinityAtNodeID(std::size_t nodeID) const
+double Land::getSalinityAtNodeID(std::size_t nodeID) const
 {
 	std::string const property ("Salinity");	//TODO: check if "Salinity" available as property
 	boost::optional<MeshLib::PropertyVector<double>&> const salinities(_mesh->getProperties().getPropertyVector<double>(property));
 	return (*salinities)[nodeID];
 }
 
-void land::updateSalinityAtPoint()
+void Land::updateSalinityAtPoint()
 {
 	// TODO
 }

@@ -5,23 +5,23 @@
  *      Author: waltherm
  */
 
-#ifndef TREE_H_
-#define TREE_H_
+#ifndef APPLICATIONS_UTILS_INTERFACES_BETTINA_TREE_H_
+#define APPLICATIONS_UTILS_INTERFACES_BETTINA_TREE_H_
 
+#include <Land.h>
 #include "GeoLib/GEOObjects.h"
 
-#include "land.h"
 
-class tree {
+class Tree {
 public:
-	tree(GeoLib::Point const &point, unsigned int id, land const &aLand,
+	Tree(GeoLib::Point const &point, unsigned int id, Land const &aLand,
 			double stemHeight, double crownHeight, double rootDepth,
 			double crownRadius, double fineRootPermeability,
 			double minimumLeafWaterPotential, double xylemConductivity,
 			double halfMaxHeightGrowthWeight,
 			double maintanceFactor);
 
-	virtual ~tree();
+	virtual ~Tree();
 
 	void recruitment();
 	void competition();
@@ -80,7 +80,7 @@ private:
 	double const _sizeFactor;	//size-factor
 
 	unsigned int const _id;
-	land const & _thisLand;
+	Land const & _thisLand;
 	std::size_t _nearestNodeID;
 
 	void growTree();
@@ -101,4 +101,4 @@ private:
 
 };
 
-#endif /* TREE_H_ */
+#endif /* APPLICATIONS_UTILS_INTERFACES_BETTINA_TREE_H_ */

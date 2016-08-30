@@ -1,15 +1,15 @@
 ADD_EXECUTABLE( Bettina 
     bettina.cpp
-    globals.cpp
-    globals.h
-    land.cpp
-    land.h
-    tree.cpp
-    tree.h
-    avicennia.cpp
-    avicennia.h
-    rhizophora.cpp
-    rhizophora.h
+    Globals.cpp
+    Globals.h
+    Land.cpp
+    Land.h
+    Tree.cpp
+    Tree.h
+    Avicennia.cpp
+    Avicennia.h
+    Rhizophora.cpp
+    Rhizophora.h
     )
 SET_TARGET_PROPERTIES( Bettina PROPERTIES FOLDER Utilities)
 TARGET_LINK_LIBRARIES( Bettina

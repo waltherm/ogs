@@ -5,8 +5,8 @@
  *      Author: waltherm
  */
 
-#ifndef GLOBALS_H_
-#define GLOBALS_H_
+#ifndef APPLICATIONS_UTILS_INTERFACES_BETTINA_GLOBALS_H_
+#define APPLICATIONS_UTILS_INTERFACES_BETTINA_GLOBALS_H_
 
 #include <boost/math/constants/constants.hpp>
 
@@ -30,7 +30,7 @@ namespace BettinaConstants {
 
 	double const aviSizeFactor(4);
 
-	double const oneOverSQRTTwo(std::pow(2, -0.5));
+	double const oneOverSqrtTwo(std::pow(2, -0.5));
 
 //	double const salRand;
 //	double const rrd1;
@@ -51,10 +51,10 @@ namespace BettinaConstants {
 };
 
 
-class globals {
+class Globals {
 public:
-	globals();
-	virtual ~globals();
+	Globals();
+	virtual ~Globals();
 
 	void calculateClarkEvansIndex();
 
@@ -82,4 +82,4 @@ private:
 
 };
 
-#endif /* GLOBALS_H_ */
+#endif /* APPLICATIONS_UTILS_INTERFACES_BETTINA_GLOBALS_H_ */
