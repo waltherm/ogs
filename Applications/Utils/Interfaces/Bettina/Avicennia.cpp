@@ -9,8 +9,23 @@
 
 Avicennia::Avicennia(GeoLib::Point const &point, unsigned int id,
 		Land const &aLand) :
-		Tree(point, id, aLand, 0.0001, 0.004, 0.004, 0.3, 0.04, -7860, 1.48,
-				0.1, 0.28) {
+		Tree(point, id, aLand,
+				0.0001,	//stemHeight
+				0.004,	//crownHeight
+				0.004,	//rootDepth
+				0.3,	//crownRadius
+				0.04,	//fineRootPermeability
+				-7860,	//minimumLeafWaterPotential
+				1.48,	//xylemConductivity
+				0.1,	//halfMaxHeightGrowthWeight
+				0.28)	//maintanceFactor
+{
+//	(GeoLib::Point const &point, unsigned int id, Land const &aLand,
+//	double stemHeight, double crownHeight, double rootDepth,
+//	double crownRadius, double fineRootPermeability,
+//	double minimumLeafWaterPotential, double xylemConductivity,
+//	double halfMaxHeightGrowthWeight, double maintanceFactor)
+
 	// TODO Auto-generated constructor stub
 }
 

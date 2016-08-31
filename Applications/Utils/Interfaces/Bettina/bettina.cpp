@@ -13,6 +13,7 @@
 
 #include "Land.h"
 #include "Flora.h"
+#include "Output.h"
 
 using namespace std;
 
@@ -23,6 +24,7 @@ int main() {
 	// reading
 	std::string fileName(
 			"/home/waltherm/03_scientific_work/mangroven/BETTINA/test/test.vtu");
+	Output thisOutput("/home/waltherm/03_scientific_work/mangroven/BETTINA/test/test");
 
 	// create subsurface & flora
 	Land thisLand(fileName);
@@ -36,6 +38,10 @@ int main() {
 		thisFlora.competition();
 		thisFlora.grow();
 		thisFlora.die();
+
+		thisOutput.writeFlora(thisFlora, time);
+		thisOutput.writeLand(thisLand.getSubsurface(), time);
+
 		if ( !(thisFlora.checkForActivePopulation()) )
 			std::abort();
 

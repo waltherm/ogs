@@ -32,6 +32,34 @@ public:
 		return _deathFlag;
 	}
 
+	const GeoLib::Point& getPosition() const {
+		return _position;
+	}
+
+	double getStemHeight() const {
+		return _stemHeight;
+	}
+
+	double getStemHeightGrowth() const {
+		return _stemHeightGrowth;
+	}
+
+	void setStemHeightGrowth(double stemHeightGrowth) {
+		_stemHeightGrowth = stemHeightGrowth;
+	}
+
+	double getStemHeightGrowthWeight() const {
+		return _stemHeightGrowthWeight;
+	}
+
+	void setStemHeightGrowthWeight(double stemHeightGrowthWeight) {
+		_stemHeightGrowthWeight = stemHeightGrowthWeight;
+	}
+
+	std::size_t getId() const {
+		return _id;
+	}
+
 private:
 	GeoLib::Point _position;
 	double _stemRadius;	//r_stem
@@ -79,7 +107,7 @@ private:
 	double _size;	//size
 	double const _sizeFactor;	//size-factor
 
-	unsigned int const _id;
+	std::size_t const _id;
 	Land const & _thisLand;
 	std::size_t _nearestNodeID;
 

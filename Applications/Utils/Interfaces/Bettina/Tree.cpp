@@ -55,7 +55,7 @@ Tree::Tree(GeoLib::Point const &point, unsigned int id, Land const &aLand,
 			(_stemHeight + BettinaConstants::oneOverSqrtTwo * _rootRadius
 					+ 2 * _crownRadius)
 					/ (_xylemConductivity * BettinaConstants::pi * hir), 0.5); //TODO: double-check functions
-	_size = _crownRadius * _sizeFactor;
+	_size = 2 * _crownRadius * _sizeFactor;
 
 }
 

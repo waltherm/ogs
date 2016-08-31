@@ -1,11 +1,13 @@
 ADD_EXECUTABLE( Bettina 
     bettina.cpp
-    Flora.cpp
-    Flora.h
-    Globals.cpp
-    Globals.h
     Land.cpp
     Land.h
+    Flora.cpp
+    Flora.h
+    Output.cpp
+    Output.h
+    Globals.cpp
+    Globals.h
     Tree.cpp
     Tree.h
     Avicennia.cpp
@@ -13,6 +15,9 @@ ADD_EXECUTABLE( Bettina
     Rhizophora.cpp
     Rhizophora.h
     )
+
+ADD_VTK_DEPENDENCY(Bettina)
+
 SET_TARGET_PROPERTIES( Bettina PROPERTIES FOLDER Utilities)
 TARGET_LINK_LIBRARIES( Bettina
     MeshLib
