@@ -11,6 +11,7 @@
 
 #include <cmath>
 
+#include <iostream>
 
 #include "MeshGeoToolsLib/MeshNodeSearcher.h"
 
@@ -90,6 +91,8 @@ void Tree::grow() {
 			updateGrowLengths();
 			growTree();
 			_stepFrac += frac;
+			if (_stepFrac > 1)
+				std::cout << std::endl;
 			calcGrowth();
 		}
 	} else {
@@ -167,7 +170,7 @@ void Tree::gatherResources() {
 					- (_minimumLeafWaterPotential
 							+ BettinaConstants::gravityConstant
 									* (_stemHeight + 2 * _crownRadius)
-							+ 85 * getSalinity())
+							+ 85 * getSalinity())	//TODO what is 85?
 							/ (_radialFluxResistence + _lateralFluxResistence)
 							/ BettinaConstants::gravityConstant);
 	//	  set res_avail (min (list (k_rel * res_a)  res_b))
@@ -201,9 +204,9 @@ void Tree::updateWeights() {
 
 //	  set wa2 max (list (max_h / (1 + exp((Qr0 - Q_rad) / sigmo_slope_hg))) 0)
 	_stemHeightGrowthWeight = std::max(
-			(_halfMaxHeightGrowthWeigth
-					/ (1 + std::exp(BettinaConstants::Qr0 - qRad))
-					/ BettinaConstants::sigmo_slope_hg), 0.0);
+			_halfMaxHeightGrowthWeigth
+					/ (1 + std::exp( (BettinaConstants::Qr0 - qRad)
+					/ BettinaConstants::sigmo_slope_hg)), 0.0);
 //	  set wa1 max (list ((1 - wa2) / (1 + exp(Q_res / sigmo_slope))) 0)
 	_crownRadiusGrowthWeight = std::max(
 			(1 - _stemHeightGrowthWeight)
@@ -222,24 +225,11 @@ void Tree::updateWeights() {
 void Tree::updateGrowLengths() {
 
 	//TODO functions for individual equations
-	_stemHeightGrowth = stemHeightGrowth();
-	_crownRadiusGrowth = crownRadiusGrowth();
 	_rootRadiusGrowth = rootRadiusGrowth();
+	_crownRadiusGrowth = crownRadiusGrowth();
+	_stemHeightGrowth = stemHeightGrowth();
 	_stemRadiusGrowth = stemRadiusGrowth();
 
-}
-
-double Tree::stemHeightGrowth() {
-	//	  set hg wa2 * growth / (pi * r_stem ^ 2)
-	return _stemHeightGrowthWeight * _growth
-			/ (BettinaConstants::pi * std::pow(_stemRadius, 2));
-}
-
-double Tree::crownRadiusGrowth() {
-	//	  set cg wa1 * growth / (2 * pi * (r_crown * h_crown + r_stem ^ 2))
-	return _crownRadiusGrowthWeight * _growth
-			/ (2 * BettinaConstants::pi
-					* (_crownRadius * _crownHeight + std::pow(_stemRadius, 2)));
 }
 
 double Tree::rootRadiusGrowth() {
@@ -250,8 +240,22 @@ double Tree::rootRadiusGrowth() {
 							* std::pow(_stemRadius, 2));
 }
 
+double Tree::crownRadiusGrowth() {
+	//	  set cg wa1 * growth / (2 * pi * (r_crown * h_crown + r_stem ^ 2))
+	return _crownRadiusGrowthWeight * _growth
+			/ (2 * BettinaConstants::pi
+					* (_crownRadius * _crownHeight + std::pow(_stemRadius, 2)));
+}
+
+double Tree::stemHeightGrowth() {
+	//	  set hg wa2 * growth / (pi * r_stem ^ 2)
+	return _stemHeightGrowthWeight * _growth
+			/ (BettinaConstants::pi * std::pow(_stemRadius, 2));
+}
+
 double Tree::stemRadiusGrowth() {
 	//	  set dg wb2 * growth / (2 * pi * r_stem * (h_stem + 2 ^ (-0.5) * r_root + 2 * r_crown))
+	// 			 wb2 * growth / (2 * pi * r_stem * (h_stem + 2 ^ (-0.5) * r_root + 2 * r_crown))
 	return _stemRadiusGrowthWeight * _growth
 			/ (2 * BettinaConstants::pi * _stemRadius
 					* (_stemHeight

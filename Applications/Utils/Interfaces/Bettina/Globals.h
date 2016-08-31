@@ -19,13 +19,13 @@ namespace BettinaConstants {
 	// what do the following parameters mean and do?
 	double const k_geom(1);
 	double const k_rel(1);
-	double const k_grow(1);
+	double const k_grow(0.1);
 	double const Qr0(0);
 	double const sigmo_slope_hg(0.15);
 	double const sigmo_slope(0.02);
 
 	double const growthLimitCoefficient(50);
-	double const deathTreshhold(0.004);
+	double const deathTreshhold(0.001);
 	double const solarRadiation(0.038);
 
 	double const aviSizeFactor(4);

@@ -36,20 +36,8 @@ public:
 		return _position;
 	}
 
-	double getStemHeight() const {
-		return _stemHeight;
-	}
-
-	double getStemHeightGrowth() const {
-		return _stemHeightGrowth;
-	}
-
 	void setStemHeightGrowth(double stemHeightGrowth) {
 		_stemHeightGrowth = stemHeightGrowth;
-	}
-
-	double getStemHeightGrowthWeight() const {
-		return _stemHeightGrowthWeight;
 	}
 
 	void setStemHeightGrowthWeight(double stemHeightGrowthWeight) {
@@ -58,6 +46,186 @@ public:
 
 	std::size_t getId() const {
 		return _id;
+	}
+
+	double getAboveGroundCompetitionCoefficient() const {
+		return _aboveGroundCompetitionCoefficient;
+	}
+
+	double getAboveGroundResources() const {
+		return _aboveGroundResources;
+	}
+
+	double getAvailableResources() const {
+		return _availableResources;
+	}
+
+	double getBelowGroundCompetitionCoefficient() const {
+		return _belowGroundCompetitionCoefficient;
+	}
+
+	double getBelowGroundResources() const {
+		return _belowGroundResources;
+	}
+
+	double getBranchVolume() const {
+		return _branchVolume;
+	}
+
+	double getCableRootVolume() const {
+		return _cableRootVolume;
+	}
+
+	double getCrownHeight() const {
+		return _crownHeight;
+	}
+
+	double getCrownRadius() const {
+		return _crownRadius;
+	}
+
+	double getCrownRadiusGrowth() const {
+		return _crownRadiusGrowth;
+	}
+
+	double getCrownRadiusGrowthWeight() const {
+		return _crownRadiusGrowthWeight;
+	}
+
+	bool isDeathFlag() const {
+		return _deathFlag;
+	}
+
+	double getDeathThreshold() const {
+		return _deathThreshold;
+	}
+
+	double getFineRootGrowthWeight() const {
+		return _fineRootGrowthWeight;
+	}
+
+	double getFineRootPermeability() const {
+		return _fineRootPermeability;
+	}
+
+	double getFineRootVolume() const {
+		return _fineRootVolume;
+	}
+
+	double getGrowth() const {
+		return _growth;
+	}
+
+	double getGrowthLimitCoefficient() const {
+		return _growthLimitCoefficient;
+	}
+
+	double getHalfMaxHeightGrowthWeigth() const {
+		return _halfMaxHeightGrowthWeigth;
+	}
+
+	double getLateralFluxResistence() const {
+		return _lateralFluxResistence;
+	}
+
+	double getLeafVolume() const {
+		return _leafVolume;
+	}
+
+	double getMaintanceFactor() const {
+		return _maintanceFactor;
+	}
+
+	double getMinimumLeafWaterPotential() const {
+		return _minimumLeafWaterPotential;
+	}
+
+	std::size_t getNearestNodeId() const {
+		return _nearestNodeID;
+	}
+
+	double getRadialFluxResistence() const {
+		return _radialFluxResistence;
+	}
+
+	double getRootDepth() const {
+		return _rootDepth;
+	}
+
+	double getRootRadius() const {
+		return _rootRadius;
+	}
+
+	double getRootRadiusGrowth() const {
+		return _rootRadiusGrowth;
+	}
+
+	double getSize() const {
+		return _size;
+	}
+
+	double getSizeFactor() const {
+		return _sizeFactor;
+	}
+
+	double getStemHeight() const {
+		return _stemHeight;
+	}
+
+	double getStemHeightGrowth() const {
+		return _stemHeightGrowth;
+	}
+
+	double getStemHeightGrowthWeight() const {
+		return _stemHeightGrowthWeight;
+	}
+
+	double getStemRadius() const {
+		return _stemRadius;
+	}
+
+	double getStemRadiusGrowth() const {
+		return _stemRadiusGrowth;
+	}
+
+	double getStemRadiusGrowthWeight() const {
+		return _stemRadiusGrowthWeight;
+	}
+
+	double getStemVolume() const {
+		return _stemVolume;
+	}
+
+	double getStepFrac() const {
+		return _stepFrac;
+	}
+
+	double getTreeVolume() const {
+		return _treeVolume;
+	}
+
+	double getXylemConductivity() const {
+		return _xylemConductivity;
+	}
+
+	double getCountabove() const {
+		return countabove;
+	}
+
+	double getCountbelow() const {
+		return countbelow;
+	}
+
+	double getMindist() const {
+		return mindist;
+	}
+
+	double getWinCountabove() const {
+		return win_countabove;
+	}
+
+	double getWinCountbelow() const {
+		return win_countbelow;
 	}
 
 private:
