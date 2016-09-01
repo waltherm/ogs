@@ -6,6 +6,7 @@
  */
 
 #include <Flora.h>
+#include <time.h>
 
 Flora::Flora(Land const &aLand) :
 		_thisLand(aLand) {
@@ -19,12 +20,24 @@ Flora::~Flora() {
 
 void Flora::initialPopulate() {
 
-	GeoLib::Point const newPoint(30, 30, 0);	//TODO random sampling
-	_aliveTrees.push_back(new Avicennia(newPoint, _aliveTrees.size(), _thisLand));
+	std::srand (std::time(NULL));
+
+	for (std::size_t i(0); i<30; i++)
+	{
+		double const x = std::rand() % 100;
+		double const y = std::rand() % 100;
+		double const z = 0;
+
+		GeoLib::Point const newPoint(x, y, z);
+		_aliveTrees.push_back(new Avicennia(newPoint, _aliveTrees.size(), _thisLand));
+	}
+
+	//	GeoLib::Point const newPoint(30, 30, 0);	//TODO random sampling
+//	_aliveTrees.push_back(new Avicennia(newPoint, _aliveTrees.size(), _thisLand));
 
 //	GeoLib::Point const newPointb(40, 40, 0);	//TODO random sampling
 //	_aliveTrees.push_back(new Avicennia(newPointb, _aliveTrees.size(), _thisLand));
-//
+
 //	GeoLib::Point const newPointc(60, 60, 0);	//TODO random sampling
 //	_aliveTrees.push_back(new Avicennia(newPointc, _aliveTrees.size(), _thisLand));
 }
