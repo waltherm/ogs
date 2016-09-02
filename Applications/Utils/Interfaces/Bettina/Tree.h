@@ -23,9 +23,19 @@ public:
 	virtual ~Tree();
 
 	void recruitment();
-	void checkAboveGroundCompetition();
+
+	void checkAboveGroundCompetition(std::vector<Tree*> &aliveTrees);
+	//void findNodesInCrownRadius();
+	std::vector<std::size_t> findMinOneNodeInSearchRadius(double searchRadius);
+	void setAboveGroundCompetition(std::vector<Tree*> &aliveTrees);
 	void calcAboveGroundCompetition();
+
+	void checkBelowGroundCompetition();
+	void setBelowGroundCompetition();
+	void calcBelowGroundCompetition();
+
 	void grow();
+
 	double getSalinity() const;
 	double getProperty(std::string propertyName) const;
 
@@ -209,12 +219,12 @@ public:
 		return _xylemConductivity;
 	}
 
-	double getCountabove() const {
-		return countabove;
+	std::vector<std::size_t> getNodesWithinCrownRadius() const {
+		return _nodesWithinCrownRadius;
 	}
 
-	double getCountbelow() const {
-		return countbelow;
+	std::vector<std::size_t> getNodesWithinRootRadius() const {
+		return _nodesWithinRootRadius;
 	}
 
 	double getMindist() const {
@@ -222,11 +232,11 @@ public:
 	}
 
 	double getWinCountabove() const {
-		return win_countabove;
+		return _aboveGroundCompetitionWins;
 	}
 
 	double getWinCountbelow() const {
-		return win_countbelow;
+		return _belowGroundCompetitionWins;
 	}
 
 private:
@@ -258,10 +268,10 @@ private:
 	double _rootRadiusGrowth;	//rg;
 	double _stemRadiusGrowth;	//dg;
 	double _stepFrac;	//stepfrac numerical helper variable
-	double countabove;
-	double win_countabove;
-	double countbelow;
-	double win_countbelow;
+	std::vector<std::size_t> _nodesWithinCrownRadius;	//countabove number of nodes within crownradius * sizefactor
+	double _aboveGroundCompetitionWins;
+	std::vector<std::size_t> _nodesWithinRootRadius;	//countbelow number of nodes within rootradius * sizefactor
+	double _belowGroundCompetitionWins;
 	double _aboveGroundCompetitionCoefficient;	//above_c
 	double _belowGroundCompetitionCoefficient;	//below_c
 	bool _deathFlag;	//deathflag

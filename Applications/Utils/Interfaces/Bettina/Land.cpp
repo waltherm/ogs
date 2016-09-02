@@ -54,16 +54,48 @@ double Land::getSalinityAtNodeID(std::size_t nodeID) const {
 	return getPropertyAtNodeID<double>(nodeID, _salinityPropertyString);
 }
 
-void Land::resetAboveGroundCompetition(){
+double Land::getAboveGroundCompetitionAtNodeID(std::size_t nodeID) const {
+	return getPropertyAtNodeID<double>(nodeID, _aboveGroundCompetitionString);
+}
+
+double Land::getBelowGroundCompetitionAtNodeID(std::size_t nodeID) const {
+	return getPropertyAtNodeID<double>(nodeID, _belowGroundCompetitionString);
+}
+
+void Land::resetAboveGroundCompetition() {
 	resetPropertyValues(-1.0, _aboveGroundCompetitionString);
 }
 
-void Land::resetBelowGroundCompetition(){
-	resetPropertyValues(-1.0, _belowGroundCompetitionString);
+void Land::resetBelowGroundCompetition() {
+	resetPropertyValues(0.0, _belowGroundCompetitionString);
 }
 
+void Land::setAboveGroundCompetition(double value, std::size_t nodeID) {
+	setPropertyAtNodeID(value, nodeID, _aboveGroundCompetitionString);
+}
 
+void Land::setBelowGroundCompetition(double value, std::size_t nodeID) {
+	setPropertyAtNodeID(value, nodeID, _belowGroundCompetitionString);
+}
 
+void Land::incrementBelowGroundCompetition(std::size_t nodeID) {
+	setBelowGroundCompetition(getBelowGroundCompetitionAtNodeID(nodeID) + 1,
+			nodeID);
+}
+
+void Land::invertBelowGroundCompetition() {
+	// TODO calc inverse if belowGroundCompetition > 1
+
+	boost::optional<MeshLib::PropertyVector<double>&> property(
+			_subsurface->getProperties().getPropertyVector<double>(
+					_belowGroundCompetitionString));
+
+	for (auto & v : *property) {
+		if (v > 1)
+			v = 1 / v;
+	}
+
+}
 
 // obsolete
 double Land::getSalinityAtPoint(GeoLib::Point const &point) const {

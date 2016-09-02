@@ -30,6 +30,8 @@ namespace BettinaConstants {
 
 	double const aviSizeFactor(4);
 
+	double const searchRadiusIncrement(1.1);
+
 	double const oneOverSqrtTwo(std::pow(2, -0.5));
 
 //	double const salRand;

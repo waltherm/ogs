@@ -29,18 +29,18 @@ void Flora::initialPopulate() {
 //		double const z = 0;
 //
 //		GeoLib::Point const newPoint(x, y, z);
-//		_aliveTrees.push_back(new Avicennia(newPoint, _aliveTrees.size(), _thisLand));
+//		_aliveTrees.push_back(new Avicennia(newPoint, _aliveTrees.size()-1, _thisLand));
 //	}
 
 	GeoLib::Point const newPoint(30, 30, 0);
 	_aliveTrees.push_back(
-			new Avicennia(newPoint, _aliveTrees.size(), _thisLand));
+			new Avicennia(newPoint, _aliveTrees.size()-1, _thisLand));
 
-	GeoLib::Point const newPointb(40, 40, 0);
+	GeoLib::Point const newPointb(30, 31, 0);
 	_aliveTrees.push_back(
-			new Avicennia(newPointb, _aliveTrees.size(), _thisLand));
+			new Avicennia(newPointb, _aliveTrees.size()-1, _thisLand));
 
-//	GeoLib::Point const newPointc(60, 60, 0);	//TODO random sampling
+//	GeoLib::Point const newPointc(60, 60, 0);
 //	_aliveTrees.push_back(new Avicennia(newPointc, _aliveTrees.size(), _thisLand));
 }
 
@@ -52,16 +52,29 @@ void Flora::recruitment() {
 
 void Flora::competition() {
 
+	//above ground competition
 	_thisLand.resetAboveGroundCompetition();
 
 	for (auto &aliveTree : _aliveTrees) {
-		aliveTree->checkAboveGroundCompetition();
+		aliveTree->checkAboveGroundCompetition(_aliveTrees);
 	}
 
 	for (auto &aliveTree : _aliveTrees) {
 		aliveTree->calcAboveGroundCompetition();
 	}
 
+	//below ground competition
+	_thisLand.resetBelowGroundCompetition();
+
+	for (auto &aliveTree : _aliveTrees) {
+		aliveTree->checkBelowGroundCompetition();
+	}
+
+	_thisLand.invertBelowGroundCompetition();
+
+	for (auto &aliveTree : _aliveTrees) {
+		aliveTree->calcBelowGroundCompetition();
+	}
 }
 
 void Flora::grow() {

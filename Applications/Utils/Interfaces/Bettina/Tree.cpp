@@ -14,6 +14,7 @@
 #include <iostream>
 
 #include "MeshGeoToolsLib/MeshNodeSearcher.h"
+#include "MeshLib/Node.h"
 
 Tree::Tree(GeoLib::Point const &point, unsigned int id, Land &aLand,
 		double stemHeight, double crownHeight, double rootDepth,
@@ -27,10 +28,11 @@ Tree::Tree(GeoLib::Point const &point, unsigned int id, Land &aLand,
 				-1), _belowGroundResources(-1), _availableResources(-1), _crownRadiusGrowthWeight(
 				-1), _stemHeightGrowthWeight(-1), _fineRootGrowthWeight(-1), _stemRadiusGrowthWeight(
 				-1), _growth(-1), _stemHeightGrowth(-1), _crownRadiusGrowth(-1), _rootRadiusGrowth(
-				-1), _stemRadiusGrowth(-1), _stepFrac(0), countabove(-1), win_countabove(
-				-1), countbelow(-1), win_countbelow(-1), _aboveGroundCompetitionCoefficient(
-				1), _belowGroundCompetitionCoefficient(1), _deathFlag(false), mindist(
-				-1), _fineRootPermeability(fineRootPermeability), _minimumLeafWaterPotential(
+				-1), _stemRadiusGrowth(-1), _stepFrac(0), _nodesWithinCrownRadius(
+				1), _aboveGroundCompetitionWins(-1), _nodesWithinRootRadius(1), _belowGroundCompetitionWins(
+				-1), _aboveGroundCompetitionCoefficient(1), _belowGroundCompetitionCoefficient(
+				1), _deathFlag(false), mindist(-1), _fineRootPermeability(
+				fineRootPermeability), _minimumLeafWaterPotential(
 				minimumLeafWaterPotential), _xylemConductivity(
 				xylemConductivity), _halfMaxHeightGrowthWeigth(
 				halfMaxHeightGrowthWeight), _maintanceFactor(maintanceFactor), _growthLimitCoefficient(
@@ -67,19 +69,154 @@ void Tree::recruitment() {
 	// TODO: implement recruitment
 }
 
-void Tree::checkAboveGroundCompetition() {
+void Tree::checkAboveGroundCompetition(std::vector<Tree*> &aliveTrees) {
+	//findNodesInCrownRadius();
+	_nodesWithinCrownRadius = findMinOneNodeInSearchRadius(
+			_crownRadius * _sizeFactor);
+	setAboveGroundCompetition(aliveTrees);
+}
 
-	//find nodes in crown radius (if no nodes found, only use nearest node)
+//void Tree::findNodesInCrownRadius() {
+//
+//	//find nodes in crown radius (if no nodes found, only use nearest node)
+//	double searchRadius(_crownRadius * _sizeFactor);
+//	std::vector<std::size_t> crownRadiusNodeIDs(
+//			findNodesInRadius(searchRadius));
+//
+//	while (crownRadiusNodeIDs.size() < 1) {	//no nodes found within crown radius -> search for nearest node(s)
+//		double const radiusIncrement(1.1);
+//		searchRadius *= radiusIncrement;
+//		crownRadiusNodeIDs = findNodesInRadius(searchRadius);
+//		if (crownRadiusNodeIDs.size() < 1) {
+//			continue;
+//		} else {
+//			if (crownRadiusNodeIDs.size() > 1) {//only search for nearest node
+//				std::vector<std::size_t> temp_crownRadiusNodeIDs;
+//				temp_crownRadiusNodeIDs.push_back(
+//						findNearestNodeFromIDs(crownRadiusNodeIDs));
+//				crownRadiusNodeIDs = temp_crownRadiusNodeIDs;
+//			}
+//		}
+//	}
+//
+//	_nodesWithinCrownRadius = crownRadiusNodeIDs;
+//
+//}
+
+std::vector<std::size_t> Tree::findMinOneNodeInSearchRadius(
+		double searchRadius) {
+
+	std::vector<std::size_t> searchRadiusNodeIDs(
+			findNodesInRadius(searchRadius));
+
+	while (searchRadiusNodeIDs.size() < 1) { //no nodes found within search radius -> search for nearest node(s)
+		searchRadius *= BettinaConstants::searchRadiusIncrement;
+		searchRadiusNodeIDs = findNodesInRadius(searchRadius);
+		if (searchRadiusNodeIDs.size() < 1) {
+			continue;
+		} else {
+			if (searchRadiusNodeIDs.size() > 1) { //only search for nearest node
+				std::vector<std::size_t> temp_crownRadiusNodeIDs;
+				temp_crownRadiusNodeIDs.push_back(
+						findNearestNodeFromIDs(searchRadiusNodeIDs));
+				searchRadiusNodeIDs = temp_crownRadiusNodeIDs;
+			}
+		}
+	}
+
+	return searchRadiusNodeIDs;
+
+}
+
+void Tree::setAboveGroundCompetition(std::vector<Tree*> &aliveTrees) {
+
 	//in all nodes, set this tree ID as aboveGroundCompetitionID, if is highest
+	for (std::size_t i(0); i < _nodesWithinCrownRadius.size(); i++) {
+		double aboveGroundCompetition(
+				_thisLand.getAboveGroundCompetitionAtNodeID(
+						_nodesWithinCrownRadius[i]));
+		if (aboveGroundCompetition < 0 || aboveGroundCompetition == _id) // no other tree or this tree already highest here
+				{
+			_thisLand.setAboveGroundCompetition(_id,
+					_nodesWithinCrownRadius[i]);
+		} else	// other tree here
+		{
+			double const otherTreesHeight(
+					aliveTrees[aboveGroundCompetition]->getStemHeight()
+							+ 2
+									* aliveTrees[aboveGroundCompetition]->getCrownHeight());
+			double const thisTreesHeight(_stemHeight + 2 * _crownHeight);
+			if (otherTreesHeight <= thisTreesHeight)//this tree is higher or equal (and wins)
+					{
+				_thisLand.setAboveGroundCompetition(_id,
+						_nodesWithinCrownRadius[i]);
+			}
+		}
+	}
 
 }
 
 void Tree::calcAboveGroundCompetition() {
 
 	//find nodes in crown radius (if no nodes found, only use nearest node)
-	//calc relation between all nodes and nodes where this tree is highest
-	//calc above_c
+	_aboveGroundCompetitionWins = 0;	// TODO could be local var
+	for (auto id : _nodesWithinCrownRadius) {
+		if (_thisLand.getAboveGroundCompetitionAtNodeID(id) == _id) {
+			_aboveGroundCompetitionWins++;
+		}
+	}
+
+	//calc relation between nodes where this tree is highest and all nodes within crownradius
+	_aboveGroundCompetitionCoefficient = _aboveGroundCompetitionWins
+			/ _nodesWithinCrownRadius.size();
+
+	//calc above_c again
 	// set above_c above_c + (1 - above_c) * (count patches in-radius ( 2 * 5 * size-factor ) with [compete-above < 0] ) / (2 * count patches in-radius ( 2 * 5 * size-factor ) )
+	//count nodes, where no above competition in vicinity
+	double searchRadius(10 * _sizeFactor);	// 10 is arbitrary magic number?
+	std::vector<std::size_t> vicinityNodeIDs(findNodesInRadius(searchRadius));
+	if (vicinityNodeIDs.size() > 0) {
+		std::size_t vicinityNodes(0);
+		for (auto id : vicinityNodeIDs) {
+			if (_thisLand.getAboveGroundCompetitionAtNodeID(id) < 0) {
+				vicinityNodes++;
+			}
+		}
+		_aboveGroundCompetitionCoefficient += (1
+				- _aboveGroundCompetitionCoefficient) * vicinityNodes
+				/ (2 * vicinityNodeIDs.size());
+	}
+
+}
+
+void Tree::checkBelowGroundCompetition() {
+	// count nodes within rootRadius
+	_nodesWithinRootRadius = findMinOneNodeInSearchRadius(
+			_rootRadius * _sizeFactor);
+	// increment belowGroundCompetition
+	setBelowGroundCompetition();
+}
+
+void Tree::setBelowGroundCompetition() {
+	for (auto id : _nodesWithinRootRadius) {
+		_thisLand.incrementBelowGroundCompetition(id);
+	}
+}
+
+void Tree::calcBelowGroundCompetition() {
+
+	// calc belowGroundCompetitionCoefficient
+	// set win_countbelow (max (list ((sum ([compete-below] of patches in-radius (r_root * size-factor)))) 0.5 ))
+	_belowGroundCompetitionWins = 0;
+	for (auto id : _nodesWithinRootRadius) {
+		_belowGroundCompetitionWins +=
+				_thisLand.getBelowGroundCompetitionAtNodeID(id);
+	}
+
+	_belowGroundCompetitionWins = std::max(_belowGroundCompetitionWins, 0.5);
+	_belowGroundCompetitionCoefficient = std::min(
+			_belowGroundCompetitionWins / _nodesWithinRootRadius.size(), 1.0);
+
 }
 
 void Tree::grow() {
@@ -292,7 +429,6 @@ double Tree::stemRadiusGrowth() {
 //	return nearestNodeID;
 //}
 
-
 std::size_t Tree::findNearestNodeToTree() const {
 
 	std::vector<std::size_t> const idVector(findNodesInRadius());
@@ -300,7 +436,8 @@ std::size_t Tree::findNearestNodeToTree() const {
 
 }
 
-std::size_t Tree::findNearestNodeFromIDs(std::vector<std::size_t> nodeIDs) const {
+std::size_t Tree::findNearestNodeFromIDs(
+		std::vector<std::size_t> nodeIDs) const {
 
 	std::size_t nearestNodeID(-1);
 	if (nodeIDs.size() == 0) {
@@ -310,7 +447,25 @@ std::size_t Tree::findNearestNodeFromIDs(std::vector<std::size_t> nodeIDs) const
 		if (nodeIDs.size() == 1) {
 			nearestNodeID = nodeIDs[0];
 		} else {
-			nearestNodeID = nodeIDs[0]; //TODO: get nearest point from list of points
+			//TODO: return list of nearest nodes, if multiple points have same distance
+			double distance(std::numeric_limits<double>::max());
+			for (auto id : nodeIDs) {
+				GeoLib::Point const idCoords(
+						_thisLand.getSubsurface()->getNode(id)->getCoords()[0],
+						_thisLand.getSubsurface()->getNode(id)->getCoords()[1],
+						_thisLand.getSubsurface()->getNode(id)->getCoords()[2]);
+				double thisDistance(
+						std::sqrt(
+								std::pow((_position[0] - idCoords[0]), 2)
+										+ std::pow((_position[1] - idCoords[1]),
+												2)
+										+ std::pow((_position[2] - idCoords[2]),
+												2)));
+				if (thisDistance < distance) {
+					distance = thisDistance;
+					nearestNodeID = id;
+				}
+			}
 		}
 	}
 	return nearestNodeID;
