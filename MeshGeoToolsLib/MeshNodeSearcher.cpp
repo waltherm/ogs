@@ -39,7 +39,7 @@ MeshNodeSearcher::MeshNodeSearcher(MeshLib::Mesh const& mesh,
     DBUG("Constructing MeshNodeSearcher obj.");
     _search_length = search_length_algorithm.getSearchLength();
 
-    INFO("Calculated search length for mesh \"%s\" is %e.",
+    DBUG("Calculated search length for mesh \"%s\" is %e.",
         _mesh.getName().c_str(), _search_length);
 }
 
