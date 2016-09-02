@@ -13,7 +13,7 @@
 
 #include <iostream>
 
-#include "MeshGeoToolsLib/MeshNodeSearcher.h"
+//#include "MeshGeoToolsLib/MeshNodeSearcher.h"
 #include "MeshLib/Node.h"
 
 Tree::Tree(GeoLib::Point const &point, unsigned int id, Land &aLand,
@@ -473,16 +473,19 @@ std::size_t Tree::findNearestNodeFromIDs(
 
 std::vector<std::size_t> const Tree::findNodesInRadius(
 		double radius /*=-1.0*/) const {
+//
+//	double searchLengthTemp(radius);
+//	if (radius == -1.0)
+//		searchLengthTemp = _thisLand.getSubsurface()->getMinEdgeLength();
+//
+//	MeshGeoToolsLib::SearchLength const searchLength(searchLengthTemp);
+//	MeshGeoToolsLib::MeshNodeSearcher _meshSearcher(*_thisLand.getSubsurface(),
+//			searchLength);
+//	std::vector<std::size_t> idVector(_meshSearcher.getMeshNodeIDs(_position));
+//	return idVector;
 
-	double searchLengthTemp(radius);
-	if (radius == -1.0)
-		searchLengthTemp = _thisLand.getSubsurface()->getMinEdgeLength();
+	return _thisLand.findNodesInRadius(radius, _position);
 
-	MeshGeoToolsLib::SearchLength const searchLength(searchLengthTemp);
-	MeshGeoToolsLib::MeshNodeSearcher _meshSearcher(*_thisLand.getSubsurface(),
-			searchLength);
-	std::vector<std::size_t> idVector(_meshSearcher.getMeshNodeIDs(_position));
-	return idVector;
 }
 
 double Tree::getSalinity() const {

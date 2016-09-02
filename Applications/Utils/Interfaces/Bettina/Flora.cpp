@@ -20,28 +20,26 @@ Flora::~Flora() {
 
 void Flora::initialPopulate() {
 
-//	std::srand (std::time(NULL));
-//
-//	for (std::size_t i(0); i<30; i++)
+	std::srand (std::time(NULL));
+
+//	for (std::size_t i(0); i<200; i++)
 //	{
-//		double const x = std::rand() % 100;
-//		double const y = std::rand() % 100;
+//		double const x = std::rand() % 600;
+//		double const y = std::rand() % 300;
 //		double const z = 0;
 //
 //		GeoLib::Point const newPoint(x, y, z);
 //		_aliveTrees.push_back(new Avicennia(newPoint, _aliveTrees.size()-1, _thisLand));
 //	}
 
-	GeoLib::Point const newPoint(30, 30, 0);
+	GeoLib::Point const newPoint(31, 31, 0);
 	_aliveTrees.push_back(
 			new Avicennia(newPoint, _aliveTrees.size()-1, _thisLand));
 
-	GeoLib::Point const newPointb(30, 31, 0);
+	GeoLib::Point const newPointb(36, 36, 0);
 	_aliveTrees.push_back(
 			new Avicennia(newPointb, _aliveTrees.size()-1, _thisLand));
 
-//	GeoLib::Point const newPointc(60, 60, 0);
-//	_aliveTrees.push_back(new Avicennia(newPointc, _aliveTrees.size(), _thisLand));
 }
 
 void Flora::recruitment() {

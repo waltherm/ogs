@@ -10,9 +10,9 @@
 Avicennia::Avicennia(GeoLib::Point const &point, unsigned int id,
 		Land &aLand) :
 		Tree(point, id, aLand,
-				0.0001,	//stemHeight
-				0.004,	//crownHeight
-				0.004,	//rootDepth
+				0.001,	//stemHeight
+				0.04,	//crownHeight
+				0.04,	//rootDepth
 				0.3,	//crownRadius
 				0.04,	//fineRootPermeability
 				-7860,	//minimumLeafWaterPotential

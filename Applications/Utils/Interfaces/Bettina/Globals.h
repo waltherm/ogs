@@ -28,9 +28,9 @@ namespace BettinaConstants {
 	double const deathTreshhold(0.001);
 	double const solarRadiation(0.038);
 
-	double const aviSizeFactor(4);
+	double const aviSizeFactor(1);
 
-	double const searchRadiusIncrement(1.1);
+	double const searchRadiusIncrement(2);
 
 	double const oneOverSqrtTwo(std::pow(2, -0.5));
 

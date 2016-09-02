@@ -13,6 +13,7 @@
 
 #include "MeshLib/Mesh.h"
 #include "GeoLib/GEOObjects.h"
+#include "MeshGeoToolsLib/MeshNodeSearcher.h"
 
 class Flora;
 
@@ -23,7 +24,7 @@ public:
 			std::string const &belowGroundCompetitionString);
 	virtual ~Land();
 
-	double getSalinityAtPoint(GeoLib::Point const &point) const;
+//	double getSalinityAtPoint(GeoLib::Point const &point) const;
 	double getSalinityAtNodeID(std::size_t nodeID) const;
 	double getAboveGroundCompetitionAtNodeID(std::size_t nodeID) const;
 	double getBelowGroundCompetitionAtNodeID(std::size_t nodeID) const;
@@ -34,6 +35,8 @@ public:
 	void setBelowGroundCompetition(double value, std::size_t nodeID);
 	void incrementBelowGroundCompetition(std::size_t nodeID);
 	void invertBelowGroundCompetition();
+
+	std::vector<std::size_t> findNodesInRadius(double radius, GeoLib::Point position);
 
 	const MeshLib::Mesh* getSubsurface() const {
 		return _subsurface;
@@ -95,6 +98,8 @@ private:
 	std::string _aboveGroundCompetitionString;
 	std::string _belowGroundCompetitionString;
 	MeshLib::Mesh *_subsurface;
+	MeshGeoToolsLib::SearchLength _searchLength;
+	MeshGeoToolsLib::MeshNodeSearcher _meshSearcher;
 
 };
 

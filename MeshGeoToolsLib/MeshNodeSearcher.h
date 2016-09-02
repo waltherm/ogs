@@ -133,6 +133,10 @@ public:
      */
     static MeshNodeSearcher& getMeshNodeSearcher(MeshLib::Mesh const& mesh);
 
+	void setSearchLength(double searchLength) {
+		_search_length = searchLength;
+	}
+
 private:
     MeshLib::Mesh const& _mesh;
     GeoLib::Grid<MeshLib::Node> _mesh_grid;
