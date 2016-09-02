@@ -15,8 +15,7 @@
 
 #include "MeshGeoToolsLib/MeshNodeSearcher.h"
 
-
-Tree::Tree(GeoLib::Point const &point, unsigned int id, Land const &aLand,
+Tree::Tree(GeoLib::Point const &point, unsigned int id, Land &aLand,
 		double stemHeight, double crownHeight, double rootDepth,
 		double crownRadius, double fineRootPermeability,
 		double minimumLeafWaterPotential, double xylemConductivity,
@@ -64,18 +63,24 @@ Tree::~Tree() {
 	// TODO Auto-generated destructor stub
 }
 
-
-void Tree::recruitment()
-{
+void Tree::recruitment() {
 	// TODO: implement recruitment
 }
 
+void Tree::checkAboveGroundCompetition() {
 
-void Tree::competition()
-{
+	//find nodes in crown radius (if no nodes found, only use nearest node)
+	//in all nodes, set this tree ID as aboveGroundCompetitionID, if is highest
 
 }
 
+void Tree::calcAboveGroundCompetition() {
+
+	//find nodes in crown radius (if no nodes found, only use nearest node)
+	//calc relation between all nodes and nodes where this tree is highest
+	//calc above_c
+	// set above_c above_c + (1 - above_c) * (count patches in-radius ( 2 * 5 * size-factor ) with [compete-above < 0] ) / (2 * count patches in-radius ( 2 * 5 * size-factor ) )
+}
 
 void Tree::grow() {
 
@@ -96,7 +101,7 @@ void Tree::grow() {
 			calcGrowth();
 		}
 	} else {
-	//	updateGrowLengths();
+		//	updateGrowLengths();
 		growTree();
 	}
 
@@ -171,7 +176,7 @@ void Tree::gatherResources() {
 							+ BettinaConstants::gravityConstant
 									* (_stemHeight + 2 * _crownRadius)
 							+ 85 * getSalinity())	//TODO what is 85?
-							/ (_radialFluxResistence + _lateralFluxResistence)
+					/ (_radialFluxResistence + _lateralFluxResistence)
 							/ BettinaConstants::gravityConstant);
 	//	  set res_avail (min (list (k_rel * res_a)  res_b))
 	_availableResources = std::min(
@@ -203,10 +208,14 @@ void Tree::updateWeights() {
 			(_crownRadius - _rootRadius) / (_crownRadius + _rootRadius));
 
 //	  set wa2 max (list (max_h / (1 + exp((Qr0 - Q_rad) / sigmo_slope_hg))) 0)
-	_stemHeightGrowthWeight = std::max(
-			_halfMaxHeightGrowthWeigth
-					/ (1 + std::exp( (BettinaConstants::Qr0 - qRad)
-					/ BettinaConstants::sigmo_slope_hg)), 0.0);
+	_stemHeightGrowthWeight =
+			std::max(
+					_halfMaxHeightGrowthWeigth
+							/ (1
+									+ std::exp(
+											(BettinaConstants::Qr0 - qRad)
+													/ BettinaConstants::sigmo_slope_hg)),
+					0.0);
 //	  set wa1 max (list ((1 - wa2) / (1 + exp(Q_res / sigmo_slope))) 0)
 	_crownRadiusGrowthWeight = std::max(
 			(1 - _stemHeightGrowthWeight)
@@ -263,24 +272,62 @@ double Tree::stemRadiusGrowth() {
 							+ 2 * _crownRadius));
 }
 
-std::size_t Tree::findNearestNodeToTree() {
-	MeshGeoToolsLib::SearchLength searchLength(
-			_thisLand.getSubsurface()->getMinEdgeLength());
-	MeshGeoToolsLib::MeshNodeSearcher _meshSearcher(*_thisLand.getSubsurface(),
-			searchLength);
-	auto idVector(_meshSearcher.getMeshNodeIDs(_position));
+//std::size_t Tree::findNearestNodeToTree() {
+//	MeshGeoToolsLib::SearchLength searchLength(
+//			_thisLand.getSubsurface()->getMinEdgeLength());
+//	MeshGeoToolsLib::MeshNodeSearcher _meshSearcher(*_thisLand.getSubsurface(),
+//			searchLength);
+//	auto idVector(_meshSearcher.getMeshNodeIDs(_position));
+//	std::size_t nearestNodeID(-1);
+//	if (idVector.size() == 0) {
+//		ERR("No nodes found near tree no. %u.", _id);
+//		std::abort();
+//	} else {
+//		if (idVector.size() == 1) {
+//			nearestNodeID = idVector[0];
+//		} else {
+//			nearestNodeID = idVector[0]; //TODO: get nearest point from list of points
+//		}
+//	}
+//	return nearestNodeID;
+//}
+
+
+std::size_t Tree::findNearestNodeToTree() const {
+
+	std::vector<std::size_t> const idVector(findNodesInRadius());
+	return findNearestNodeFromIDs(idVector);
+
+}
+
+std::size_t Tree::findNearestNodeFromIDs(std::vector<std::size_t> nodeIDs) const {
+
 	std::size_t nearestNodeID(-1);
-	if (idVector.size() == 0) {
+	if (nodeIDs.size() == 0) {
 		ERR("No nodes found near tree no. %u.", _id);
 		std::abort();
 	} else {
-		if (idVector.size() == 1) {
-			nearestNodeID = idVector[0];
+		if (nodeIDs.size() == 1) {
+			nearestNodeID = nodeIDs[0];
 		} else {
-			nearestNodeID = idVector[0]; //TODO: get nearest point from list of points
+			nearestNodeID = nodeIDs[0]; //TODO: get nearest point from list of points
 		}
 	}
 	return nearestNodeID;
+}
+
+std::vector<std::size_t> const Tree::findNodesInRadius(
+		double radius /*=-1.0*/) const {
+
+	double searchLengthTemp(radius);
+	if (radius == -1.0)
+		searchLengthTemp = _thisLand.getSubsurface()->getMinEdgeLength();
+
+	MeshGeoToolsLib::SearchLength const searchLength(searchLengthTemp);
+	MeshGeoToolsLib::MeshNodeSearcher _meshSearcher(*_thisLand.getSubsurface(),
+			searchLength);
+	std::vector<std::size_t> idVector(_meshSearcher.getMeshNodeIDs(_position));
+	return idVector;
 }
 
 double Tree::getSalinity() const {
@@ -290,3 +337,4 @@ double Tree::getSalinity() const {
 double Tree::getSalinityAtNearestNode() const {
 	return _thisLand.getSalinityAtNodeID(_nearestNodeID);
 }
+

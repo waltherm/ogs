@@ -21,15 +21,19 @@ int main() {
 
 	ApplicationsLib::LogogSetup logog_setup;
 
+	std::string const salinityString = "Salinity2", aboveGroundCompetitionString(
+			"CompeteAbove"), belowGroundCompetitionString("CompeteBelow");
+
 	// reading
-	std::string fileName(
+	std::string const fileName(
 			"/home/waltherm/03_scientific_work/mangroven/BETTINA/test/test.vtu");
-	Output thisOutput("/home/waltherm/03_scientific_work/mangroven/BETTINA/test/test");
+	Output thisOutput(
+			"/home/waltherm/03_scientific_work/mangroven/BETTINA/test/test");
 
 	// create subsurface & flora
-	Land thisLand(fileName);
+	Land thisLand(fileName, salinityString, aboveGroundCompetitionString,
+			belowGroundCompetitionString);
 	Flora thisFlora(thisLand);
-
 
 	// run through time steps
 	for (std::size_t time(0); time < 100000; time++) {
@@ -42,7 +46,7 @@ int main() {
 		thisOutput.writeFlora(thisFlora, time);
 		thisOutput.writeLand(thisLand.getSubsurface(), time);
 
-		if ( !(thisFlora.checkForActivePopulation()) )
+		if (!(thisFlora.checkForActivePopulation()))
 			std::abort();
 
 		//TODO calculate Clark-Evans-Index

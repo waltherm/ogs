@@ -12,7 +12,7 @@
 
 class Rhizophora: public Tree {
 public:
-	Rhizophora(GeoLib::Point const &point, unsigned int id, Land const &aLand);
+	Rhizophora(GeoLib::Point const &point, unsigned int id, Land &aLand);
 	virtual ~Rhizophora();
 };
 

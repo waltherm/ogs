@@ -8,7 +8,7 @@
 #include <Avicennia.h>
 
 Avicennia::Avicennia(GeoLib::Point const &point, unsigned int id,
-		Land const &aLand) :
+		Land &aLand) :
 		Tree(point, id, aLand,
 				0.0001,	//stemHeight
 				0.004,	//crownHeight

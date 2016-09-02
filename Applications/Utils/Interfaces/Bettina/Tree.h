@@ -10,23 +10,24 @@
 
 #include "GeoLib/GEOObjects.h"
 
-class Land;
+#include "Land.h"
 
 class Tree {
 public:
-	Tree(GeoLib::Point const &point, unsigned int id, Land const &aLand,
+	Tree(GeoLib::Point const &point, unsigned int id, Land &aLand,
 			double stemHeight, double crownHeight, double rootDepth,
 			double crownRadius, double fineRootPermeability,
 			double minimumLeafWaterPotential, double xylemConductivity,
-			double halfMaxHeightGrowthWeight,
-			double maintanceFactor);
+			double halfMaxHeightGrowthWeight, double maintanceFactor);
 
 	virtual ~Tree();
 
 	void recruitment();
-	void competition();
+	void checkAboveGroundCompetition();
+	void calcAboveGroundCompetition();
 	void grow();
 	double getSalinity() const;
+	double getProperty(std::string propertyName) const;
 
 	bool getDeathFlag() const {
 		return _deathFlag;
@@ -242,8 +243,8 @@ private:
 	double _cableRootVolume;	//v_croot
 	double _fineRootVolume;	//v_froot
 	double _treeVolume;	//v_tree
-	double _radialFluxResistence;	//r1, Wasseraufnahmeẃiderstand, radialer Fluß
-	double _lateralFluxResistence;	//r2, Widerstand axialer Fluß (cable roots, Stamm, Äste)
+	double _radialFluxResistence;//r1, Wasseraufnahmeẃiderstand, radialer Fluß
+	double _lateralFluxResistence;//r2, Widerstand axialer Fluß (cable roots, Stamm, Äste)
 	double _aboveGroundResources;	//res_a
 	double _belowGroundResources;	//res_b
 	double _availableResources;	//res_avail, minimum of _above and _belowGRes
@@ -276,7 +277,7 @@ private:
 	double const _sizeFactor;	//size-factor
 
 	std::size_t const _id;
-	Land const & _thisLand;
+	Land & _thisLand;
 	std::size_t _nearestNodeID;
 
 	void growTree();
@@ -292,8 +293,23 @@ private:
 	double rootRadiusGrowth();
 	double stemRadiusGrowth();
 
-	std::size_t findNearestNodeToTree();
+	//std::size_t findNearestNodeToTree();
+	std::size_t findNearestNodeToTree() const;
+	std::size_t findNearestNodeFromIDs(std::vector<std::size_t> nodeIDs) const;
+	std::vector<std::size_t> const findNodesInRadius(double radius = -1.0) const;
+
 	double getSalinityAtNearestNode() const;
+
+	template<typename PROP_VAL_TYPE>
+	PROP_VAL_TYPE getProperty(std::string propertyName) const {
+		return getPropertyAtNearestNode<PROP_VAL_TYPE>(propertyName);
+	}
+
+	template<typename PROP_VAL_TYPE>
+	PROP_VAL_TYPE getPropertyAtNearestNode(std::string propertyName) const {
+		return _thisLand.getPropertyAtNodeID<PROP_VAL_TYPE>(_nearestNodeID,
+				propertyName);
+	}
 
 };
 

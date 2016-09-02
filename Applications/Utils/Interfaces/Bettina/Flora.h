@@ -18,7 +18,7 @@ class Land;
 
 class Flora {
 public:
-	Flora(Land const &aLand);
+	Flora(Land &aLand);
 	virtual ~Flora();
 
 	void initialPopulate();
@@ -43,7 +43,7 @@ public:
 
 private:
 	std::vector<Tree*> _aliveTrees, _deadTrees;
-	Land const & _thisLand;
+	Land & _thisLand;
 };
 
 #endif /* FLORA_H_ */
