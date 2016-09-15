@@ -93,7 +93,8 @@ std::vector<std::size_t> const& MeshNodeSearcher::getMeshNodeIDsAlongSurface(Geo
 
 MeshNodesOnPoint& MeshNodeSearcher::getMeshNodesOnPoint(GeoLib::Point const& pnt)
 {
-    std::vector<MeshNodesOnPoint*>::const_iterator it(_mesh_nodes_on_points.begin());
+	_mesh_nodes_on_points.clear();	// clear cache
+	std::vector<MeshNodesOnPoint*>::const_iterator it(_mesh_nodes_on_points.begin());
     for (; it != _mesh_nodes_on_points.end(); ++it) {
         if (&(*it)->getPoint() == &pnt) {
             return *(*it);
