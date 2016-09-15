@@ -36,7 +36,7 @@ public:
 	void incrementBelowGroundCompetition(std::size_t nodeID);
 	void invertBelowGroundCompetition();
 
-	std::vector<std::size_t> findNodesInRadius(double radius, GeoLib::Point position);
+	std::vector<std::size_t> findNodesInRadius(double radius, GeoLib::Point const &position);
 
 	const MeshLib::Mesh* getSubsurface() const {
 		return _subsurface;

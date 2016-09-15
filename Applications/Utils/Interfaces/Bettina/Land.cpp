@@ -24,7 +24,7 @@ Land::Land(std::string const &fileName,
 				belowGroundCompetitionString), _subsurface(
 				MeshLib::IO::readMeshFromFile(fileName)), _searchLength(
 				_subsurface->getMinEdgeLength()), _meshSearcher(
-				MeshGeoToolsLib::MeshNodeSearcher(*_subsurface, _searchLength)) {
+				*_subsurface, _searchLength) {
 	// TODO Auto-generated constructor stub
 	//readMesh(fileName);
 	checkPropertyExists(_salinityPropertyString);
@@ -102,7 +102,7 @@ void Land::invertBelowGroundCompetition() {
 }
 
 std::vector<std::size_t> Land::findNodesInRadius(double radius,
-		GeoLib::Point position) {
+		GeoLib::Point const &position) {
 	double searchLength(radius);
 	if (radius == -1.0)
 		searchLength = _subsurface->getMinEdgeLength();
