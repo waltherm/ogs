@@ -25,10 +25,10 @@ namespace BettinaConstants {
 	double const sigmo_slope(0.02);
 
 	double const growthLimitCoefficient(50);
-	double const deathTreshhold(0.001);
+	double const deathTreshhold(0.0001);
 	double const solarRadiation(0.038);
 
-	double const aviSizeFactor(1);
+	double const aviSizeFactor(4);
 
 	double const searchRadiusIncrement(2);
 

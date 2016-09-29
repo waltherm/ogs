@@ -38,7 +38,7 @@ Tree::Tree(GeoLib::Point const &point, unsigned int id, Land &aLand,
 				halfMaxHeightGrowthWeight), _maintanceFactor(maintanceFactor), _growthLimitCoefficient(
 				BettinaConstants::growthLimitCoefficient), _deathThreshold(
 				BettinaConstants::deathTreshhold), _size(-1), _sizeFactor(
-				BettinaConstants::aviSizeFactor), _id(id + 1), _thisLand(aLand), _nearestNodeID(
+				BettinaConstants::aviSizeFactor), _ID(id + 1), _updatedID(_ID), _thisLand(aLand), _nearestNodeID(
 				findNearestNodeToTree()) {
 	// TODO Auto-generated constructor stub
 	// initializing
@@ -135,9 +135,9 @@ void Tree::setAboveGroundCompetition(std::vector<Tree*> &aliveTrees) {
 		double aboveGroundCompetition(
 				_thisLand.getAboveGroundCompetitionAtNodeID(
 						_nodesWithinCrownRadius[i]));
-		if (aboveGroundCompetition < 0 || aboveGroundCompetition == _id) // no other tree or this tree already highest here
+		if (aboveGroundCompetition < 0 || aboveGroundCompetition == _updatedID) // no other tree or this tree already highest here
 				{
-			_thisLand.setAboveGroundCompetition(_id,
+			_thisLand.setAboveGroundCompetition(_updatedID,
 					_nodesWithinCrownRadius[i]);
 		} else	// other tree here
 		{
@@ -148,7 +148,7 @@ void Tree::setAboveGroundCompetition(std::vector<Tree*> &aliveTrees) {
 			double const thisTreesHeight(_stemHeight + 2 * _crownHeight);
 			if (otherTreesHeight <= thisTreesHeight)//this tree is higher or equal (and wins)
 					{
-				_thisLand.setAboveGroundCompetition(_id,
+				_thisLand.setAboveGroundCompetition(_updatedID,
 						_nodesWithinCrownRadius[i]);
 			}
 		}
@@ -161,7 +161,7 @@ void Tree::calcAboveGroundCompetition() {
 	//find nodes in crown radius (if no nodes found, only use nearest node)
 	_aboveGroundCompetitionWins = 0;	// TODO could be local var
 	for (auto id : _nodesWithinCrownRadius) {
-		if (_thisLand.getAboveGroundCompetitionAtNodeID(id) == _id) {
+		if (_thisLand.getAboveGroundCompetitionAtNodeID(id) == _ID) {
 			_aboveGroundCompetitionWins++;
 		}
 	}
@@ -173,7 +173,7 @@ void Tree::calcAboveGroundCompetition() {
 	//calc above_c again
 	// set above_c above_c + (1 - above_c) * (count patches in-radius ( 2 * 5 * size-factor ) with [compete-above < 0] ) / (2 * count patches in-radius ( 2 * 5 * size-factor ) )
 	//count nodes, where no above competition in vicinity
-	double searchRadius(10 * _sizeFactor);	// 10 is arbitrary magic number?
+	double searchRadius(1 * _sizeFactor);	// 10 is arbitrary magic number?
 	std::vector<std::size_t> vicinityNodeIDs(findNodesInRadius(searchRadius));
 	if (vicinityNodeIDs.size() > 0) {
 		std::size_t vicinityNodes(0);
@@ -326,6 +326,8 @@ void Tree::gatherResources() {
 	if (_growth < (_treeVolume * _deathThreshold)) {
 		_deathFlag = true;
 	}
+	else
+		_deathFlag = false;
 }
 
 void Tree::updateWeights() {
@@ -441,7 +443,7 @@ std::size_t Tree::findNearestNodeFromIDs(
 
 	std::size_t nearestNodeID(-1);
 	if (nodeIDs.size() == 0) {
-		ERR("No nodes found near tree no. %u.", _id);
+		ERR("No nodes found near tree no. %u.", _ID);
 		std::abort();
 	} else {
 		if (nodeIDs.size() == 1) {

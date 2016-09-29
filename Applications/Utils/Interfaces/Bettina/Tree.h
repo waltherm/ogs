@@ -55,8 +55,16 @@ public:
 		_stemHeightGrowthWeight = stemHeightGrowthWeight;
 	}
 
-	std::size_t getId() const {
-		return _id;
+	std::size_t getID() const {
+		return _ID;
+	}
+
+	std::size_t getUpdatedID() const {
+		return _updatedID;
+	}
+
+	void setUpdatedID(std::size_t updatedID) {
+		_updatedID = updatedID;
 	}
 
 	double getAboveGroundCompetitionCoefficient() const {
@@ -268,9 +276,9 @@ private:
 	double _rootRadiusGrowth;	//rg;
 	double _stemRadiusGrowth;	//dg;
 	double _stepFrac;	//stepfrac numerical helper variable
-	std::vector<std::size_t> _nodesWithinCrownRadius;	//countabove number of nodes within crownradius * sizefactor
+	std::vector<std::size_t> _nodesWithinCrownRadius;//countabove number of nodes within crownradius * sizefactor
 	double _aboveGroundCompetitionWins;
-	std::vector<std::size_t> _nodesWithinRootRadius;	//countbelow number of nodes within rootradius * sizefactor
+	std::vector<std::size_t> _nodesWithinRootRadius;//countbelow number of nodes within rootradius * sizefactor
 	double _belowGroundCompetitionWins;
 	double _aboveGroundCompetitionCoefficient;	//above_c
 	double _belowGroundCompetitionCoefficient;	//below_c
@@ -286,7 +294,8 @@ private:
 	double _size;	//size
 	double const _sizeFactor;	//size-factor
 
-	std::size_t const _id;
+	std::size_t const _ID;
+	std::size_t _updatedID;
 	Land & _thisLand;
 	std::size_t _nearestNodeID;
 
@@ -306,7 +315,8 @@ private:
 	//std::size_t findNearestNodeToTree();
 	std::size_t findNearestNodeToTree() const;
 	std::size_t findNearestNodeFromIDs(std::vector<std::size_t> nodeIDs) const;
-	std::vector<std::size_t> const findNodesInRadius(double radius = -1.0) const;
+	std::vector<std::size_t> const findNodesInRadius(
+			double radius = -1.0) const;
 
 	double getSalinityAtNearestNode() const;
 

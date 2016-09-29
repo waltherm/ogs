@@ -20,26 +20,28 @@ Flora::~Flora() {
 
 void Flora::initialPopulate() {
 
-	std::srand (std::time(NULL));
+	std::srand(std::time(NULL));
+	for (std::size_t i(0); i < 200; i++) {
+		double const x = 1 + std::rand() % 98;	//600
+		double const y = 1 + std::rand() % 98;	//300
+		double const z = 0;
 
-//	for (std::size_t i(0); i<200; i++)
-//	{
-//		double const x = std::rand() % 600;
-//		double const y = std::rand() % 300;
-//		double const z = 0;
+		GeoLib::Point const newPoint(x, y, z);
+		_aliveTrees.push_back(
+				new Avicennia(newPoint, _aliveTrees.size() - 1, _thisLand));
+	}
+
+//	GeoLib::Point const newPoint(31, 31, 0);
+//	_aliveTrees.push_back(
+//			new Avicennia(newPoint, _aliveTrees.size()-1, _thisLand));
 //
-//		GeoLib::Point const newPoint(x, y, z);
-//		_aliveTrees.push_back(new Avicennia(newPoint, _aliveTrees.size()-1, _thisLand));
-//	}
-
-	GeoLib::Point const newPoint(31, 31, 0);
-	_aliveTrees.push_back(
-			new Avicennia(newPoint, _aliveTrees.size()-1, _thisLand));
-
-	GeoLib::Point const newPointb(36, 36, 0);
-	_aliveTrees.push_back(
-			new Avicennia(newPointb, _aliveTrees.size()-1, _thisLand));
-
+//	GeoLib::Point const newPointb(31.2, 31.2, 0);
+//	_aliveTrees.push_back(
+//			new Avicennia(newPointb, _aliveTrees.size()-1, _thisLand));
+//
+//	GeoLib::Point const newPointc(30.8, 31.5, 0);
+//	_aliveTrees.push_back(
+//			new Avicennia(newPointc, _aliveTrees.size()-1, _thisLand));
 }
 
 void Flora::recruitment() {
@@ -50,6 +52,7 @@ void Flora::recruitment() {
 
 void Flora::competition() {
 
+	//TODO check calculation of competition - something seems wrong, at some point, many trees die suddenly
 	//above ground competition
 	_thisLand.resetAboveGroundCompetition();
 
@@ -93,6 +96,14 @@ void Flora::die() {
 			std::remove(_aliveTrees.begin(), _aliveTrees.end(), nullptr), //sort all nullptr elements to end of vector and return begin of nullptr elements
 			_aliveTrees.end());
 
+	updateTreeIDs();
+
+}
+
+void Flora::updateTreeIDs() {
+	for (std::size_t i(0); i < _aliveTrees.size(); i++) {
+		_aliveTrees[i]->setUpdatedID(i);
+	}
 }
 
 bool Flora::checkForActivePopulation() {

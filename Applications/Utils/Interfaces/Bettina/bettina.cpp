@@ -54,6 +54,7 @@ int main() {
 
 		//TODO calculate Clark-Evans-Index
 		//TODO thisLand.updateSalinityAtPoint();
+		INFO("Time: %i", time);
 	}
 
 	return 0;

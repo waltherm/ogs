@@ -42,6 +42,8 @@ public:
 	}
 
 private:
+	void updateTreeIDs();
+
 	std::vector<Tree*> _aliveTrees, _deadTrees;
 	Land & _thisLand;
 };
