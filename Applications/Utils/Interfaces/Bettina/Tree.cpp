@@ -146,7 +146,7 @@ void Tree::setAboveGroundCompetition(std::vector<Tree*> &aliveTrees) {
 							+ 2
 									* aliveTrees[aboveGroundCompetition]->getCrownHeight());
 			double const thisTreesHeight(_stemHeight + 2 * _crownHeight);
-			if (otherTreesHeight <= thisTreesHeight)//this tree is higher or equal (and wins)
+			if (otherTreesHeight <= thisTreesHeight) //this tree is higher or equal (and wins)
 					{
 				_thisLand.setAboveGroundCompetition(_updatedID,
 						_nodesWithinCrownRadius[i]);
@@ -161,7 +161,7 @@ void Tree::calcAboveGroundCompetition() {
 	//find nodes in crown radius (if no nodes found, only use nearest node)
 	_aboveGroundCompetitionWins = 0;	// TODO could be local var
 	for (auto id : _nodesWithinCrownRadius) {
-		if (_thisLand.getAboveGroundCompetitionAtNodeID(id) == _ID) {
+		if (_thisLand.getAboveGroundCompetitionAtNodeID(id) == _updatedID) {
 			_aboveGroundCompetitionWins++;
 		}
 	}
@@ -443,7 +443,7 @@ std::size_t Tree::findNearestNodeFromIDs(
 
 	std::size_t nearestNodeID(-1);
 	if (nodeIDs.size() == 0) {
-		ERR("No nodes found near tree no. %u.", _ID);
+		ERR("No nodes found near tree with _ID = %u.", _ID);
 		std::abort();
 	} else {
 		if (nodeIDs.size() == 1) {
