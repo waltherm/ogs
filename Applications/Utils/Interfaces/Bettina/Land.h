@@ -36,7 +36,8 @@ public:
 	void incrementBelowGroundCompetition(std::size_t nodeID);
 	void invertBelowGroundCompetition();
 
-	std::vector<std::size_t> findNodesInRadius(double radius, GeoLib::Point const &position);
+	std::vector<std::size_t> findNodesInRadius(double radius,
+			GeoLib::Point const &position);
 
 	const MeshLib::Mesh* getSubsurface() const {
 		return _subsurface;
@@ -51,9 +52,15 @@ private:
 			std::string propertyString) const {
 
 		std::string const propertyName(propertyString);
-		boost::optional<MeshLib::PropertyVector<PROP_VAL_TYPE>&> const property(
+		MeshLib::PropertyVector<PROP_VAL_TYPE>* const property(
 				_subsurface->getProperties().getPropertyVector<PROP_VAL_TYPE>(
 						propertyName));
+
+		if (property == nullptr) {
+			ERR("There is no property named '%s' in the mesh. Exiting.",
+					propertyName.c_str());
+			std::abort();
+		}
 
 		if (property->getNumberOfTuples() < nodeID) {
 			ERR("There is no node with ID '%i' in the mesh. Exiting.", nodeID);
@@ -69,9 +76,15 @@ private:
 			std::string propertyString) {
 
 		std::string const propertyName(propertyString);
-		boost::optional<MeshLib::PropertyVector<PROP_VAL_TYPE>&> const property(
+		MeshLib::PropertyVector<PROP_VAL_TYPE>* const property(
 				_subsurface->getProperties().getPropertyVector<PROP_VAL_TYPE>(
 						propertyName));
+
+		if (property == nullptr) {
+			ERR("There is no property named '%s' in the mesh. Exiting.",
+					propertyName.c_str());
+			std::abort();
+		}
 
 		if (property->getNumberOfTuples() < nodeID) {
 			ERR("There is no node with ID '%i' in the mesh. Exiting.", nodeID);
@@ -85,9 +98,15 @@ private:
 			std::string propertyString) {
 
 		std::string const propertyName(propertyString);
-		boost::optional<MeshLib::PropertyVector<PROP_VAL_TYPE>&> const property(
+		MeshLib::PropertyVector<PROP_VAL_TYPE>* const property(
 				_subsurface->getProperties().getPropertyVector<PROP_VAL_TYPE>(
 						propertyName));
+
+		if (property == nullptr) {
+			ERR("There is no property named '%s' in the mesh. Exiting.",
+					propertyName.c_str());
+			std::abort();
+		}
 
 		for (auto & thisProperty : *property)
 			thisProperty = resetValue;

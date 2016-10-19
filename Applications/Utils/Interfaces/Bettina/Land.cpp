@@ -90,9 +90,15 @@ void Land::incrementBelowGroundCompetition(std::size_t nodeID) {
 void Land::invertBelowGroundCompetition() {
 	// TODO calc inverse if belowGroundCompetition > 1
 
-	boost::optional<MeshLib::PropertyVector<double>&> property(
+	MeshLib::PropertyVector<double>* property(
 			_subsurface->getProperties().getPropertyVector<double>(
 					_belowGroundCompetitionString));
+
+	if(property==nullptr){
+		ERR("There is no property named '%s' in the mesh. Exiting.",
+				_belowGroundCompetitionString.c_str());
+		std::abort();
+	}
 
 	for (auto & v : *property) {
 		if (v > 1)
