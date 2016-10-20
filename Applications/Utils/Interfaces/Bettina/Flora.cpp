@@ -6,6 +6,7 @@
  */
 
 #include <random>
+#include <boost/math/complex.hpp>
 
 #include <Flora.h>
 #include <time.h>
@@ -22,8 +23,8 @@ Flora::~Flora() {
 
 void Flora::initialPopulate() {
 
-	for (std::size_t i(0); i < 100; i++) {
-		plantRandomAvi(10, 10);
+	for (std::size_t i(0); i < 10; i++) {
+		plantAviRandomRectangle(100, 100, 0);
 	}
 
 //// uniform distribution
@@ -36,28 +37,46 @@ void Flora::initialPopulate() {
 //		}
 //	}
 
-// single tree distribution
-//	plantAvi(8, 8, 0);
-//	plantAvi(8, 8, 0);
+//// single tree distribution
+//	plantAvi(31, 31, 0);
+//	plantAvi(31.2, 31.2, 0);
 //	plantAvi(30.8, 31.5, 0);
 
 }
 
-void Flora::plantRandomAvi(double xMax, double yMax, double zMax, double xMin,
-		double yMin, double zMin) {
+void Flora::plantAviRandomRectangle(double xMax, double yMax, double zMax,
+		double xMin, double yMin, double zMin) {
 
 	//Mersenne Twister: Good quality random number generator
 	std::mt19937 rng;
 	//Initialize with non-deterministic seeds
 	rng.seed(std::random_device { }());
 
-	std::uniform_real_distribution<double> unifx(xMin, xMax);
-	double const x = unifx(rng);
-	std::uniform_real_distribution<double> unify(yMin, yMax);
-	double const y = unify(rng);
-	std::uniform_real_distribution<double> unifz(zMin, zMax);
-	double const z = unifz(rng);
+	std::uniform_real_distribution<double> uniformDoubleX(xMin, xMax);
+	double const x(uniformDoubleX(rng));
+	std::uniform_real_distribution<double> uniformDoubleY(yMin, yMax);
+	double const y(uniformDoubleY(rng));
+	std::uniform_real_distribution<double> uniformDoubleZ(zMin, zMax);
+	double const z(uniformDoubleZ(rng));
 	plantAvi(x, y, z);
+}
+
+void Flora::plantAviRandomCircle(double x, double y, double z, double radius) {
+	//Mersenne Twister: Good quality random number generator
+	std::mt19937 rng;
+	//Initialize with non-deterministic seeds
+	rng.seed(std::random_device { }());
+
+	std::uniform_real_distribution<double> uniformDoubleAngle(0,
+			2 * BettinaConstants::pi);
+	double const angle(uniformDoubleAngle(rng));
+	std::uniform_real_distribution<double> uniformDoubleDistance(0, radius);
+	double const distance(
+			uniformDoubleDistance(rng) * BettinaConstants::seedSpreadFactor
+					* BettinaConstants::aviSizeFactor);
+	double const xdiff(std::cos(angle) * distance);
+	double const ydiff(std::sin(angle) * distance);
+	plantAvi(x + xdiff, y + ydiff, z);
 }
 
 void Flora::plantAvi(double x, double y, double z) {
@@ -66,18 +85,38 @@ void Flora::plantAvi(double x, double y, double z) {
 			new Avicennia(newTreePosition, _treeCounter++, _thisLand));	// guess, this is a bad way to get the tree counting correct
 }
 
+
 void Flora::recruitment() {
 
-	for (auto &aliveTree : _aliveTrees) {
-		std::size_t seeds (aliveTree->recruitment());
-
-		for (std::size_t seed(1); seed < seeds; seed++)
-		{
+	const std::size_t noAliveTrees(_aliveTrees.size());
+	for (std::size_t i(0); i < noAliveTrees; i++) {
+		Tree *thisTree(_aliveTrees[i]);
+		std::size_t seeds(thisTree->recruitment());
+		for (std::size_t seed(0); seed < seeds; seed++) {
 			// roll dice within crown radius (TODO: drift through wind?)
 			// plant new trees
+			plantAviRandomCircle(thisTree->getPosition().getCoords()[0],
+					thisTree->getPosition().getCoords()[1],
+					thisTree->getPosition().getCoords()[2],
+					thisTree->getCrownRadius());
 		}
 	}
+
+//		for (auto &aliveTree : _aliveTrees) {
+//			std::size_t seeds(aliveTree->recruitment());
+//
+//			for (std::size_t seed(0); seed < seeds; seed++) {
+//				// roll dice within crown radius (TODO: drift through wind?)
+//				// plant new trees
+//				plantAviRandomCircle(aliveTree->getPosition().getCoords()[0],
+//						aliveTree->getPosition().getCoords()[1],
+//						aliveTree->getPosition().getCoords()[2],
+//						aliveTree->getCrownRadius());
+//			}
+//		}
+
 }
+
 
 void Flora::competition() {
 
@@ -126,15 +165,15 @@ void Flora::die() {
 			std::remove(_aliveTrees.begin(), _aliveTrees.end(), nullptr), //sort all nullptr elements to end of vector and return begin of nullptr elements
 			_aliveTrees.end());
 
-	//updateTreeIDs();
+	updateTreeIDs();
 
 }
 
-//void Flora::updateTreeIDs() {
-//	for (std::size_t i(0); i < _aliveTrees.size(); i++) {
-//		_aliveTrees[i]->setUpdatedID(i);
-//	}
-//}
+void Flora::updateTreeIDs() {
+	for (std::size_t i(0); i < _aliveTrees.size(); i++) {
+		_aliveTrees[i]->setUpdatedID(i);
+	}
+}
 
 bool Flora::checkForActivePopulation() {
 	if (_aliveTrees.empty()) {

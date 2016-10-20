@@ -23,6 +23,7 @@ namespace BettinaConstants {
 	double const Qr0(0);
 	double const sigmo_slope_hg(0.15);
 	double const sigmo_slope(0.02);
+	double const seedSpreadFactor(1.2);
 
 	double const growthLimitCoefficient(50);
 	double const deathTreshhold(0.0001);

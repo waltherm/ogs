@@ -133,7 +133,7 @@ std::vector<std::size_t> Land::findNodesInRadius(double radius,
 	double searchLength(radius);
 	if (radius == -1.0)
 		//searchLength = _subsurface->getMinEdgeLength();	//this may fail, if tree is exactly in middle of element or in big element
-		searchLength = _subsurface->getMaxEdgeLength() * 1.1;
+		searchLength = _subsurface->getMaxEdgeLength() * 100;
 
 	//MeshGeoToolsLib::SearchLength const searchLength(searchLengthTemp);
 	_meshSearcher.setSearchLength(searchLength);
