@@ -121,6 +121,9 @@ void Output::writeFlora(Flora const & aFlora, std::size_t currentTimeStep) {
 	vtkSmartPointer<vtkDoubleArray> treeData_sizeFactor = vtkSmartPointer<
 			vtkDoubleArray>::New();
 
+	vtkSmartPointer<vtkDoubleArray> treeData_aboveGroundCompetitionWins = vtkSmartPointer<
+				vtkDoubleArray>::New();
+
 	//give names to arrays
 	treeData_stemRadius->SetName("stemRadius");
 	treeData_crownRadius->SetName("crownRadius");
@@ -162,6 +165,8 @@ void Output::writeFlora(Flora const & aFlora, std::size_t currentTimeStep) {
 	treeData_deathThreshold->SetName("deathThreshold");
 	treeData_size->SetName("size");
 	treeData_sizeFactor->SetName("sizeFactor");
+
+	treeData_aboveGroundCompetitionWins->SetName("aboveGroundCompetitionWins");
 
 	std::size_t idCounter(0);
 	for (auto &thisTree : aFlora.getAliveTrees()) {
@@ -233,6 +238,8 @@ void Output::writeFlora(Flora const & aFlora, std::size_t currentTimeStep) {
 		treeData_size->InsertNextValue(thisTree->getSize());
 		treeData_sizeFactor->InsertNextValue(thisTree->getSizeFactor());
 
+		treeData_aboveGroundCompetitionWins->InsertNextValue(thisTree->getWinCountabove());
+
 		idCounter++;
 	}
 
@@ -281,6 +288,8 @@ void Output::writeFlora(Flora const & aFlora, std::size_t currentTimeStep) {
 	treeGrid->GetCellData()->AddArray(treeData_deathThreshold);
 	treeGrid->GetCellData()->AddArray(treeData_size);
 	treeGrid->GetCellData()->AddArray(treeData_sizeFactor);
+
+	treeGrid->GetCellData()->AddArray(treeData_aboveGroundCompetitionWins);
 
 	//ini writer and write
 	vtkSmartPointer<vtkXMLUnstructuredGridWriter> treeWriter = vtkSmartPointer<
