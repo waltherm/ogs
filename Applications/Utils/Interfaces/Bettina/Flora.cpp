@@ -22,26 +22,30 @@ void Flora::initialPopulate() {
 
 	std::srand(std::time(NULL));
 
-	double const z = 0;
-	for (std::size_t i(0); i < 20; i++) {
-		double const x = i*4 +10;
-		for (std::size_t j(0); j < 20; j++) {
-			double const y = j*4 +10;
-			GeoLib::Point const newPoint(x, y, z);
-			_aliveTrees.push_back(
-					new Avicennia(newPoint, _aliveTrees.size() - 1, _thisLand));
-		}
-	}
-//	for (std::size_t i(0); i < 200; i++) {
-//		double const x = 1 + std::rand() % 98;	//600
-//		double const y = 1 + std::rand() % 98;	//300
-//		double const z = 0;
-//
-//		GeoLib::Point const newPoint(x, y, z);
-//		_aliveTrees.push_back(
-//				new Avicennia(newPoint, _aliveTrees.size() - 1, _thisLand));
+//	// uniform distribution
+//	double const z = 0;
+//	for (std::size_t i(0); i < 20; i++) {
+//		double const x = i*4 +10;
+//		for (std::size_t j(0); j < 20; j++) {
+//			double const y = j*4 +10;
+//			GeoLib::Point const newPoint(x, y, z);
+//			_aliveTrees.push_back(
+//					new Avicennia(newPoint, _aliveTrees.size() - 1, _thisLand));
+//		}
 //	}
 
+	// random distribution
+	for (std::size_t i(0); i < 1000; i++) {
+		double const x = 1 + std::rand() % 98;	//600
+		double const y = 1 + std::rand() % 98;	//300
+		double const z = 0;
+
+		GeoLib::Point const newPoint(x, y, z);
+		_aliveTrees.push_back(
+				new Avicennia(newPoint, _aliveTrees.size() - 1, _thisLand));
+	}
+
+	// single tree distribution
 //	GeoLib::Point const newPoint(31, 31, 0);
 //	_aliveTrees.push_back(
 //			new Avicennia(newPoint, _aliveTrees.size()-1, _thisLand));
@@ -56,6 +60,15 @@ void Flora::initialPopulate() {
 }
 
 void Flora::recruitment() {
+
+	// check on adulthood
+	//  possibility of sapling will rise with higher tree, more resource availability (not net availability)
+
+	// roll dice within crown radius (TODO: wind?)
+
+	// plant new trees
+
+
 	for (auto &aliveTree : _aliveTrees) {
 		aliveTree->recruitment();
 	}
