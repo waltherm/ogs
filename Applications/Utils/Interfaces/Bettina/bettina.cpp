@@ -39,22 +39,28 @@ int main() {
 	thisOutput.writeLand(thisLand.getSubsurface(), 0);
 
 	// run through time steps
-	for (std::size_t time(0); time < 100000; time++) {
+	double timeBegin(0), timeEnd(10000), timeDiff(1), currentTime(timeBegin);
+
+	while (currentTime < timeEnd) {
+
+		INFO("Time: %i", currentTime);
 
 		thisFlora.recruitment();
 		thisFlora.competition();
-		thisFlora.grow();
+		thisFlora.grow(timeDiff);
 		thisFlora.die();
 
-		thisOutput.writeFlora(thisFlora, time+1);
-		thisOutput.writeLand(thisLand.getSubsurface(), time+1);
+		thisOutput.writeFlora(thisFlora, currentTime+1);
+		thisOutput.writeLand(thisLand.getSubsurface(), currentTime+1);
 
 		if (!(thisFlora.checkForActivePopulation()))
 			std::abort();
 
 		//TODO calculate Clark-Evans-Index
 		//TODO thisLand.updateSalinityAtPoint();
-		INFO("Time: %i", time);
+
+		currentTime+=timeDiff;
+
 	}
 
 	return 0;

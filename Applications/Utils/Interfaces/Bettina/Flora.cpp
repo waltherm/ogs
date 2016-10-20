@@ -61,14 +61,6 @@ void Flora::initialPopulate() {
 
 void Flora::recruitment() {
 
-	// check on adulthood
-	//  possibility of sapling will rise with higher tree, more resource availability (not net availability)
-
-	// roll dice within crown radius (TODO: wind?)
-
-	// plant new trees
-
-
 	for (auto &aliveTree : _aliveTrees) {
 		aliveTree->recruitment();
 	}
@@ -102,9 +94,10 @@ void Flora::competition() {
 	}
 }
 
-void Flora::grow() {
+void Flora::grow(double timeDiff) {
 	for (auto &aliveTree : _aliveTrees) {
 		aliveTree->grow();
+		aliveTree->aging(timeDiff);
 	}
 }
 

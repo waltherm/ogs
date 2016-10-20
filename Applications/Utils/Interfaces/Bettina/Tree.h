@@ -35,6 +35,8 @@ public:
 	void calcBelowGroundCompetition();
 
 	void grow();
+	void aging(double timeDiff);
+	void increaseAge(double timeDiff);
 
 	double getSalinity() const;
 	double getProperty(std::string propertyName) const;
@@ -247,8 +249,13 @@ public:
 		return _belowGroundCompetitionWins;
 	}
 
+	double getAge() const {
+		return _age;
+	}
+
 private:
 	GeoLib::Point _position;
+	double _age;
 	double _stemRadius;	//r_stem
 	double _crownRadius;	//r_crown
 	double _rootRadius;	//r_root

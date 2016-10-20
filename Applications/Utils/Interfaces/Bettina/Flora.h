@@ -26,7 +26,7 @@ public:
 
 	void recruitment();
 	void competition();
-	void grow();
+	void grow(double timeDiff);
 	void die();
 
 	std::size_t getNumberOfAliveTrees() const {

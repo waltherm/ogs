@@ -21,25 +21,25 @@ Tree::Tree(GeoLib::Point const &point, unsigned int id, Land &aLand,
 		double crownRadius, double fineRootPermeability,
 		double minimumLeafWaterPotential, double xylemConductivity,
 		double halfMaxHeightGrowthWeight, double maintanceFactor) :
-		_position(point), _crownRadius(crownRadius), _stemHeight(stemHeight), _crownHeight(
-				crownHeight), _rootDepth(rootDepth), _leafVolume(-1), _branchVolume(
-				-1), _stemVolume(-1), _cableRootVolume(-1), _fineRootVolume(-1), _treeVolume(
-				-1), _radialFluxResistence(-1), _lateralFluxResistence(-1), _aboveGroundResources(
-				-1), _belowGroundResources(-1), _availableResources(-1), _crownRadiusGrowthWeight(
-				-1), _stemHeightGrowthWeight(-1), _fineRootGrowthWeight(-1), _stemRadiusGrowthWeight(
-				-1), _growth(-1), _stemHeightGrowth(-1), _crownRadiusGrowth(-1), _rootRadiusGrowth(
-				-1), _stemRadiusGrowth(-1), _stepFrac(0), _nodesWithinCrownRadius(
-				1), _aboveGroundCompetitionWins(-1), _nodesWithinRootRadius(1), _belowGroundCompetitionWins(
-				-1), _aboveGroundCompetitionCoefficient(1), _belowGroundCompetitionCoefficient(
-				1), _deathFlag(false), mindist(-1), _fineRootPermeability(
-				fineRootPermeability), _minimumLeafWaterPotential(
+		_position(point), _age(0), _crownRadius(crownRadius), _stemHeight(
+				stemHeight), _crownHeight(crownHeight), _rootDepth(rootDepth), _leafVolume(
+				-1), _branchVolume(-1), _stemVolume(-1), _cableRootVolume(-1), _fineRootVolume(
+				-1), _treeVolume(-1), _radialFluxResistence(-1), _lateralFluxResistence(
+				-1), _aboveGroundResources(-1), _belowGroundResources(-1), _availableResources(
+				-1), _crownRadiusGrowthWeight(-1), _stemHeightGrowthWeight(-1), _fineRootGrowthWeight(
+				-1), _stemRadiusGrowthWeight(-1), _growth(-1), _stemHeightGrowth(
+				-1), _crownRadiusGrowth(-1), _rootRadiusGrowth(-1), _stemRadiusGrowth(
+				-1), _stepFrac(0), _nodesWithinCrownRadius(1), _aboveGroundCompetitionWins(
+				-1), _nodesWithinRootRadius(1), _belowGroundCompetitionWins(-1), _aboveGroundCompetitionCoefficient(
+				1), _belowGroundCompetitionCoefficient(1), _deathFlag(false), mindist(
+				-1), _fineRootPermeability(fineRootPermeability), _minimumLeafWaterPotential(
 				minimumLeafWaterPotential), _xylemConductivity(
 				xylemConductivity), _halfMaxHeightGrowthWeigth(
 				halfMaxHeightGrowthWeight), _maintanceFactor(maintanceFactor), _growthLimitCoefficient(
 				BettinaConstants::growthLimitCoefficient), _deathThreshold(
 				BettinaConstants::deathTreshhold), _size(-1), _sizeFactor(
-				BettinaConstants::aviSizeFactor), _ID(id + 1), _updatedID(_ID), _thisLand(aLand), _nearestNodeID(
-				findNearestNodeToTree()) {
+				BettinaConstants::aviSizeFactor), _ID(id + 1), _updatedID(_ID), _thisLand(
+				aLand), _nearestNodeID(findNearestNodeToTree()) {
 	// TODO Auto-generated constructor stub
 	// initializing
 
@@ -66,7 +66,19 @@ Tree::~Tree() {
 }
 
 void Tree::recruitment() {
-	// TODO: implement recruitment
+
+	// check on adulthood and calculate possibility for sapling cast
+	//  possibility of sapling will rise with
+	//   higher tree,
+	//   more total resource availability (not net availability)
+	//   age
+	//   indirectly with crown radius, as higher area on which probability of sapling cast will be calculated
+	// TODO: seasonal recruitment
+
+	// roll dice within crown radius (TODO: drift through wind?)
+
+	// plant new trees
+
 }
 
 void Tree::checkAboveGroundCompetition(std::vector<Tree*> &aliveTrees) {
@@ -244,6 +256,17 @@ void Tree::grow() {
 
 }
 
+void Tree::aging(double timeDiff) {
+
+	increaseAge(timeDiff);
+
+	//TODO add malus for getting old eg loosing parts of the crown from time to time
+}
+
+void Tree::increaseAge(double timeDiff){
+	_age+=timeDiff;
+}
+
 void Tree::growTree() {
 	_rootRadius += _rootRadiusGrowth;
 	_crownRadius += _crownRadiusGrowth;
@@ -325,8 +348,7 @@ void Tree::gatherResources() {
 //	  if growth < (v_tree / 100 * death.thresh / 100) [set deathflag 1]
 	if (_growth < (_treeVolume * _deathThreshold)) {
 		_deathFlag = true;
-	}
-	else
+	} else
 		_deathFlag = false;
 }
 

@@ -43,7 +43,12 @@ void Output::writeFlora(Flora const & aFlora, std::size_t currentTimeStep) {
 	vtkSmartPointer<vtkCellArray> treeVertices =
 			vtkSmartPointer<vtkCellArray>::New();
 
+//	std::vector<std::string> variable("age", "stemRadius");
+//	fillArrays(variables);
+
 	// ini all data arrays
+	vtkSmartPointer<vtkDoubleArray> treeData_age = vtkSmartPointer<
+				vtkDoubleArray>::New();
 	vtkSmartPointer<vtkDoubleArray> treeData_stemRadius = vtkSmartPointer<
 			vtkDoubleArray>::New();
 	vtkSmartPointer<vtkDoubleArray> treeData_crownRadius = vtkSmartPointer<
@@ -125,6 +130,7 @@ void Output::writeFlora(Flora const & aFlora, std::size_t currentTimeStep) {
 				vtkDoubleArray>::New();
 
 	//give names to arrays
+	treeData_age->SetName("age");
 	treeData_stemRadius->SetName("stemRadius");
 	treeData_crownRadius->SetName("crownRadius");
 	treeData_rootRadius->SetName("rootRadius");
@@ -177,6 +183,7 @@ void Output::writeFlora(Flora const & aFlora, std::size_t currentTimeStep) {
 		treeVertices->InsertNextCell(1);
 		treeVertices->InsertCellPoint(idCounter); //give point id of neuronPoints
 
+		treeData_age->InsertNextValue(thisTree->getAge());
 		treeData_stemRadius->InsertNextValue(thisTree->getStemRadius());
 		treeData_crownRadius->InsertNextValue(thisTree->getCrownRadius());
 		treeData_rootRadius->InsertNextValue(thisTree->getRootRadius());
@@ -248,6 +255,7 @@ void Output::writeFlora(Flora const & aFlora, std::size_t currentTimeStep) {
 			vtkUnstructuredGrid>::New();
 	treeGrid->SetPoints(treePoints);
 	treeGrid->SetCells(VTK_VERTEX, treeVertices);
+	treeGrid->GetCellData()->AddArray(treeData_age);
 	treeGrid->GetCellData()->AddArray(treeData_stemRadius);
 	treeGrid->GetCellData()->AddArray(treeData_crownRadius);
 	treeGrid->GetCellData()->AddArray(treeData_rootRadius);
