@@ -8,7 +8,7 @@
 #include <Avicennia.h>
 
 Avicennia::Avicennia(GeoLib::Point const &point, unsigned int id,
-		Land &aLand) :
+		Land &aLand, double age) :
 		Tree(point, id, aLand,
 				0.001,	//stemHeight
 				0.04,	//crownHeight
@@ -18,7 +18,9 @@ Avicennia::Avicennia(GeoLib::Point const &point, unsigned int id,
 				-7860,	//minimumLeafWaterPotential
 				1.48,	//xylemConductivity
 				0.1,	//halfMaxHeightGrowthWeight
-				0.28)	//maintanceFactor
+				0.28,	//maintanceFactor
+				age
+				)
 {
 //	(GeoLib::Point const &point, unsigned int id, Land const &aLand,
 //	double stemHeight, double crownHeight, double rootDepth,

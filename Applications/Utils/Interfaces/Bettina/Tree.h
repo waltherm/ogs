@@ -18,7 +18,8 @@ public:
 			double stemHeight, double crownHeight, double rootDepth,
 			double crownRadius, double fineRootPermeability,
 			double minimumLeafWaterPotential, double xylemConductivity,
-			double halfMaxHeightGrowthWeight, double maintanceFactor);
+			double halfMaxHeightGrowthWeight, double maintanceFactor,
+			double age = 0);
 
 	virtual ~Tree();
 
@@ -252,6 +253,10 @@ public:
 	double getAge() const {
 		return _age;
 	}
+
+	virtual double getMinSeedingAge() const = 0;	// this function needs to be implemented in the derived classes
+	virtual double getMinSeedingHeight() const = 0;
+	virtual double getMinSeedingResources() const = 0;
 
 private:
 	GeoLib::Point _position;

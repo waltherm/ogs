@@ -12,8 +12,22 @@
 
 class Avicennia: public Tree {
 public:
-	Avicennia(GeoLib::Point const &point, unsigned int id, Land &aLand);
+	Avicennia(GeoLib::Point const &point, unsigned int id, Land &aLand,
+			double age = 0);
 	virtual ~Avicennia();
+
+	double getMinSeedingAge() const override {
+		return 20;
+	}
+
+	double getMinSeedingHeight() const override {
+		return 10;
+	}
+
+	double getMinSeedingResources() const override {
+		return 1e-3;
+	}
+
 };
 
 #endif /* AVICENNIA_H_ */

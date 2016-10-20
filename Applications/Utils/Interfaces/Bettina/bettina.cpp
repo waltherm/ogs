@@ -45,9 +45,9 @@ int main() {
 
 		INFO("Time: %i", currentTime);
 
-		thisFlora.recruitment();
 		thisFlora.competition();
 		thisFlora.grow(timeDiff);
+		thisFlora.recruitment();
 		thisFlora.die();
 
 		thisOutput.writeFlora(thisFlora, currentTime+1);

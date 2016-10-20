@@ -20,8 +20,8 @@ Tree::Tree(GeoLib::Point const &point, unsigned int id, Land &aLand,
 		double stemHeight, double crownHeight, double rootDepth,
 		double crownRadius, double fineRootPermeability,
 		double minimumLeafWaterPotential, double xylemConductivity,
-		double halfMaxHeightGrowthWeight, double maintanceFactor) :
-		_position(point), _age(0), _crownRadius(crownRadius), _stemHeight(
+		double halfMaxHeightGrowthWeight, double maintanceFactor, double age) :
+		_position(point), _age(age), _crownRadius(crownRadius), _stemHeight(
 				stemHeight), _crownHeight(crownHeight), _rootDepth(rootDepth), _leafVolume(
 				-1), _branchVolume(-1), _stemVolume(-1), _cableRootVolume(-1), _fineRootVolume(
 				-1), _treeVolume(-1), _radialFluxResistence(-1), _lateralFluxResistence(
@@ -75,9 +75,18 @@ void Tree::recruitment() {
 	//   indirectly with crown radius, as higher area on which probability of sapling cast will be calculated
 	// TODO: seasonal recruitment
 
-	// roll dice within crown radius (TODO: drift through wind?)
+	if (_age > getMinSeedingAge()
+			&& _stemHeight > getMinSeedingHeight()
+			&& _availableResources > getMinSeedingResources())
+	{
 
-	// plant new trees
+		// roll dice within crown radius (TODO: drift through wind?)
+
+		// plant new trees
+
+	}
+
+
 
 }
 
