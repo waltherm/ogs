@@ -65,7 +65,7 @@ Tree::~Tree() {
 	// TODO Auto-generated destructor stub
 }
 
-void Tree::recruitment() {
+std::size_t Tree::recruitment() {
 
 	// check on adulthood and calculate possibility for sapling cast
 	//  possibility of sapling will rise with
@@ -75,18 +75,17 @@ void Tree::recruitment() {
 	//   indirectly with crown radius, as higher area on which probability of sapling cast will be calculated
 	// TODO: seasonal recruitment
 
-	if (_age > getMinSeedingAge()
-			&& _stemHeight > getMinSeedingHeight()
-			&& _availableResources > getMinSeedingResources())
-	{
+	std::size_t seeds(0);
 
-		// roll dice within crown radius (TODO: drift through wind?)
-
-		// plant new trees
-
+	if (_age > getMinSeedingAge() && _stemHeight > getMinSeedingHeight()
+			&& _availableResources > getMinSeedingResources()) {
+		// TODO: own competition through saplings ???
+		//  saplings are placed within limited radius around existing tree -> will they limit this tree?
+		seeds = static_cast<std::size_t>(calcCrownArea() * getSeedsPerUnitArea());
 	}
 
-
+	return seeds;
+	// TODO: add malus for resources needed to produce seeds
 
 }
 

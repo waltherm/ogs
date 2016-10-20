@@ -43,7 +43,7 @@ int main() {
 
 	while (currentTime < timeEnd) {
 
-		INFO("Time: %i", currentTime);
+		INFO("Time: %1.0f", currentTime);
 
 		thisFlora.competition();
 		thisFlora.grow(timeDiff);

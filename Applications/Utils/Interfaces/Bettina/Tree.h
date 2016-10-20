@@ -11,6 +11,7 @@
 #include "GeoLib/GEOObjects.h"
 
 #include "Land.h"
+#include "Globals.h"
 
 class Tree {
 public:
@@ -23,7 +24,7 @@ public:
 
 	virtual ~Tree();
 
-	void recruitment();
+	std::size_t recruitment();
 
 	void checkAboveGroundCompetition();
 	//void findNodesInCrownRadius();
@@ -257,6 +258,7 @@ public:
 	virtual double getMinSeedingAge() const = 0;	// this function needs to be implemented in the derived classes
 	virtual double getMinSeedingHeight() const = 0;
 	virtual double getMinSeedingResources() const = 0;
+	virtual double getSeedsPerUnitArea() const = 0;
 
 private:
 	GeoLib::Point _position;
@@ -343,6 +345,9 @@ private:
 				propertyName);
 	}
 
+	double calcCrownArea() const{
+		return 2 * BettinaConstants::pi * std::pow(_crownRadius,2);
+	}
 };
 
 #endif /* TREE_H_ */

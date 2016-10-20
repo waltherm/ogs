@@ -69,7 +69,13 @@ void Flora::plantAvi(double x, double y, double z) {
 void Flora::recruitment() {
 
 	for (auto &aliveTree : _aliveTrees) {
-		aliveTree->recruitment();
+		std::size_t seeds (aliveTree->recruitment());
+
+		for (std::size_t seed(1); seed < seeds; seed++)
+		{
+			// roll dice within crown radius (TODO: drift through wind?)
+			// plant new trees
+		}
 	}
 }
 

@@ -26,6 +26,10 @@ public:
 	double getMinSeedingResources() const override {
 		return 1e-3;
 	}
+
+	virtual double getSeedsPerUnitArea() const override {
+		return 1;
+	}
 };
 
 #endif /* RHIZOPHORA_H_ */

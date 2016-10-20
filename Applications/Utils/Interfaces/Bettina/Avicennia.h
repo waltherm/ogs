@@ -28,6 +28,10 @@ public:
 		return 1e-3;
 	}
 
+	virtual double getSeedsPerUnitArea() const override {
+		return 1;
+	}
+
 };
 
 #endif /* AVICENNIA_H_ */
