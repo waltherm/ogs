@@ -43,8 +43,14 @@ void Output::writeFlora(Flora const & aFlora, std::size_t currentTimeStep) {
 	vtkSmartPointer<vtkCellArray> treeVertices =
 			vtkSmartPointer<vtkCellArray>::New();
 
-//	std::vector<std::string> variable("age", "stemRadius");
-//	fillArrays(variables);
+	//std::vector<std::string> variable("age", "stemRadius");
+	// create vector of smartpointers
+	// give names to smartpointers
+	// fill variables from all trees
+	// add all arrays
+	// need pointer to functions (bind) of tree objects
+	// could be a pair of string and pointer
+
 
 	// ini all data arrays
 	vtkSmartPointer<vtkDoubleArray> treeData_age = vtkSmartPointer<
