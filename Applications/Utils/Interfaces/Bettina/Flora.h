@@ -24,6 +24,11 @@ public:
 	void initialPopulate();
 	bool checkForActivePopulation();
 
+	void plantRandomAvi(double xMax = 100, double yMax = 100,
+			double zMax = 0, double xMin = 0, double yMin = 0,
+			double zMin = 0);
+	void plantAvi(double x, double y, double z);
+
 	void recruitment();
 	void competition();
 	void grow(double timeDiff);

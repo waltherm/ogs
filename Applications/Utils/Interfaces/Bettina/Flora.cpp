@@ -5,6 +5,8 @@
  *      Author: waltherm
  */
 
+#include <random>
+
 #include <Flora.h>
 #include <time.h>
 
@@ -20,44 +22,52 @@ Flora::~Flora() {
 
 void Flora::initialPopulate() {
 
-	std::srand(std::time(NULL));
+	for (std::size_t i(0); i < 10; i++) {
+		plantRandomAvi();
+	}
 
-//	// uniform distribution
+//// uniform distribution
 //	double const z = 0;
 //	for (std::size_t i(0); i < 20; i++) {
 //		double const x = i*4 +10;
 //		for (std::size_t j(0); j < 20; j++) {
 //			double const y = j*4 +10;
-//			GeoLib::Point const newPoint(x, y, z);
-//			_aliveTrees.push_back(
-//					new Avicennia(newPoint, _aliveTrees.size() - 1, _thisLand));
+//			plantAvi(x, y, z);
 //		}
 //	}
 
-	// random distribution
-	for (std::size_t i(0); i < 1000; i++) {
-		double const x = 1 + std::rand() % 98;	//600
-		double const y = 1 + std::rand() % 98;	//300
-		double const z = 0;
+//// single tree distribution
+//	plantAvi(31, 31, 0);
+//	plantAvi(31.2, 31.2, 0);
+//	plantAvi(30.8, 31.5, 0);
 
-		GeoLib::Point const newPoint(x, y, z);
-		_aliveTrees.push_back(
-				new Avicennia(newPoint, _aliveTrees.size() - 1, _thisLand));
-	}
-
-	// single tree distribution
-//	GeoLib::Point const newPoint(31, 31, 0);
-//	_aliveTrees.push_back(
-//			new Avicennia(newPoint, _aliveTrees.size()-1, _thisLand));
-//
-//	GeoLib::Point const newPointb(31.2, 31.2, 0);
-//	_aliveTrees.push_back(
-//			new Avicennia(newPointb, _aliveTrees.size()-1, _thisLand));
-//
-//	GeoLib::Point const newPointc(30.8, 31.5, 0);
-//	_aliveTrees.push_back(
-//			new Avicennia(newPointc, _aliveTrees.size()-1, _thisLand));
 }
+
+
+void Flora::plantRandomAvi(double xMax, double yMax, double zMax, double xMin,
+		double yMin, double zMin) {
+
+	//Mersenne Twister: Good quality random number generator
+	std::mt19937 rng;
+	//Initialize with non-deterministic seeds
+	rng.seed(std::random_device{}());
+
+	std::uniform_real_distribution<double> unifx(xMin, xMax);
+	double const x = unifx(rng);
+	std::uniform_real_distribution<double> unify(yMin, yMax);
+	double const y = unify(rng);
+	std::uniform_real_distribution<double> unifz(zMin, zMax);
+	double const z = unifz(rng);
+	plantAvi(x, y, z);
+}
+
+
+void Flora::plantAvi(double x, double y, double z) {
+	GeoLib::Point const newTreePosition(x, y, z);
+	_aliveTrees.push_back(
+			new Avicennia(newTreePosition, _aliveTrees.size() - 1, _thisLand));
+}
+
 
 void Flora::recruitment() {
 
@@ -65,6 +75,7 @@ void Flora::recruitment() {
 		aliveTree->recruitment();
 	}
 }
+
 
 void Flora::competition() {
 
