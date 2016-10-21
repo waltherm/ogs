@@ -47,7 +47,8 @@ public:
 	}
 
 private:
-	void updateTreeIDs();
+//	void updateTreeIDs();
+	std::size_t _treeCounter;
 
 	std::vector<Tree*> _aliveTrees, _deadTrees;
 	Land & _thisLand;

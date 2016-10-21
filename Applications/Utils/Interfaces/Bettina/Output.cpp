@@ -46,9 +46,9 @@ void Output::writeFlora(Flora const & aFlora, std::size_t currentTimeStep) {
 //	std::vector<std::string> variable("age", "stemRadius");
 //	fillArrays(variables);
 
-	// ini all data arrays
+// ini all data arrays
 	vtkSmartPointer<vtkDoubleArray> treeData_age = vtkSmartPointer<
-				vtkDoubleArray>::New();
+			vtkDoubleArray>::New();
 	vtkSmartPointer<vtkDoubleArray> treeData_stemRadius = vtkSmartPointer<
 			vtkDoubleArray>::New();
 	vtkSmartPointer<vtkDoubleArray> treeData_crownRadius = vtkSmartPointer<
@@ -126,8 +126,8 @@ void Output::writeFlora(Flora const & aFlora, std::size_t currentTimeStep) {
 	vtkSmartPointer<vtkDoubleArray> treeData_sizeFactor = vtkSmartPointer<
 			vtkDoubleArray>::New();
 
-	vtkSmartPointer<vtkDoubleArray> treeData_aboveGroundCompetitionWins = vtkSmartPointer<
-				vtkDoubleArray>::New();
+	vtkSmartPointer<vtkDoubleArray> treeData_aboveGroundCompetitionWins =
+			vtkSmartPointer<vtkDoubleArray>::New();
 
 	//give names to arrays
 	treeData_age->SetName("age");
@@ -245,7 +245,8 @@ void Output::writeFlora(Flora const & aFlora, std::size_t currentTimeStep) {
 		treeData_size->InsertNextValue(thisTree->getSize());
 		treeData_sizeFactor->InsertNextValue(thisTree->getSizeFactor());
 
-		treeData_aboveGroundCompetitionWins->InsertNextValue(thisTree->getWinCountabove());
+		treeData_aboveGroundCompetitionWins->InsertNextValue(
+				thisTree->getWinCountabove());
 
 		idCounter++;
 	}
@@ -311,9 +312,19 @@ void Output::writeFlora(Flora const & aFlora, std::size_t currentTimeStep) {
 
 }
 
-void Output::writeLand(const MeshLib::Mesh * subsurface,
-		std::size_t currentTimeStep) {
+void Output::writeLand(Land &aLand, std::size_t currentTimeStep) {
 
+	for (std::size_t i(0); i < aLand.getSubsurface()->getNumberOfNodes(); i++) {
+		if (aLand.getAboveGroundCompetitionAtNodeID(i) != nullptr) {
+			aLand.setAboveGroundCompetition(aLand.getAboveGroundCompetitionAtNodeID(i)->getID(),i);
+		}
+		else
+		{
+			aLand.setAboveGroundCompetition(-1,i);
+		}
+	}
+
+	const MeshLib::Mesh * subsurface(aLand.getSubsurface());
 	std::string currentOutfile(
 			_landOutFileName + std::to_string(currentTimeStep)
 					+ _landFileEnding);

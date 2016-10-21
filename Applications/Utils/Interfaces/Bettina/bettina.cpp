@@ -21,12 +21,12 @@ int main() {
 
 	ApplicationsLib::LogogSetup logog_setup;
 
-	std::string const salinityString = "Salinity2", aboveGroundCompetitionString(
+	std::string const salinityString = "Salinity", aboveGroundCompetitionString(
 			"CompeteAbove"), belowGroundCompetitionString("CompeteBelow");
 
 	// reading
 	std::string const fileName(
-			"/home/waltherm/03_scientific_work/mangroven/BETTINA/test/test.vtu");
+			"/home/waltherm/03_scientific_work/mangroven/BETTINA/test/test_small.vtu");
 	Output thisOutput(
 			"/home/waltherm/03_scientific_work/mangroven/BETTINA/test/test");
 
@@ -36,7 +36,7 @@ int main() {
 	Flora thisFlora(thisLand);
 
 	thisOutput.writeFlora(thisFlora, 0);
-	thisOutput.writeLand(thisLand.getSubsurface(), 0);
+	thisOutput.writeLand(thisLand, 0);
 
 	// run through time steps
 	double timeBegin(0), timeEnd(10000), timeDiff(1), currentTime(timeBegin);
@@ -51,7 +51,7 @@ int main() {
 		thisFlora.die();
 
 		thisOutput.writeFlora(thisFlora, currentTime+1);
-		thisOutput.writeLand(thisLand.getSubsurface(), currentTime+1);
+		thisOutput.writeLand(thisLand, currentTime+1);
 
 		if (!(thisFlora.checkForActivePopulation()))
 			std::abort();

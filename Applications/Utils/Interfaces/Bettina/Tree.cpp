@@ -38,8 +38,8 @@ Tree::Tree(GeoLib::Point const &point, unsigned int id, Land &aLand,
 				halfMaxHeightGrowthWeight), _maintanceFactor(maintanceFactor), _growthLimitCoefficient(
 				BettinaConstants::growthLimitCoefficient), _deathThreshold(
 				BettinaConstants::deathTreshhold), _size(-1), _sizeFactor(
-				BettinaConstants::aviSizeFactor), _ID(id + 1), _updatedID(_ID), _thisLand(
-				aLand), _nearestNodeID(findNearestNodeToTree()) {
+				BettinaConstants::aviSizeFactor), _ID(id + 1), //_updatedID(_ID),
+				_thisLand(aLand), _nearestNodeID(findNearestNodeToTree()) {
 	// TODO Auto-generated constructor stub
 	// initializing
 
@@ -52,11 +52,11 @@ Tree::Tree(GeoLib::Point const &point, unsigned int id, Land &aLand,
 	_rootRadius = 1.05
 			/ std::pow(
 					_fineRootPermeability * BettinaConstants::k_geom
-							* BettinaConstants::pi * hir * _rootDepth, 0.5); //TODO: double-check functions
+							* BettinaConstants::pi * hir * _rootDepth, 0.5);//TODO: double-check functions
 	_stemRadius = std::pow(
 			(_stemHeight + BettinaConstants::oneOverSqrtTwo * _rootRadius
 					+ 2 * _crownRadius)
-					/ (_xylemConductivity * BettinaConstants::pi * hir), 0.5); //TODO: double-check functions
+					/ (_xylemConductivity * BettinaConstants::pi * hir), 0.5);//TODO: double-check functions
 	_size = 2 * _crownRadius * _sizeFactor;
 
 }
@@ -81,11 +81,11 @@ void Tree::recruitment() {
 
 }
 
-void Tree::checkAboveGroundCompetition(std::vector<Tree*> &aliveTrees) {
+void Tree::checkAboveGroundCompetition() {
 	//findNodesInCrownRadius();
 	_nodesWithinCrownRadius = findMinOneNodeInSearchRadius(
 			_crownRadius * _sizeFactor);
-	setAboveGroundCompetition(aliveTrees);
+	setAboveGroundCompetition();
 }
 
 //void Tree::findNodesInCrownRadius() {
@@ -140,32 +140,30 @@ std::vector<std::size_t> Tree::findMinOneNodeInSearchRadius(
 
 }
 
-void Tree::setAboveGroundCompetition(std::vector<Tree*> &aliveTrees) {
+void Tree::setAboveGroundCompetition() {
 
 	//in all nodes, set this tree ID as aboveGroundCompetitionID, if is highest
 	for (std::size_t i(0); i < _nodesWithinCrownRadius.size(); i++) {
-		double aboveGroundCompetition(
+		Tree* aboveGroundCompetition(
 				_thisLand.getAboveGroundCompetitionAtNodeID(
 						_nodesWithinCrownRadius[i]));
-		if (aboveGroundCompetition < 0 || aboveGroundCompetition == _updatedID) // no other tree or this tree already highest here
+		if (aboveGroundCompetition == nullptr || aboveGroundCompetition == this) // no other tree or this tree already highest here
 				{
-			_thisLand.setAboveGroundCompetition(_updatedID,
+			_thisLand.setAboveGroundCompetition(this,
 					_nodesWithinCrownRadius[i]);
 		} else	// other tree here
 		{
 			double const otherTreesHeight(
-					aliveTrees[aboveGroundCompetition]->getStemHeight()
-							+ 2
-									* aliveTrees[aboveGroundCompetition]->getCrownHeight());
+					aboveGroundCompetition->getStemHeight()
+							+ 2 * aboveGroundCompetition->getCrownHeight());
 			double const thisTreesHeight(_stemHeight + 2 * _crownHeight);
 			if (otherTreesHeight <= thisTreesHeight) //this tree is higher or equal (and wins)
 					{
-				_thisLand.setAboveGroundCompetition(_updatedID,
+				_thisLand.setAboveGroundCompetition(this,
 						_nodesWithinCrownRadius[i]);
 			}
 		}
 	}
-
 }
 
 void Tree::calcAboveGroundCompetition() {
@@ -173,7 +171,7 @@ void Tree::calcAboveGroundCompetition() {
 	//find nodes in crown radius (if no nodes found, only use nearest node)
 	_aboveGroundCompetitionWins = 0;	// TODO could be local var
 	for (auto id : _nodesWithinCrownRadius) {
-		if (_thisLand.getAboveGroundCompetitionAtNodeID(id) == _updatedID) {
+		if (_thisLand.getAboveGroundCompetitionAtNodeID(id) == this) {
 			_aboveGroundCompetitionWins++;
 		}
 	}
@@ -190,7 +188,7 @@ void Tree::calcAboveGroundCompetition() {
 	if (vicinityNodeIDs.size() > 0) {
 		std::size_t vicinityNodes(0);
 		for (auto id : vicinityNodeIDs) {
-			if (_thisLand.getAboveGroundCompetitionAtNodeID(id) < 0) {
+			if (_thisLand.getAboveGroundCompetitionAtNodeID(id) == nullptr) {
 				vicinityNodes++;
 			}
 		}
@@ -263,8 +261,8 @@ void Tree::aging(double timeDiff) {
 	//TODO add malus for getting old eg loosing parts of the crown from time to time
 }
 
-void Tree::increaseAge(double timeDiff){
-	_age+=timeDiff;
+void Tree::increaseAge(double timeDiff) {
+	_age += timeDiff;
 }
 
 void Tree::growTree() {

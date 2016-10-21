@@ -16,6 +16,7 @@
 #include "MeshGeoToolsLib/MeshNodeSearcher.h"
 
 class Flora;
+class Tree;
 
 class Land {
 public:
@@ -26,11 +27,12 @@ public:
 
 //	double getSalinityAtPoint(GeoLib::Point const &point) const;
 	double getSalinityAtNodeID(std::size_t nodeID) const;
-	double getAboveGroundCompetitionAtNodeID(std::size_t nodeID) const;
+	Tree* getAboveGroundCompetitionAtNodeID(std::size_t nodeID) const;
 	double getBelowGroundCompetitionAtNodeID(std::size_t nodeID) const;
 
 	void resetAboveGroundCompetition();
 	void resetBelowGroundCompetition();
+	void setAboveGroundCompetition(Tree* aTree, std::size_t nodeID);
 	void setAboveGroundCompetition(double value, std::size_t nodeID);
 	void setBelowGroundCompetition(double value, std::size_t nodeID);
 	void incrementBelowGroundCompetition(std::size_t nodeID);
@@ -46,6 +48,7 @@ public:
 private:
 	void readMesh(std::string const &fileName);
 	void checkPropertyExists(std::string propertyString) const;
+	void initializeAboveGroundCompetition();
 
 	template<typename PROP_VAL_TYPE>
 	PROP_VAL_TYPE getPropertyAtNodeID(std::size_t nodeID,
@@ -119,6 +122,7 @@ private:
 	MeshLib::Mesh *_subsurface;
 	MeshGeoToolsLib::SearchLength _searchLength;
 	MeshGeoToolsLib::MeshNodeSearcher _meshSearcher;
+	std::vector<Tree*> _aboveGroundCompetition;
 
 };
 

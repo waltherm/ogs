@@ -24,10 +24,10 @@ public:
 
 	void recruitment();
 
-	void checkAboveGroundCompetition(std::vector<Tree*> &aliveTrees);
+	void checkAboveGroundCompetition();
 	//void findNodesInCrownRadius();
 	std::vector<std::size_t> findMinOneNodeInSearchRadius(double searchRadius);
-	void setAboveGroundCompetition(std::vector<Tree*> &aliveTrees);
+	void setAboveGroundCompetition();
 	void calcAboveGroundCompetition();
 
 	void checkBelowGroundCompetition();
@@ -61,13 +61,13 @@ public:
 		return _ID;
 	}
 
-	std::size_t getUpdatedID() const {
-		return _updatedID;
-	}
+//	std::size_t getUpdatedID() const {
+//		return _updatedID;
+//	}
 
-	void setUpdatedID(std::size_t updatedID) {
-		_updatedID = updatedID;
-	}
+//	void setUpdatedID(std::size_t updatedID) {
+//		_updatedID = updatedID;
+//	}
 
 	double getAboveGroundCompetitionCoefficient() const {
 		return _aboveGroundCompetitionCoefficient;
@@ -302,7 +302,7 @@ private:
 	double const _sizeFactor;	//size-factor
 
 	std::size_t const _ID;
-	std::size_t _updatedID;
+//	std::size_t _updatedID;
 	Land & _thisLand;
 	std::size_t _nearestNodeID;
 

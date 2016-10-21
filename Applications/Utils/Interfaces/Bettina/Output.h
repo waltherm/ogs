@@ -22,7 +22,7 @@ public:
 	virtual ~Output();
 
 	void writeFlora(Flora const & aFlora, std::size_t currentTimeStep);
-	void writeLand(const MeshLib::Mesh * subsurface, std::size_t currentTimeStep);
+	void writeLand(Land &aLand, std::size_t currentTimeStep);
 
 private:
 
