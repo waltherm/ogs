@@ -35,6 +35,10 @@ namespace BettinaConstants {
 
 	double const oneOverSqrtTwo(std::pow(2, -0.5));
 
+
+//	static double randomDoubleInRange(double lowerBound, double upperBound) {
+//		return lowerBound + (rand() / ( RAND_MAX / (upperBound - lowerBound)));
+//	}
 //	double const salRand;
 //	double const rrd1;
 //	double const rrd2;

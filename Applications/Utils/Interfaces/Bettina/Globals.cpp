@@ -20,3 +20,5 @@ Globals::~Globals() {
 void Globals::calculateClarkEvansIndex() {
 	//TODO only do, if tree number > 1
 }
+
+

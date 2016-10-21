@@ -5,8 +5,10 @@
  *      Author: waltherm
  */
 
-#include <random>
 #include <boost/math/complex.hpp>
+#include <boost/random/uniform_real.hpp>
+#include <boost/random/mersenne_twister.hpp>
+#include <boost/random/variate_generator.hpp>
 
 #include <Flora.h>
 #include <time.h>
@@ -24,82 +26,92 @@ Flora::~Flora() {
 void Flora::initialPopulate() {
 
 //	//random distribution
-//	for (std::size_t i(0); i < 10; i++) {
-//		plantAviRandomRectangle(100, 100, 0);
-//	}
-
-// uniform distribution
-	double const z = 0;
-	for (std::size_t i(0); i < 20; i++) {
-		double const x = i*4 +10;
-		for (std::size_t j(0); j < 20; j++) {
-			double const y = j*4 +10;
-			plantAvi(x, y, z);
-		}
+	for (std::size_t i(0); i < 2000; i++) {
+		plantAviRandomRectangle(100, 100, 0);
 	}
+
+//// uniform distribution
+//	double const z = 0;
+//	for (std::size_t i(0); i < 20; i++) {
+//		double const x = i * 4 + 10;
+//		for (std::size_t j(0); j < 20; j++) {
+//			double const y = j * 4 + 10;
+//			plantAvi(x, y, z);
+//		}
+//	}
 
 //// single tree distribution
 //	plantAvi(31, 31, 0);
-//	plantAvi(31.2, 31.2, 0);
-//	plantAvi(30.8, 31.5, 0);
+//	plantAvi(2, 2, 0);
+//	plantAvi(4, 4, 0);
 
 }
 
 void Flora::plantAviRandomRectangle(double xMax, double yMax, double zMax,
 		double xMin, double yMin, double zMin) {
 
-	//Mersenne Twister: Good quality random number generator
-	std::mt19937 rng;
-	//Initialize with non-deterministic seeds
-	rng.seed(std::random_device { }());
+	std::random_device rd;
+	std::mt19937 random_number_generator(rd());
 
 	std::uniform_real_distribution<double> uniformDoubleX(xMin, xMax);
-	double const x(uniformDoubleX(rng));
+	double const x(uniformDoubleX(random_number_generator));
 	std::uniform_real_distribution<double> uniformDoubleY(yMin, yMax);
-	double const y(uniformDoubleY(rng));
+	double const y(uniformDoubleY(random_number_generator));
 	std::uniform_real_distribution<double> uniformDoubleZ(zMin, zMax);
-	double const z(uniformDoubleZ(rng));
+	double const z(uniformDoubleZ(random_number_generator));
 	plantAvi(x, y, z);
 }
 
-void Flora::plantAviRandomCircle(double x, double y, double z, double radius) {
-	//Mersenne Twister: Good quality random number generator
-	std::mt19937 rng;
-	//Initialize with non-deterministic seeds
-	rng.seed(std::random_device { }());
+void Flora::plantAviRandomCircle(double x, double y, double z, double radius,
+		double angle) {
 
-	std::uniform_real_distribution<double> uniformDoubleAngle(0,
-			2 * BettinaConstants::pi);
-	double const angle(uniformDoubleAngle(rng));
-	std::uniform_real_distribution<double> uniformDoubleDistance(0, radius);
-	double const distance(
-			uniformDoubleDistance(rng) * BettinaConstants::seedSpreadFactor
-					* BettinaConstants::aviSizeFactor);
-	double const xdiff(std::cos(angle) * distance);
-	double const ydiff(std::sin(angle) * distance);
+//	double const angle(
+//			BettinaConstants::randomDoubleInRange(0, 2 * BettinaConstants::pi));
+//	double const angle(
+//			0 + (std::rand() / ( RAND_MAX / (2 * BettinaConstants::pi - 0))));
+
+//	double const distance(
+//			BettinaConstants::randomDoubleInRange(0,
+//					radius * BettinaConstants::aviSizeFactor * BettinaConstants::seedSpreadFactor)); // TODO I dont like this sizefactor. why not making the crown 4 times bigger right away?
+//	double const distance(
+//			0
+//					+ (std::rand()
+//							/ ( RAND_MAX
+//									/ (radius * BettinaConstants::aviSizeFactor
+//											- 0))));
+
+	double const xdiff(std::cos(angle) * radius);
+	double const ydiff(std::sin(angle) * radius);
 	plantAvi(x + xdiff, y + ydiff, z);
 }
 
 void Flora::plantAvi(double x, double y, double z) {
 	GeoLib::Point const newTreePosition(x, y, z);
 	_aliveTrees.push_back(
-			new Avicennia(newTreePosition, _treeCounter++, _thisLand));	// guess, this is a bad way to get the tree counting correct
+			new Avicennia(newTreePosition, _treeCounter++, _thisLand));	// TODO guess, this is a bad way to get the tree counting correct
 }
-
 
 void Flora::recruitment() {
 
+//	std::srand(std::time(NULL));
+	std::random_device rd;
+	std::mt19937 random_number_generator(rd());
+	std::uniform_real_distribution<double> rnd(0.0, 1.0);
+
 	const std::size_t noAliveTrees(_aliveTrees.size());
 	for (std::size_t i(0); i < noAliveTrees; i++) {
-		Tree *thisTree(_aliveTrees[i]);
-		std::size_t seeds(thisTree->recruitment());
+		std::size_t seeds(_aliveTrees[i]->recruitment());
 		for (std::size_t seed(0); seed < seeds; seed++) {
 			// roll dice within crown radius (TODO: drift through wind?)
 			// plant new trees
-			plantAviRandomCircle(thisTree->getPosition().getCoords()[0],
-					thisTree->getPosition().getCoords()[1],
-					thisTree->getPosition().getCoords()[2],
-					thisTree->getCrownRadius());
+			plantAviRandomCircle(_aliveTrees[i]->getPosition().getCoords()[0],
+					_aliveTrees[i]->getPosition().getCoords()[1],
+					_aliveTrees[i]->getPosition().getCoords()[2],
+					_aliveTrees[i]->getCrownRadius()
+							* BettinaConstants::seedSpreadFactor
+							* BettinaConstants::aviSizeFactor
+							* rnd(random_number_generator),
+					2 * BettinaConstants::pi * rnd(random_number_generator));//* BettinaConstants::seedSpreadFactor	//FIXME why is this not working?
 		}
 	}
 
@@ -117,7 +129,6 @@ void Flora::recruitment() {
 //		}
 
 }
-
 
 void Flora::competition() {
 
@@ -158,7 +169,7 @@ void Flora::die() {
 
 	for (auto & aliveTree : _aliveTrees) {
 		if (aliveTree->getDeathFlag()) {
-			_deadTrees.push_back(aliveTree); //copy aliveTrees with deathflag to deadTrees
+//			_deadTrees.push_back(aliveTree); //copy aliveTrees with deathflag to deadTrees
 			aliveTree = nullptr; //write nullpointer to aliveTree with deathflag
 		}
 	}

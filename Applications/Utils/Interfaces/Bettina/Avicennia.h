@@ -29,7 +29,7 @@ public:
 	}
 
 	virtual double getSeedsPerUnitArea() const override {
-		return 1;
+		return 0.3;
 	}
 
 };

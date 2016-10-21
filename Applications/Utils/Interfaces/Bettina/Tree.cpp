@@ -81,7 +81,7 @@ std::size_t Tree::recruitment() {
 			&& _availableResources > getMinSeedingResources()) {
 		// TODO: own competition through saplings ???
 		//  saplings are placed within limited radius around existing tree -> will they limit this tree?
-		seeds = static_cast<std::size_t>(calcCrownArea() * getSeedsPerUnitArea());
+		seeds = static_cast<std::size_t>(calcCrownArea() * _sizeFactor * getSeedsPerUnitArea());
 	}
 
 	return seeds;

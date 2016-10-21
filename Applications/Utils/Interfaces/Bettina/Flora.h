@@ -9,6 +9,12 @@
 #define FLORA_H_
 
 #include <vector>
+#include <random>
+#include <boost/random/variate_generator.hpp>
+#include <boost/random/uniform_real.hpp>
+#include <boost/random/mersenne_twister.hpp>
+
+
 
 //#include "Land.h"
 #include "Tree.h"
@@ -24,10 +30,9 @@ public:
 	void initialPopulate();
 	bool checkForActivePopulation();
 
-	void plantAviRandomRectangle(double xMax, double yMax,
-			double zMax, double xMin = 0, double yMin = 0,
-			double zMin = 0);
-	void plantAviRandomCircle(double x, double y, double z, double radius);
+	void plantAviRandomRectangle(double xMax, double yMax, double zMax,
+			double xMin = 0, double yMin = 0, double zMin = 0);
+	void plantAviRandomCircle(double x, double y, double z, double radius, double angle);
 	void plantAvi(double x, double y, double z);
 
 	void recruitment();
