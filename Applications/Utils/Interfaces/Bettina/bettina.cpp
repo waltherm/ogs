@@ -26,7 +26,7 @@ int main() {
 
 	// reading
 	std::string const fileName(
-			"/home/waltherm/03_scientific_work/mangroven/BETTINA/test/test_small.vtu");
+			"/home/waltherm/03_scientific_work/mangroven/BETTINA/test/test.vtu");
 	Output thisOutput(
 			"/home/waltherm/03_scientific_work/mangroven/BETTINA/test/test");
 

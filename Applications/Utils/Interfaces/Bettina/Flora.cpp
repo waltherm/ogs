@@ -23,19 +23,20 @@ Flora::~Flora() {
 
 void Flora::initialPopulate() {
 
-	for (std::size_t i(0); i < 10; i++) {
-		plantAviRandomRectangle(100, 100, 0);
-	}
-
-//// uniform distribution
-//	double const z = 0;
-//	for (std::size_t i(0); i < 20; i++) {
-//		double const x = i*4 +10;
-//		for (std::size_t j(0); j < 20; j++) {
-//			double const y = j*4 +10;
-//			plantAvi(x, y, z);
-//		}
+//	//random distribution
+//	for (std::size_t i(0); i < 10; i++) {
+//		plantAviRandomRectangle(100, 100, 0);
 //	}
+
+// uniform distribution
+	double const z = 0;
+	for (std::size_t i(0); i < 20; i++) {
+		double const x = i*4 +10;
+		for (std::size_t j(0); j < 20; j++) {
+			double const y = j*4 +10;
+			plantAvi(x, y, z);
+		}
+	}
 
 //// single tree distribution
 //	plantAvi(31, 31, 0);
@@ -165,14 +166,6 @@ void Flora::die() {
 			std::remove(_aliveTrees.begin(), _aliveTrees.end(), nullptr), //sort all nullptr elements to end of vector and return begin of nullptr elements
 			_aliveTrees.end());
 
-	updateTreeIDs();
-
-}
-
-void Flora::updateTreeIDs() {
-	for (std::size_t i(0); i < _aliveTrees.size(); i++) {
-		_aliveTrees[i]->setUpdatedID(i);
-	}
 }
 
 bool Flora::checkForActivePopulation() {
