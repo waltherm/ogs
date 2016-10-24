@@ -10,9 +10,9 @@
 
 #include <vector>
 #include <random>
-#include <boost/random/variate_generator.hpp>
-#include <boost/random/uniform_real.hpp>
-#include <boost/random/mersenne_twister.hpp>
+//#include <boost/random/variate_generator.hpp>
+//#include <boost/random/uniform_real.hpp>
+//#include <boost/random/mersenne_twister.hpp>
 
 
 
@@ -32,7 +32,9 @@ public:
 
 	void plantAviRandomRectangle(double xMax, double yMax, double zMax,
 			double xMin = 0, double yMin = 0, double zMin = 0);
-	void plantAviRandomCircle(double x, double y, double z, double radius, double angle);
+	void plantAviRandomCircle(double x, double y, double z, double radius);
+	void plantTreeRandomCircle(double x, double y, double z, double radius, Tree const &aTree);
+	void plantSeed(Tree const &aTree);
 	void plantAvi(double x, double y, double z);
 
 	void recruitment();
@@ -54,6 +56,9 @@ public:
 
 private:
 	std::size_t _treeCounter;
+	std::random_device _rd;
+	std::mt19937 _random_number_generator;
+	std::uniform_real_distribution<double> _rnd;
 
 	std::vector<Tree*> _aliveTrees, _deadTrees;
 	Land & _thisLand;

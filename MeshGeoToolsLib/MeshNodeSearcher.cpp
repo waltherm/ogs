@@ -33,7 +33,7 @@ std::vector<std::unique_ptr<MeshNodeSearcher>> MeshNodeSearcher::_mesh_node_sear
 
 MeshNodeSearcher::MeshNodeSearcher(MeshLib::Mesh const& mesh,
     MeshGeoToolsLib::SearchLength const& search_length_algorithm, bool search_all_nodes) :
-        _mesh(mesh), _mesh_grid(_mesh.getNodes().cbegin(), _mesh.getNodes().cend()),
+        _mesh(mesh), _mesh_grid(_mesh.getNodes().cbegin(), _mesh.getNodes().cend()), // , 64 give lower mesh grid size (default 512)
         _search_length(0.0), _search_all_nodes(search_all_nodes)
 {
     DBUG("Constructing MeshNodeSearcher obj.");
@@ -93,7 +93,13 @@ std::vector<std::size_t> const& MeshNodeSearcher::getMeshNodeIDsAlongSurface(Geo
 
 MeshNodesOnPoint& MeshNodeSearcher::getMeshNodesOnPoint(GeoLib::Point const& pnt)
 {
-	_mesh_nodes_on_points.clear();	// clear cache
+	if (!(_mesh_nodes_on_points.empty()))	// clear cache
+	{
+		for (auto mn : _mesh_nodes_on_points)
+			delete mn;
+		_mesh_nodes_on_points.clear();
+	}
+
 	std::vector<MeshNodesOnPoint*>::const_iterator it(_mesh_nodes_on_points.begin());
     for (; it != _mesh_nodes_on_points.end(); ++it) {
         if (&(*it)->getPoint() == &pnt) {

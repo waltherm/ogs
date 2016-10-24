@@ -13,9 +13,15 @@
 #include "Land.h"
 #include "Globals.h"
 
+
+enum class TreeType{
+	Avicennia,
+	Rhizophora
+};
+
 class Tree {
 public:
-	Tree(GeoLib::Point const &point, unsigned int id, Land &aLand,
+	Tree(GeoLib::Point const &point, Land &aLand,
 			double stemHeight, double crownHeight, double rootDepth,
 			double crownRadius, double fineRootPermeability,
 			double minimumLeafWaterPotential, double xylemConductivity,
@@ -27,7 +33,6 @@ public:
 	std::size_t recruitment();
 
 	void checkAboveGroundCompetition();
-	//void findNodesInCrownRadius();
 	std::vector<std::size_t> findMinOneNodeInSearchRadius(double searchRadius);
 	void setAboveGroundCompetition();
 	void calcAboveGroundCompetition();
@@ -62,14 +67,6 @@ public:
 	std::size_t getID() const {
 		return _ID;
 	}
-
-//	std::size_t getUpdatedID() const {
-//		return _updatedID;
-//	}
-
-//	void setUpdatedID(std::size_t updatedID) {
-//		_updatedID = updatedID;
-//	}
 
 	double getAboveGroundCompetitionCoefficient() const {
 		return _aboveGroundCompetitionCoefficient;
@@ -255,12 +252,20 @@ public:
 		return _age;
 	}
 
+	static std::size_t getNumberOfTrees() {
+		return _numberOfTrees;
+	}
+
 	virtual double getMinSeedingAge() const = 0;	// this function needs to be implemented in the derived classes
 	virtual double getMinSeedingHeight() const = 0;
 	virtual double getMinSeedingResources() const = 0;
 	virtual double getSeedsPerUnitArea() const = 0;
+	virtual TreeType getTreeType() const = 0;
+
 
 private:
+	static std::size_t _numberOfTrees;
+
 	GeoLib::Point _position;
 	double _age;
 	double _stemRadius;	//r_stem
@@ -309,9 +314,9 @@ private:
 	double const _sizeFactor;	//size-factor
 
 	std::size_t const _ID;
-//	std::size_t _updatedID;
 	Land & _thisLand;
 	std::size_t _nearestNodeID;
+
 
 	void growTree();
 	void calcGrowth();
@@ -326,11 +331,11 @@ private:
 	double rootRadiusGrowth();
 	double stemRadiusGrowth();
 
-	//std::size_t findNearestNodeToTree();
 	std::size_t findNearestNodeToTree() const;
 	std::size_t findNearestNodeFromIDs(std::vector<std::size_t> nodeIDs) const;
 	std::vector<std::size_t> const findNodesInRadius(
 			double radius = -1.0) const;
+
 
 	double getSalinityAtNearestNode() const;
 

@@ -12,8 +12,12 @@
 
 class Rhizophora: public Tree {
 public:
-	Rhizophora(GeoLib::Point const &point, unsigned int id, Land &aLand);
+	Rhizophora(GeoLib::Point const &point, Land &aLand);
 	virtual ~Rhizophora();
+
+	TreeType getTreeType() const override {
+		return TreeType::Rhizophora;
+	}
 
 	double getMinSeedingAge() const override {
 		return 20;

@@ -6,27 +6,33 @@
  */
 
 #include <boost/math/complex.hpp>
-#include <boost/random/uniform_real.hpp>
-#include <boost/random/mersenne_twister.hpp>
-#include <boost/random/variate_generator.hpp>
+//#include <boost/random/uniform_real.hpp>
+//#include <boost/random/mersenne_twister.hpp>
+//#include <boost/random/variate_generator.hpp>
 
 #include <Flora.h>
 #include <time.h>
 
 Flora::Flora(Land &aLand) :
-		_treeCounter(0), _thisLand(aLand) {
+		_treeCounter(0), _random_number_generator(_rd()), _rnd(0, 1), _thisLand(
+				aLand) {
 	// TODO Auto-generated constructor stub
 	initialPopulate();
 }
 
 Flora::~Flora() {
 	// TODO Auto-generated destructor stub
+	for (auto at : _aliveTrees)
+		delete at;
+
+	for (auto dt : _deadTrees)
+		delete dt;
 }
 
 void Flora::initialPopulate() {
 
 //	//random distribution
-	for (std::size_t i(0); i < 2000; i++) {
+	for (std::size_t i(0); i < 200; i++) {
 		plantAviRandomRectangle(100, 100, 0);
 	}
 
@@ -62,41 +68,49 @@ void Flora::plantAviRandomRectangle(double xMax, double yMax, double zMax,
 	plantAvi(x, y, z);
 }
 
-void Flora::plantAviRandomCircle(double x, double y, double z, double radius,
-		double angle) {
+void Flora::plantTreeRandomCircle(double x, double y, double z, double radius,
+		Tree const &aTree) {
 
-//	double const angle(
-//			BettinaConstants::randomDoubleInRange(0, 2 * BettinaConstants::pi));
-//	double const angle(
-//			0 + (std::rand() / ( RAND_MAX / (2 * BettinaConstants::pi - 0))));
+	double const distance(
+			radius * BettinaConstants::aviSizeFactor
+					* _rnd(_random_number_generator));
+	double const angle(
+			2 * BettinaConstants::pi * _rnd(_random_number_generator));
 
-//	double const distance(
-//			BettinaConstants::randomDoubleInRange(0,
-//					radius * BettinaConstants::aviSizeFactor * BettinaConstants::seedSpreadFactor)); // TODO I dont like this sizefactor. why not making the crown 4 times bigger right away?
-//	double const distance(
-//			0
-//					+ (std::rand()
-//							/ ( RAND_MAX
-//									/ (radius * BettinaConstants::aviSizeFactor
-//											- 0))));
+	double const xdiff(std::cos(angle) * distance);
+	double const ydiff(std::sin(angle) * distance);
 
-	double const xdiff(std::cos(angle) * radius);
-	double const ydiff(std::sin(angle) * radius);
+	switch (aTree.getTreeType()) {
+	case TreeType::Avicennia:
+		plantAvi(x + xdiff, y + ydiff, z);
+		break;
+	default:
+		ERR("Unknown tree type when planting seed.")
+		;
+		std::abort();
+	}
+
+}
+
+void Flora::plantAviRandomCircle(double x, double y, double z, double radius) {
+	double const distance(
+			radius * BettinaConstants::aviSizeFactor
+					* _rnd(_random_number_generator));
+	double const angle(
+			2 * BettinaConstants::pi * _rnd(_random_number_generator));
+
+	double const xdiff(std::cos(angle) * distance);
+	double const ydiff(std::sin(angle) * distance);
 	plantAvi(x + xdiff, y + ydiff, z);
 }
 
 void Flora::plantAvi(double x, double y, double z) {
 	GeoLib::Point const newTreePosition(x, y, z);
 	_aliveTrees.push_back(
-			new Avicennia(newTreePosition, _treeCounter++, _thisLand));	// TODO guess, this is a bad way to get the tree counting correct
+			new Avicennia(newTreePosition, _thisLand));	// TODO guess, this is a bad way to get the tree counting correct
 }
 
 void Flora::recruitment() {
-
-//	std::srand(std::time(NULL));
-	std::random_device rd;
-	std::mt19937 random_number_generator(rd());
-	std::uniform_real_distribution<double> rnd(0.0, 1.0);
 
 	const std::size_t noAliveTrees(_aliveTrees.size());
 	for (std::size_t i(0); i < noAliveTrees; i++) {
@@ -104,35 +118,20 @@ void Flora::recruitment() {
 		for (std::size_t seed(0); seed < seeds; seed++) {
 			// roll dice within crown radius (TODO: drift through wind?)
 			// plant new trees
-			plantAviRandomCircle(_aliveTrees[i]->getPosition().getCoords()[0],
-					_aliveTrees[i]->getPosition().getCoords()[1],
-					_aliveTrees[i]->getPosition().getCoords()[2],
-					_aliveTrees[i]->getCrownRadius()
-							* BettinaConstants::seedSpreadFactor
-							* BettinaConstants::aviSizeFactor
-							* rnd(random_number_generator),
-					2 * BettinaConstants::pi * rnd(random_number_generator));//* BettinaConstants::seedSpreadFactor	//FIXME why is this not working?
+			plantSeed(*_aliveTrees[i]);
 		}
 	}
 
-//		for (auto &aliveTree : _aliveTrees) {
-//			std::size_t seeds(aliveTree->recruitment());
-//
-//			for (std::size_t seed(0); seed < seeds; seed++) {
-//				// roll dice within crown radius (TODO: drift through wind?)
-//				// plant new trees
-//				plantAviRandomCircle(aliveTree->getPosition().getCoords()[0],
-//						aliveTree->getPosition().getCoords()[1],
-//						aliveTree->getPosition().getCoords()[2],
-//						aliveTree->getCrownRadius());
-//			}
-//		}
-
 }
 
-void Flora::competition() {
+void Flora::plantSeed(Tree const &aTree) {
+	plantTreeRandomCircle(aTree.getPosition()[0], aTree.getPosition()[1],
+			aTree.getPosition()[2],
+			aTree.getCrownRadius() * BettinaConstants::seedSpreadFactor, aTree);
+}
 
-	//TODO check calculation of competition - something seems wrong, at some point, many trees die suddenly
+void Flora::competition() {		//memleak here
+
 	//above ground competition
 	_thisLand.resetAboveGroundCompetition();
 
@@ -169,7 +168,7 @@ void Flora::die() {
 
 	for (auto & aliveTree : _aliveTrees) {
 		if (aliveTree->getDeathFlag()) {
-//			_deadTrees.push_back(aliveTree); //copy aliveTrees with deathflag to deadTrees
+			_deadTrees.push_back(aliveTree); //copy aliveTrees with deathflag to deadTrees
 			aliveTree = nullptr; //write nullpointer to aliveTree with deathflag
 		}
 	}

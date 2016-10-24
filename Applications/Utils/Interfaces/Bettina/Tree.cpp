@@ -16,7 +16,9 @@
 //#include "MeshGeoToolsLib/MeshNodeSearcher.h"
 #include "MeshLib/Node.h"
 
-Tree::Tree(GeoLib::Point const &point, unsigned int id, Land &aLand,
+std::size_t Tree::_numberOfTrees(0);
+
+Tree::Tree(GeoLib::Point const &point, Land &aLand,
 		double stemHeight, double crownHeight, double rootDepth,
 		double crownRadius, double fineRootPermeability,
 		double minimumLeafWaterPotential, double xylemConductivity,
@@ -38,10 +40,14 @@ Tree::Tree(GeoLib::Point const &point, unsigned int id, Land &aLand,
 				halfMaxHeightGrowthWeight), _maintanceFactor(maintanceFactor), _growthLimitCoefficient(
 				BettinaConstants::growthLimitCoefficient), _deathThreshold(
 				BettinaConstants::deathTreshhold), _size(-1), _sizeFactor(
-				BettinaConstants::aviSizeFactor), _ID(id + 1), //_updatedID(_ID),
-				_thisLand(aLand), _nearestNodeID(findNearestNodeToTree()) {
+				BettinaConstants::aviSizeFactor), _ID(_numberOfTrees), _thisLand(aLand), _nearestNodeID(
+				findNearestNodeToTree()) {
 	// TODO Auto-generated constructor stub
 	// initializing
+
+	_numberOfTrees++;
+
+
 
 	double hir = 0
 			- (_minimumLeafWaterPotential
@@ -65,6 +71,9 @@ Tree::~Tree() {
 	// TODO Auto-generated destructor stub
 }
 
+
+
+
 std::size_t Tree::recruitment() {
 
 	// check on adulthood and calculate possibility for sapling cast
@@ -81,7 +90,8 @@ std::size_t Tree::recruitment() {
 			&& _availableResources > getMinSeedingResources()) {
 		// TODO: own competition through saplings ???
 		//  saplings are placed within limited radius around existing tree -> will they limit this tree?
-		seeds = static_cast<std::size_t>(calcCrownArea() * _sizeFactor * getSeedsPerUnitArea());
+		seeds = static_cast<std::size_t>(calcCrownArea() * _sizeFactor
+				* getSeedsPerUnitArea());
 	}
 
 	return seeds;
@@ -90,38 +100,10 @@ std::size_t Tree::recruitment() {
 }
 
 void Tree::checkAboveGroundCompetition() {
-	//findNodesInCrownRadius();
 	_nodesWithinCrownRadius = findMinOneNodeInSearchRadius(
 			_crownRadius * _sizeFactor);
 	setAboveGroundCompetition();
 }
-
-//void Tree::findNodesInCrownRadius() {
-//
-//	//find nodes in crown radius (if no nodes found, only use nearest node)
-//	double searchRadius(_crownRadius * _sizeFactor);
-//	std::vector<std::size_t> crownRadiusNodeIDs(
-//			findNodesInRadius(searchRadius));
-//
-//	while (crownRadiusNodeIDs.size() < 1) {	//no nodes found within crown radius -> search for nearest node(s)
-//		double const radiusIncrement(1.1);
-//		searchRadius *= radiusIncrement;
-//		crownRadiusNodeIDs = findNodesInRadius(searchRadius);
-//		if (crownRadiusNodeIDs.size() < 1) {
-//			continue;
-//		} else {
-//			if (crownRadiusNodeIDs.size() > 1) {//only search for nearest node
-//				std::vector<std::size_t> temp_crownRadiusNodeIDs;
-//				temp_crownRadiusNodeIDs.push_back(
-//						findNearestNodeFromIDs(crownRadiusNodeIDs));
-//				crownRadiusNodeIDs = temp_crownRadiusNodeIDs;
-//			}
-//		}
-//	}
-//
-//	_nodesWithinCrownRadius = crownRadiusNodeIDs;
-//
-//}
 
 std::vector<std::size_t> Tree::findMinOneNodeInSearchRadius(
 		double searchRadius) {
@@ -256,7 +238,6 @@ void Tree::grow() {
 			calcGrowth();
 		}
 	} else {
-		//	updateGrowLengths();
 		growTree();
 	}
 
@@ -329,8 +310,6 @@ void Tree::updateResistances() {
 
 void Tree::gatherResources() {
 
-	//TODO compute competition
-
 	//	  set res_a R_solar * pi * r_crown ^ 2  * above_c
 	_aboveGroundResources = _aboveGroundCompetitionCoefficient
 			* BettinaConstants::solarRadiation * BettinaConstants::pi
@@ -351,11 +330,15 @@ void Tree::gatherResources() {
 	//	  set growth k_grow * (res_avail - k_maint * v_tree)
 	_growth = BettinaConstants::k_grow
 			* (_availableResources - _maintanceFactor * _treeVolume);
+
 //	  if growth < (v_tree / 100 * death.thresh / 100) [set deathflag 1]
+	// TODO add plastic tree decrease
 	if (_growth < (_treeVolume * _deathThreshold)) {
 		_deathFlag = true;
 	} else
 		_deathFlag = false;
+//	if (_growth<0)
+//		_growth=0;
 }
 
 void Tree::updateWeights() {
@@ -400,7 +383,6 @@ void Tree::updateWeights() {
 
 void Tree::updateGrowLengths() {
 
-	//TODO functions for individual equations
 	_rootRadiusGrowth = rootRadiusGrowth();
 	_crownRadiusGrowth = crownRadiusGrowth();
 	_stemHeightGrowth = stemHeightGrowth();
@@ -439,31 +421,9 @@ double Tree::stemRadiusGrowth() {
 							+ 2 * _crownRadius));
 }
 
-//std::size_t Tree::findNearestNodeToTree() {
-//	MeshGeoToolsLib::SearchLength searchLength(
-//			_thisLand.getSubsurface()->getMinEdgeLength());
-//	MeshGeoToolsLib::MeshNodeSearcher _meshSearcher(*_thisLand.getSubsurface(),
-//			searchLength);
-//	auto idVector(_meshSearcher.getMeshNodeIDs(_position));
-//	std::size_t nearestNodeID(-1);
-//	if (idVector.size() == 0) {
-//		ERR("No nodes found near tree no. %u.", _id);
-//		std::abort();
-//	} else {
-//		if (idVector.size() == 1) {
-//			nearestNodeID = idVector[0];
-//		} else {
-//			nearestNodeID = idVector[0]; //TODO: get nearest point from list of points
-//		}
-//	}
-//	return nearestNodeID;
-//}
-
 std::size_t Tree::findNearestNodeToTree() const {
-
 	std::vector<std::size_t> const idVector(findNodesInRadius());
 	return findNearestNodeFromIDs(idVector);
-
 }
 
 std::size_t Tree::findNearestNodeFromIDs(

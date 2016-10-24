@@ -35,11 +35,11 @@ int main() {
 			belowGroundCompetitionString);
 	Flora thisFlora(thisLand);
 
-	thisOutput.writeFlora(thisFlora, 0);
-	thisOutput.writeLand(thisLand, 0);
+	//thisOutput.writeFlora(thisFlora, 0);
+	//thisOutput.writeLand(thisLand, 0);
 
 	// run through time steps
-	double timeBegin(0), timeEnd(10000), timeDiff(1), currentTime(timeBegin);
+	double timeBegin(0), timeEnd(200), timeDiff(1), currentTime(timeBegin);
 
 	while (currentTime < timeEnd) {
 
@@ -49,9 +49,10 @@ int main() {
 		thisFlora.grow(timeDiff);
 		thisFlora.recruitment();
 		thisFlora.die();
+		INFO("%i ", thisFlora.getAliveTrees().size());
 
-		thisOutput.writeFlora(thisFlora, currentTime+1);
-		thisOutput.writeLand(thisLand, currentTime+1);
+		//thisOutput.writeFlora(thisFlora, currentTime+1);
+		//thisOutput.writeLand(thisLand, currentTime+1);
 
 		if (!(thisFlora.checkForActivePopulation()))
 			std::abort();

@@ -38,6 +38,7 @@ Land::Land(std::string const &fileName,
 
 Land::~Land() {
 	// TODO Auto-generated destructor stub
+	delete _subsurface;
 }
 
 void Land::readMesh(std::string const &fileName) {

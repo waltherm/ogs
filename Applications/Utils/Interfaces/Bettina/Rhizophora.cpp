@@ -7,8 +7,8 @@
 
 #include <Rhizophora.h>
 
-Rhizophora::Rhizophora(GeoLib::Point const &point, unsigned int id, Land &aLand) ://TODO check ini variables for rhizo
-		Tree(point, id, aLand, 0.001,	//stemHeight
+Rhizophora::Rhizophora(GeoLib::Point const &point, Land &aLand) ://TODO check ini variables for rhizo
+		Tree(point, aLand, 0.001,	//stemHeight
 				0.04,	//crownHeight
 				0.04,	//rootDepth
 				0.3,	//crownRadius
