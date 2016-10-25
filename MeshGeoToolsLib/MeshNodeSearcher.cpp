@@ -95,7 +95,7 @@ MeshNodesOnPoint& MeshNodeSearcher::getMeshNodesOnPoint(GeoLib::Point const& pnt
 {
 	if (!(_mesh_nodes_on_points.empty()))	// clear cache
 	{
-		for (auto mn : _mesh_nodes_on_points)
+		for (auto mn : _mesh_nodes_on_points)	// FIXME is this correct?
 			delete mn;
 		_mesh_nodes_on_points.clear();
 	}

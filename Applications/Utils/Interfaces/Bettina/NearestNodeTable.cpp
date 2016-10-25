@@ -19,6 +19,7 @@ NearestNodeTable::~NearestNodeTable() {
 
 }
 
+
 void NearestNodeTable::initializeNearestNodeTable() {
 	appendNearestNodeTable();
 }
@@ -39,14 +40,14 @@ void NearestNodeTable::appendNearestNodeTable() {
 }
 
 double NearestNodeTable::getIniRadius() const {
+	//Avicennia *a=dynamic_cast<Avicennia*>(_theTree);	// will return nullptr
 	double radius;
 	switch (_nntc) {
 	case NearestNodeTableClass::Crown:
-		//Avicennia *a=dynamic_cast<Avicennia>(_theTree);
-		radius = _theTree->getIniCrownRadius();
+		radius = 1;//_theTree->getIniCrownRadius();
 		break;
 	case NearestNodeTableClass::Root:
-		radius = _theTree->getIniRootRadius();
+		radius = 1;//_theTree->getIniRootRadius();
 		break;
 	default:
 		ERR("Wrong NearestNodeTableClass.")

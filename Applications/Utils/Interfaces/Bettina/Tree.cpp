@@ -45,9 +45,9 @@ Tree::Tree(GeoLib::Point const &point, Land &aLand, double stemHeight,
 				aLand), _nearestNodeID(findNearestNodeToTree()), _iniHir(
 				iniHir()), _iniRootRadius(iniRootRadius()), _iniStemRadius(
 				iniStemRadius()), _iniSize(
-				iniSize()),
-				_crownRadiusNodeTable(aTree, NearestNodeTableClass::Crown),
-				_rootRadiusNodeTable(aTree, NearestNodeTableClass::Crown)
+				iniSize())
+				, _crownRadiusNodeTable(aTree, NearestNodeTableClass::Crown),
+				_rootRadiusNodeTable(aTree, NearestNodeTableClass::Root)
 				{
 	// TODO Auto-generated constructor stub
 	// initializing

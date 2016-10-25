@@ -106,8 +106,7 @@ void Flora::plantAviRandomCircle(double x, double y, double z, double radius) {
 
 void Flora::plantAvi(double x, double y, double z) {
 	GeoLib::Point const newTreePosition(x, y, z);
-	_aliveTrees.push_back(
-			new Avicennia(newTreePosition, _thisLand));	// TODO guess, this is a bad way to get the tree counting correct
+	_aliveTrees.push_back(new Avicennia(newTreePosition, _thisLand)); // TODO guess, this is a bad way to get the tree counting correct
 }
 
 void Flora::recruitment() {
