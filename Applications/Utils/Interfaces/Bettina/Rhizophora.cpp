@@ -6,13 +6,14 @@
  */
 
 #include <Rhizophora.h>
+#include "NearestNodeTable.h"
 
 Rhizophora::Rhizophora(GeoLib::Point const &point, Land &aLand, double age) :
 		Tree(point, aLand, getIniStemHeight(), getIniCrownHeight(),
 				getIniRootDepth(), getIniCrownRadius(),
 				getIniFineRootPermeability(), getIniMinimumLeafWaterPotential(),
 				getIniXylemConductivity(), getIniHalfMaxHeightGrowthWeight(),
-				getIniMaintenanceFactor(), age) {
+				getIniMaintenanceFactor(), this, age) {
 // TODO Auto-generated constructor stub
 }
 

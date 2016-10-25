@@ -7,8 +7,9 @@
 
 #include "NearestNodeTable.h"
 #include "Tree.h"
+#include "Avicennia.h"
 
-NearestNodeTable::NearestNodeTable(Tree &aTree, NearestNodeTableClass nntc) :
+NearestNodeTable::NearestNodeTable(Tree *aTree, NearestNodeTableClass nntc) :
 		_theTree(aTree), _nntc(nntc), _iniRadius(getIniRadius()), _minEdgeLength(
 				getMinEdgeLength()) {
 	initializeNearestNodeTable();
@@ -33,7 +34,7 @@ const std::vector<std::size_t> NearestNodeTable::getNearestNodeList() {
 
 void NearestNodeTable::appendNearestNodeTable() {
 	const std::vector<std::size_t> newNodes(
-			_theTree.findMinOneNodeInSearchRadius(getCurrentRadius()));
+			_theTree->findMinOneNodeInSearchRadius(getCurrentRadius()));
 	_nearestNodeTable.push_back(newNodes);
 }
 
@@ -41,10 +42,11 @@ double NearestNodeTable::getIniRadius() const {
 	double radius;
 	switch (_nntc) {
 	case NearestNodeTableClass::Crown:
-		radius = _theTree.getIniCrownRadius();
+		//Avicennia *a=dynamic_cast<Avicennia>(_theTree);
+		radius = _theTree->getIniCrownRadius();
 		break;
 	case NearestNodeTableClass::Root:
-		radius = _theTree.getIniRootRadius();
+		radius = _theTree->getIniRootRadius();
 		break;
 	default:
 		ERR("Wrong NearestNodeTableClass.")
@@ -58,10 +60,10 @@ double NearestNodeTable::getCurrentRadius() const {
 	double radius;
 	switch (_nntc) {
 	case NearestNodeTableClass::Crown:
-		radius = _theTree.getCrownRadius();
+		radius = _theTree->getCrownRadius();
 		break;
 	case NearestNodeTableClass::Root:
-		radius = _theTree.getRootRadius();
+		radius = _theTree->getRootRadius();
 		break;
 	default:
 		ERR("Wrong NearestNodeTableClass.")
@@ -72,7 +74,7 @@ double NearestNodeTable::getCurrentRadius() const {
 }
 
 double NearestNodeTable::getMinEdgeLength() const {
-	return _theTree.getThisLand().getSubsurface()->getMinEdgeLength();
+	return _theTree->getThisLand().getSubsurface()->getMinEdgeLength();
 }
 
 //const std::vector<std::vector<std::size_t>>& NearestNodeTable::getNearestNodeTable() const {

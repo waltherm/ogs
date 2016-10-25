@@ -8,7 +8,8 @@
 #ifndef RHIZOPHORA_H_
 #define RHIZOPHORA_H_
 
-#include <Tree.h>
+#include "Tree.h"
+
 
 class Rhizophora: public Tree {
 public:
@@ -63,6 +64,9 @@ public:
 		return 0.28;
 	}
 
+//private:
+//	NearestNodeTable _crownRadiusNodeTable;
+//	NearestNodeTable _rootRadiusNodeTable;
 };
 
 #endif /* RHIZOPHORA_H_ */

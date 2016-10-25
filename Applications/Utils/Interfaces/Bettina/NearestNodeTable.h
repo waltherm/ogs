@@ -18,16 +18,21 @@ enum class NearestNodeTableClass {
 
 class NearestNodeTable {
 public:
-	NearestNodeTable(Tree &aTree, NearestNodeTableClass nntc);
+	NearestNodeTable(Tree *aTree, NearestNodeTableClass nntc);
 	virtual ~NearestNodeTable();
 
 	//const std::vector<std::vector<std::size_t>>& getNearestNodeTable() const;
 	const std::vector<std::size_t> getNearestNodeList();
+
+	Tree* getTheTree() const {
+		return _theTree;
+	}
+
 	//void addNodeList(std::vector<std::size_t> nearestNodeList);
 
 private:
 	std::vector<std::vector<std::size_t>> _nearestNodeTable; //for faster node searching
-	Tree &_theTree;
+	Tree *_theTree;
 	NearestNodeTableClass _nntc;
 	const double _iniRadius;
 	const double _minEdgeLength;

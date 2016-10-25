@@ -24,7 +24,7 @@ public:
 			double crownHeight, double rootDepth, double crownRadius,
 			double fineRootPermeability, double minimumLeafWaterPotential,
 			double xylemConductivity, double halfMaxHeightGrowthWeight,
-			double maintanceFactor, double age = 0);
+			double maintanceFactor, Tree *aTree, double age = 0);
 
 	virtual ~Tree();
 
@@ -336,8 +336,8 @@ private:
 	double const _iniStemRadius;
 	double const _iniSize;
 
-	NearestNodeTable _crownRadiusNodeTable; //for faster node searching
-	NearestNodeTable _rootRadiusNodeTable;
+//	NearestNodeTable _crownRadiusNodeTable; //for faster node searching
+//	NearestNodeTable _rootRadiusNodeTable;
 
 	double iniHir();
 	double iniRootRadius();
@@ -378,6 +378,12 @@ private:
 	double calcCrownArea() const {
 		return 2 * BettinaConstants::pi * std::pow(_crownRadius, 2);
 	}
+
+protected:
+	NearestNodeTable _crownRadiusNodeTable; //for faster node searching
+	NearestNodeTable _rootRadiusNodeTable;
+//	int ab;
+
 };
 
 #endif /* TREE_H_ */

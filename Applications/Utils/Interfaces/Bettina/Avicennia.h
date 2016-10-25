@@ -10,6 +10,7 @@
 
 #include <Tree.h>
 
+
 class Avicennia: public Tree {
 public:
 	Avicennia(GeoLib::Point const &point, Land &aLand, double age = 0);
@@ -63,6 +64,9 @@ public:
 		return 0.28;
 	}
 
+//private:
+//	NearestNodeTable _crownRadiusNodeTable;
+//	NearestNodeTable _rootRadiusNodeTable;
 };
 
 #endif /* AVICENNIA_H_ */

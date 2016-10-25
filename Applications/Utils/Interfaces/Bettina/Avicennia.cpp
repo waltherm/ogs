@@ -6,13 +6,14 @@
  */
 
 #include <Avicennia.h>
+#include "NearestNodeTable.h"
 
 Avicennia::Avicennia(GeoLib::Point const &point, Land &aLand, double age) :
 		Tree(point, aLand, getIniStemHeight(), getIniCrownHeight(),
 				getIniRootDepth(), getIniCrownRadius(),
 				getIniFineRootPermeability(), getIniMinimumLeafWaterPotential(),
 				getIniXylemConductivity(), getIniHalfMaxHeightGrowthWeight(),
-				getIniMaintenanceFactor(), age) {
+				getIniMaintenanceFactor(), this, age) {
 //	(GeoLib::Point const &point, unsigned int id, Land const &aLand,
 //	double stemHeight, double crownHeight, double rootDepth,
 //	double crownRadius, double fineRootPermeability,
@@ -20,9 +21,11 @@ Avicennia::Avicennia(GeoLib::Point const &point, Land &aLand, double age) :
 //	double halfMaxHeightGrowthWeight, double maintanceFactor)
 
 // TODO Auto-generated constructor stub
+
 }
 
 Avicennia::~Avicennia() {
 	// TODO Auto-generated destructor stub
 }
+
 
