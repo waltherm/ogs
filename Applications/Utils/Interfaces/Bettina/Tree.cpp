@@ -5,24 +5,24 @@
  *      Author: waltherm
  */
 
-#include <Globals.h>
-#include <Tree.h>
-#include "Land.h"
-
 #include <cmath>
-
 #include <iostream>
 
-//#include "MeshGeoToolsLib/MeshNodeSearcher.h"
 #include "MeshLib/Node.h"
+
+#include "Globals.h"
+#include "Tree.h"
+#include "Land.h"
+
+//#include "MeshGeoToolsLib/MeshNodeSearcher.h"
 
 std::size_t Tree::_numberOfTrees(0);
 
-Tree::Tree(GeoLib::Point const &point, Land &aLand,
-		double stemHeight, double crownHeight, double rootDepth,
-		double crownRadius, double fineRootPermeability,
-		double minimumLeafWaterPotential, double xylemConductivity,
-		double halfMaxHeightGrowthWeight, double maintanceFactor, double age) :
+Tree::Tree(GeoLib::Point const &point, Land &aLand, double stemHeight,
+		double crownHeight, double rootDepth, double crownRadius,
+		double fineRootPermeability, double minimumLeafWaterPotential,
+		double xylemConductivity, double halfMaxHeightGrowthWeight,
+		double maintenanceFactor, double age) :
 		_position(point), _age(age), _crownRadius(crownRadius), _stemHeight(
 				stemHeight), _crownHeight(crownHeight), _rootDepth(rootDepth), _leafVolume(
 				-1), _branchVolume(-1), _stemVolume(-1), _cableRootVolume(-1), _fineRootVolume(
@@ -36,34 +36,22 @@ Tree::Tree(GeoLib::Point const &point, Land &aLand,
 				1), _belowGroundCompetitionCoefficient(1), _deathFlag(false), mindist(
 				-1), _fineRootPermeability(fineRootPermeability), _minimumLeafWaterPotential(
 				minimumLeafWaterPotential), _xylemConductivity(
-				xylemConductivity), _halfMaxHeightGrowthWeigth(
-				halfMaxHeightGrowthWeight), _maintanceFactor(maintanceFactor), _growthLimitCoefficient(
+				xylemConductivity), _halfMaxHeightGrowthWeight(
+				halfMaxHeightGrowthWeight), _maintenanceFactor(
+				maintenanceFactor), _growthLimitCoefficient(
 				BettinaConstants::growthLimitCoefficient), _deathThreshold(
 				BettinaConstants::deathTreshhold), _size(-1), _sizeFactor(
-				BettinaConstants::aviSizeFactor), _ID(_numberOfTrees), _thisLand(aLand), _nearestNodeID(
-				findNearestNodeToTree()) {
+				BettinaConstants::aviSizeFactor), _ID(_numberOfTrees), _thisLand(
+				aLand), _nearestNodeID(findNearestNodeToTree()), _iniHir(
+				iniHir()), _iniRootRadius(iniRootRadius()), _iniStemRadius(
+				iniStemRadius()), _iniSize(iniSize()), _crownRadiusNodeTable(
+				*this, NearestNodeTableClass::Crown), _rootRadiusNodeTable(
+				*this, NearestNodeTableClass::Root) {
 	// TODO Auto-generated constructor stub
 	// initializing
 
+	//buildNearestNodeTable();
 	_numberOfTrees++;
-
-
-
-	double hir = 0
-			- (_minimumLeafWaterPotential
-					+ 9.81 * (_stemHeight + 2 * _crownRadius)
-					+ 85 * getSalinity())
-					/ (BettinaConstants::solarRadiation * BettinaConstants::pi
-							* std::pow(_crownRadius, 2)) / 9.81 / 2;
-	_rootRadius = 1.05
-			/ std::pow(
-					_fineRootPermeability * BettinaConstants::k_geom
-							* BettinaConstants::pi * hir * _rootDepth, 0.5);//TODO: double-check functions
-	_stemRadius = std::pow(
-			(_stemHeight + BettinaConstants::oneOverSqrtTwo * _rootRadius
-					+ 2 * _crownRadius)
-					/ (_xylemConductivity * BettinaConstants::pi * hir), 0.5);//TODO: double-check functions
-	_size = 2 * _crownRadius * _sizeFactor;
 
 }
 
@@ -71,8 +59,57 @@ Tree::~Tree() {
 	// TODO Auto-generated destructor stub
 }
 
+double Tree::iniHir() {
 
+	return 0
+			- (_minimumLeafWaterPotential
+					+ 9.81 * (_stemHeight + 2 * _crownRadius)
+					+ 85 * getSalinity())
+					/ (BettinaConstants::solarRadiation * BettinaConstants::pi
+							* std::pow(_crownRadius, 2)) / 9.81 / 2;
+}
 
+double Tree::iniRootRadius() {
+
+	return 1.05
+			/ std::pow(
+					_fineRootPermeability * BettinaConstants::k_geom
+							* BettinaConstants::pi * _iniHir * _rootDepth, 0.5);//TODO: double-check functions
+}
+
+double Tree::iniStemRadius() {
+	return std::pow(
+			(_stemHeight + BettinaConstants::oneOverSqrtTwo * _rootRadius
+					+ 2 * _crownRadius)
+					/ (_xylemConductivity * BettinaConstants::pi * _iniHir),
+			0.5);	//TODO: double-check functions
+}
+
+double Tree::iniSize() {
+	return 2 * _crownRadius * _sizeFactor;
+}
+
+void Tree::buildNearestNodeTable() {
+
+	//find mesh nodes around tree for a list of different radii
+	//_thisLand.getSubsurface()->getMinEdgeLength();
+	//for (double rad(_crownRadius); rad<_crownRadius*100; rad+=(_crownRadius/10))
+
+//	for (std::size_t i(0); i < 100; i++) {
+//		double const crownRadius(getIniCrownRadius() + i / 10);
+//		std::vector<std::size_t> crownIDs(
+//				_thisLand.findNodesInRadius(crownRadius * _sizeFactor,
+//						_position));
+//		_CrownRadiusNodeTable.addNodeList(crownIDs);
+//
+//		double const rootRadius = _iniRootRadius + i / 10;
+//		std::vector<std::size_t> rootIDs(
+//				_thisLand.findNodesInRadius(rootRadius * _sizeFactor,
+//						_position));
+//		_CrownRadiusNodeTable.addNodeList(rootIDs);
+//	}
+
+}
 
 std::size_t Tree::recruitment() {
 
@@ -102,6 +139,7 @@ std::size_t Tree::recruitment() {
 void Tree::checkAboveGroundCompetition() {
 	_nodesWithinCrownRadius = findMinOneNodeInSearchRadius(
 			_crownRadius * _sizeFactor);
+	//_nodesWithinCrownRadius = _CrownRadiusNodeTable.getNearestNodeList();
 	setAboveGroundCompetition();
 }
 
@@ -112,7 +150,8 @@ std::vector<std::size_t> Tree::findMinOneNodeInSearchRadius(
 			findNodesInRadius(searchRadius));
 
 	while (searchRadiusNodeIDs.size() < 1) { //no nodes found within search radius -> search for nearest node(s)
-		searchRadius *= BettinaConstants::searchRadiusIncrement;
+		//searchRadius *= BettinaConstants::searchRadiusIncrement;
+		searchRadius += _thisLand.getSubsurface()->getMinEdgeLength();
 		searchRadiusNodeIDs = findNodesInRadius(searchRadius);
 		if (searchRadiusNodeIDs.size() < 1) {
 			continue;
@@ -329,7 +368,7 @@ void Tree::gatherResources() {
 			_belowGroundResources);
 	//	  set growth k_grow * (res_avail - k_maint * v_tree)
 	_growth = BettinaConstants::k_grow
-			* (_availableResources - _maintanceFactor * _treeVolume);
+			* (_availableResources - _maintenanceFactor * _treeVolume);
 
 //	  if growth < (v_tree / 100 * death.thresh / 100) [set deathflag 1]
 	// TODO add plastic tree decrease
@@ -360,7 +399,7 @@ void Tree::updateWeights() {
 //	  set wa2 max (list (max_h / (1 + exp((Qr0 - Q_rad) / sigmo_slope_hg))) 0)
 	_stemHeightGrowthWeight =
 			std::max(
-					_halfMaxHeightGrowthWeigth
+					_halfMaxHeightGrowthWeight
 							/ (1
 									+ std::exp(
 											(BettinaConstants::Qr0 - qRad)

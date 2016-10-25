@@ -14,6 +14,8 @@ ADD_EXECUTABLE( Bettina
     Avicennia.h
     Rhizophora.cpp
     Rhizophora.h
+    NearestNodeTable.cpp
+    NearestNodeTable.h
     )
 
 ADD_VTK_DEPENDENCY(Bettina)

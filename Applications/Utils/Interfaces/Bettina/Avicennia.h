@@ -12,8 +12,7 @@
 
 class Avicennia: public Tree {
 public:
-	Avicennia(GeoLib::Point const &point, Land &aLand,
-			double age = 0);
+	Avicennia(GeoLib::Point const &point, Land &aLand, double age = 0);
 	virtual ~Avicennia();
 
 	TreeType getTreeType() const override {
@@ -32,8 +31,36 @@ public:
 		return 1e-3;
 	}
 
-	virtual double getSeedsPerUnitArea() const override {
+	double getSeedsPerUnitArea() const override {
 		return 0.3;
+	}
+
+	double getIniStemHeight() const override {
+		return 0.001;
+	}
+	double getIniCrownHeight() const override {
+		return 0.04;
+	}
+	double getIniRootDepth() const override {
+		return 0.04;
+	}
+	double getIniCrownRadius() const override {
+		return 0.3;
+	}
+	double getIniFineRootPermeability() const override {
+		return 0.04;
+	}
+	double getIniMinimumLeafWaterPotential() const override {
+		return -7860;
+	}
+	double getIniXylemConductivity() const override {
+		return 1.48;
+	}
+	double getIniHalfMaxHeightGrowthWeight() const override {
+		return 0.1;
+	}
+	double getIniMaintenanceFactor() const override {
+		return 0.28;
 	}
 
 };

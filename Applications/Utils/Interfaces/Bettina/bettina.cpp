@@ -21,12 +21,12 @@ int main() {
 
 	ApplicationsLib::LogogSetup logog_setup;
 
-	std::string const salinityString = "Salinity2", aboveGroundCompetitionString(
+	std::string const salinityString = "Salinity", aboveGroundCompetitionString(
 			"CompeteAbove"), belowGroundCompetitionString("CompeteBelow");
 
 	// reading
 	std::string const fileName(
-			"/home/waltherm/03_scientific_work/mangroven/BETTINA/test/test.vtu");
+			"/home/waltherm/03_scientific_work/mangroven/BETTINA/test/test_small.vtu");
 	Output thisOutput(
 			"/home/waltherm/03_scientific_work/mangroven/BETTINA/test/test");
 

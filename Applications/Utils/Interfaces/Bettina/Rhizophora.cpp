@@ -7,17 +7,12 @@
 
 #include <Rhizophora.h>
 
-Rhizophora::Rhizophora(GeoLib::Point const &point, Land &aLand) ://TODO check ini variables for rhizo
-		Tree(point, aLand, 0.001,	//stemHeight
-				0.04,	//crownHeight
-				0.04,	//rootDepth
-				0.3,	//crownRadius
-				0.04,	//fineRootPermeability
-				-7860,	//minimumLeafWaterPotential
-				1.48,	//xylemConductivity
-				0.1,	//halfMaxHeightGrowthWeight
-				0.28	//maintanceFactor
-				) {
+Rhizophora::Rhizophora(GeoLib::Point const &point, Land &aLand, double age) :
+		Tree(point, aLand, getIniStemHeight(), getIniCrownHeight(),
+				getIniRootDepth(), getIniCrownRadius(),
+				getIniFineRootPermeability(), getIniMinimumLeafWaterPotential(),
+				getIniXylemConductivity(), getIniHalfMaxHeightGrowthWeight(),
+				getIniMaintenanceFactor(), age) {
 // TODO Auto-generated constructor stub
 }
 

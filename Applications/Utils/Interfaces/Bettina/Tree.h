@@ -12,21 +12,19 @@
 
 #include "Land.h"
 #include "Globals.h"
+#include "NearestNodeTable.h"
 
-
-enum class TreeType{
-	Avicennia,
-	Rhizophora
+enum class TreeType {
+	Avicennia, Rhizophora
 };
 
 class Tree {
 public:
-	Tree(GeoLib::Point const &point, Land &aLand,
-			double stemHeight, double crownHeight, double rootDepth,
-			double crownRadius, double fineRootPermeability,
-			double minimumLeafWaterPotential, double xylemConductivity,
-			double halfMaxHeightGrowthWeight, double maintanceFactor,
-			double age = 0);
+	Tree(GeoLib::Point const &point, Land &aLand, double stemHeight,
+			double crownHeight, double rootDepth, double crownRadius,
+			double fineRootPermeability, double minimumLeafWaterPotential,
+			double xylemConductivity, double halfMaxHeightGrowthWeight,
+			double maintanceFactor, double age = 0);
 
 	virtual ~Tree();
 
@@ -141,7 +139,7 @@ public:
 	}
 
 	double getHalfMaxHeightGrowthWeigth() const {
-		return _halfMaxHeightGrowthWeigth;
+		return _halfMaxHeightGrowthWeight;
 	}
 
 	double getLateralFluxResistence() const {
@@ -153,7 +151,7 @@ public:
 	}
 
 	double getMaintanceFactor() const {
-		return _maintanceFactor;
+		return _maintenanceFactor;
 	}
 
 	double getMinimumLeafWaterPotential() const {
@@ -256,12 +254,28 @@ public:
 		return _numberOfTrees;
 	}
 
-	virtual double getMinSeedingAge() const = 0;	// this function needs to be implemented in the derived classes
+	virtual TreeType getTreeType() const = 0;
+	virtual double getMinSeedingAge() const = 0; // this function needs to be implemented in the derived classes
 	virtual double getMinSeedingHeight() const = 0;
 	virtual double getMinSeedingResources() const = 0;
 	virtual double getSeedsPerUnitArea() const = 0;
-	virtual TreeType getTreeType() const = 0;
+	virtual double getIniStemHeight() const = 0;
+	virtual double getIniCrownHeight() const = 0;
+	virtual double getIniRootDepth() const = 0;
+	virtual double getIniCrownRadius() const = 0;
+	virtual double getIniFineRootPermeability() const = 0;
+	virtual double getIniMinimumLeafWaterPotential() const = 0;
+	virtual double getIniXylemConductivity() const = 0;
+	virtual double getIniHalfMaxHeightGrowthWeight() const = 0;
+	virtual double getIniMaintenanceFactor() const = 0;
 
+	double getIniRootRadius() const {
+		return _iniRootRadius;
+	}
+
+	const Land getThisLand() const {
+		return _thisLand;
+	}
 
 private:
 	static std::size_t _numberOfTrees;
@@ -306,8 +320,8 @@ private:
 	double _fineRootPermeability;	//L_p
 	double _minimumLeafWaterPotential;	//psi_leaf
 	double _xylemConductivity;	//k_f_sap, => permeability?
-	double _halfMaxHeightGrowthWeigth;	//max_h, meaning of this parameter?
-	double const _maintanceFactor;	//k_maint
+	double _halfMaxHeightGrowthWeight;	//max_h, meaning of this parameter?
+	double const _maintenanceFactor;	//k_maint
 	double const _growthLimitCoefficient;	//50 in "if growth > v_tree / 50 ["
 	double const _deathThreshold;	//death.tresh, 0.004
 	double _size;	//size
@@ -317,7 +331,18 @@ private:
 	Land & _thisLand;
 	std::size_t _nearestNodeID;
 
+	double const _iniHir;
+	double const _iniRootRadius;
+	double const _iniStemRadius;
+	double const _iniSize;
 
+	NearestNodeTable _crownRadiusNodeTable; //for faster node searching
+	NearestNodeTable _rootRadiusNodeTable;
+
+	double iniHir();
+	double iniRootRadius();
+	double iniStemRadius();
+	double iniSize();
 	void growTree();
 	void calcGrowth();
 	void growInVolume();
@@ -335,7 +360,7 @@ private:
 	std::size_t findNearestNodeFromIDs(std::vector<std::size_t> nodeIDs) const;
 	std::vector<std::size_t> const findNodesInRadius(
 			double radius = -1.0) const;
-
+	void buildNearestNodeTable();
 
 	double getSalinityAtNearestNode() const;
 
@@ -350,8 +375,8 @@ private:
 				propertyName);
 	}
 
-	double calcCrownArea() const{
-		return 2 * BettinaConstants::pi * std::pow(_crownRadius,2);
+	double calcCrownArea() const {
+		return 2 * BettinaConstants::pi * std::pow(_crownRadius, 2);
 	}
 };
 
