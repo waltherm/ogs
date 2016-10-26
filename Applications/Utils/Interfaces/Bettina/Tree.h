@@ -258,7 +258,7 @@ public:
 		return _iniRootRadius;
 	}
 
-	const Land getThisLand() const {
+	Land const & getThisLand() const {
 		return _thisLand;
 	}
 
@@ -277,18 +277,40 @@ public:
 	virtual double getIniHalfMaxHeightGrowthWeight() const = 0;
 	virtual double getIniMaintenanceFactor() const = 0;
 
-
 private:
 	static std::size_t _numberOfTrees;
 
 	GeoLib::Point _position;
 	double _age;
-	double _stemRadius;	//r_stem
-	double _crownRadius;	//r_crown
-	double _rootRadius;	//r_root
-	double _stemHeight;	//h_stem
+	bool _deathFlag;	//deathflag
+
+	std::size_t const _ID;
+	Land & _thisLand;
+	std::size_t _nearestNodeID;
+
+	double _minimumLeafWaterPotential;	//psi_leaf
 	double _crownHeight;	//h_crown
 	double _rootDepth;	//h_root
+	double _crownRadius;	//r_crown
+	double const _iniHir;
+
+	double _fineRootPermeability;	//L_p
+	double const _iniRootRadius;
+
+	double _stemHeight;	//h_stem
+	double _rootRadius;	//r_root
+	double _xylemConductivity;	//k_f_sap, => permeability?
+	double const _iniStemRadius;
+
+	double const _sizeFactor;	//size-factor
+	double const _iniSize;
+
+	double _halfMaxHeightGrowthWeight;	//max_h, meaning of this parameter?
+	double const _maintenanceFactor;	//k_maint
+	double const _growthLimitCoefficient;	//50 in "if growth > v_tree / 50 ["
+	double const _deathThreshold;	//death.tresh, 0.004
+
+	double _stemRadius;	//r_stem
 	double _leafVolume;	//v_leaf
 	double _branchVolume;	//v_branch
 	double _stemVolume;	//v_stem
@@ -316,26 +338,8 @@ private:
 	double _belowGroundCompetitionWins;
 	double _aboveGroundCompetitionCoefficient;	//above_c
 	double _belowGroundCompetitionCoefficient;	//below_c
-	bool _deathFlag;	//deathflag
 	double mindist;
-	double _fineRootPermeability;	//L_p
-	double _minimumLeafWaterPotential;	//psi_leaf
-	double _xylemConductivity;	//k_f_sap, => permeability?
-	double _halfMaxHeightGrowthWeight;	//max_h, meaning of this parameter?
-	double const _maintenanceFactor;	//k_maint
-	double const _growthLimitCoefficient;	//50 in "if growth > v_tree / 50 ["
-	double const _deathThreshold;	//death.tresh, 0.004
 	double _size;	//size
-	double const _sizeFactor;	//size-factor
-
-	std::size_t const _ID;
-	Land & _thisLand;
-	std::size_t _nearestNodeID;
-
-	double const _iniHir;
-	double const _iniRootRadius;
-	double const _iniStemRadius;
-	double const _iniSize;
 
 	double iniHir();
 	double iniRootRadius();

@@ -32,9 +32,9 @@ Flora::~Flora() {
 void Flora::initialPopulate() {
 
 //	//random distribution
-//	for (std::size_t i(0); i < 200; i++) {
-//		plantAviRandomRectangle(100, 100, 0);
-//	}
+	for (std::size_t i(0); i < 20; i++) {
+		plantAviRandomRectangle(100, 100, 0);
+	}
 
 //// uniform distribution
 //	double const z = 0;
@@ -48,8 +48,8 @@ void Flora::initialPopulate() {
 
 //// single tree distribution
 //	plantAvi(31, 31, 0);
-	plantAvi(2, 2, 0);
-	plantAvi(4, 4, 0);
+//	plantAvi(2, 2, 0);
+//	plantAvi(4, 4, 0);
 
 }
 

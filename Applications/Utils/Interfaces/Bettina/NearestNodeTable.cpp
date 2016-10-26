@@ -12,7 +12,7 @@
 NearestNodeTable::NearestNodeTable(Tree *aTree, NearestNodeTableClass nntc) :
 		_theTree(aTree), _nntc(nntc), _iniRadius(getIniRadius()), _minEdgeLength(
 				getMinEdgeLength()) {
-	initializeNearestNodeTable();
+	//initializeNearestNodeTable();
 }
 
 NearestNodeTable::~NearestNodeTable() {

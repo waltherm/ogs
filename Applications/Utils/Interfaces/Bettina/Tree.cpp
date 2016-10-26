@@ -23,39 +23,42 @@ Tree::Tree(GeoLib::Point const &point, Land &aLand, double stemHeight,
 		double fineRootPermeability, double minimumLeafWaterPotential,
 		double xylemConductivity, double halfMaxHeightGrowthWeight,
 		double maintenanceFactor, double age) :
-		_position(point), _age(age), _stemRadius(-1), _crownRadius(
-						crownRadius), _rootRadius(-1), _stemHeight(
-				stemHeight), _crownHeight(crownHeight), _rootDepth(rootDepth), _leafVolume(
-				-1), _branchVolume(-1), _stemVolume(-1), _cableRootVolume(-1), _fineRootVolume(
-				-1), _treeVolume(-1), _radialFluxResistence(-1), _lateralFluxResistence(
-				-1), _aboveGroundResources(-1), _belowGroundResources(-1), _availableResources(
-				-1), _crownRadiusGrowthWeight(-1), _stemHeightGrowthWeight(-1), _fineRootGrowthWeight(
-				-1), _stemRadiusGrowthWeight(-1), _growth(-1), _stemHeightGrowth(
-				-1), _crownRadiusGrowth(-1), _rootRadiusGrowth(-1), _stemRadiusGrowth(
-				-1), _stepFrac(0), _nodesWithinCrownRadius(1), _aboveGroundCompetitionWins(
-				-1), _nodesWithinRootRadius(1), _belowGroundCompetitionWins(-1), _aboveGroundCompetitionCoefficient(
-				1), _belowGroundCompetitionCoefficient(1), _deathFlag(false), mindist(
-				-1), _fineRootPermeability(fineRootPermeability), _minimumLeafWaterPotential(
-				minimumLeafWaterPotential), _xylemConductivity(
-				xylemConductivity), _halfMaxHeightGrowthWeight(
-				halfMaxHeightGrowthWeight), _maintenanceFactor(
+		_position(point), _age(age), _deathFlag(false),
+
+		_ID(_numberOfTrees), _thisLand(aLand), _nearestNodeID(
+				findNearestNodeToTree()),
+
+		_minimumLeafWaterPotential(minimumLeafWaterPotential), _crownHeight(
+				crownHeight), _rootDepth(rootDepth), _crownRadius(crownRadius), _iniHir(
+				iniHir()),
+
+		_fineRootPermeability(fineRootPermeability), _iniRootRadius(
+				iniRootRadius()),
+
+		_stemHeight(stemHeight), _rootRadius(_iniRootRadius), _xylemConductivity(
+				xylemConductivity), _iniStemRadius(iniStemRadius()),
+
+		_sizeFactor(BettinaConstants::aviSizeFactor), _iniSize(iniSize()),
+
+		_halfMaxHeightGrowthWeight(halfMaxHeightGrowthWeight), _maintenanceFactor(
 				maintenanceFactor), _growthLimitCoefficient(
 				BettinaConstants::growthLimitCoefficient), _deathThreshold(
-				BettinaConstants::deathTreshhold), _size(-1), _sizeFactor(
-				BettinaConstants::aviSizeFactor), _ID(_numberOfTrees), _thisLand(
-				aLand), _nearestNodeID(findNearestNodeToTree()), _iniHir(
-				iniHir()), _iniRootRadius(iniRootRadius()), _iniStemRadius(
-				iniStemRadius()), _iniSize(
-				iniSize())
-				, _crownRadiusNodeTable(nullptr),
-				_rootRadiusNodeTable(nullptr)
-				{
+				BettinaConstants::deathTreshhold),
+
+		_stemRadius(_iniStemRadius), _leafVolume(-1), _branchVolume(-1), _stemVolume(
+				-1), _cableRootVolume(-1), _fineRootVolume(-1), _treeVolume(-1), _radialFluxResistence(
+				-1), _lateralFluxResistence(-1), _aboveGroundResources(-1), _belowGroundResources(
+				-1), _availableResources(-1), _crownRadiusGrowthWeight(-1), _stemHeightGrowthWeight(
+				-1), _fineRootGrowthWeight(-1), _stemRadiusGrowthWeight(-1), _growth(
+				-1), _stemHeightGrowth(-1), _crownRadiusGrowth(-1), _rootRadiusGrowth(
+				-1), _stemRadiusGrowth(-1), _stepFrac(0), _nodesWithinCrownRadius(
+				1), _aboveGroundCompetitionWins(-1), _nodesWithinRootRadius(1), _belowGroundCompetitionWins(
+				-1), _aboveGroundCompetitionCoefficient(1), _belowGroundCompetitionCoefficient(
+				1), mindist(-1), _size(-1), _crownRadiusNodeTable(nullptr), _rootRadiusNodeTable(
+				nullptr) {
 	// TODO Auto-generated constructor stub
 	// initializing
 
-	//buildNearestNodeTable();
-	_stemRadius = _iniStemRadius;
-	_rootRadius = _iniRootRadius;
 	_numberOfTrees++;
 }
 
@@ -446,6 +449,9 @@ double Tree::stemRadiusGrowth() {
 
 std::size_t Tree::findNearestNodeToTree() const {
 	std::vector<std::size_t> const idVector(findNodesInRadius());
+	if (idVector.size() == 0) {
+		INFO("No nearest node found to tree with ID %i", _ID);//FIXME do something about this!
+	}
 	return findNearestNodeFromIDs(idVector);
 }
 
