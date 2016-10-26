@@ -44,10 +44,10 @@ double NearestNodeTable::getIniRadius() const {
 	double radius;
 	switch (_nntc) {
 	case NearestNodeTableClass::Crown:
-		radius = 1;//_theTree->getIniCrownRadius();
+		radius = _theTree->getIniCrownRadius();
 		break;
 	case NearestNodeTableClass::Root:
-		radius = 1;//_theTree->getIniRootRadius();
+		radius = _theTree->getIniRootRadius();
 		break;
 	default:
 		ERR("Wrong NearestNodeTableClass.")

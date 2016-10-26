@@ -24,7 +24,7 @@ public:
 			double crownHeight, double rootDepth, double crownRadius,
 			double fineRootPermeability, double minimumLeafWaterPotential,
 			double xylemConductivity, double halfMaxHeightGrowthWeight,
-			double maintanceFactor, Tree *aTree, double age = 0);
+			double maintanceFactor, double age = 0);
 
 	virtual ~Tree();
 
@@ -380,8 +380,8 @@ private:
 	}
 
 protected:
-	NearestNodeTable _crownRadiusNodeTable; //for faster node searching
-	NearestNodeTable _rootRadiusNodeTable;
+	NearestNodeTable *_crownRadiusNodeTable; //for faster node searching
+	NearestNodeTable *_rootRadiusNodeTable;
 //	int ab;
 
 };

@@ -22,7 +22,7 @@ Tree::Tree(GeoLib::Point const &point, Land &aLand, double stemHeight,
 		double crownHeight, double rootDepth, double crownRadius,
 		double fineRootPermeability, double minimumLeafWaterPotential,
 		double xylemConductivity, double halfMaxHeightGrowthWeight,
-		double maintenanceFactor, Tree *aTree, double age) :
+		double maintenanceFactor, double age) :
 		_position(point), _age(age), _crownRadius(crownRadius), _stemHeight(
 				stemHeight), _crownHeight(crownHeight), _rootDepth(rootDepth), _leafVolume(
 				-1), _branchVolume(-1), _stemVolume(-1), _cableRootVolume(-1), _fineRootVolume(
@@ -46,8 +46,8 @@ Tree::Tree(GeoLib::Point const &point, Land &aLand, double stemHeight,
 				iniHir()), _iniRootRadius(iniRootRadius()), _iniStemRadius(
 				iniStemRadius()), _iniSize(
 				iniSize())
-				, _crownRadiusNodeTable(aTree, NearestNodeTableClass::Crown),
-				_rootRadiusNodeTable(aTree, NearestNodeTableClass::Root)
+				, _crownRadiusNodeTable(nullptr),
+				_rootRadiusNodeTable(nullptr)
 				{
 	// TODO Auto-generated constructor stub
 	// initializing
@@ -59,6 +59,8 @@ Tree::Tree(GeoLib::Point const &point, Land &aLand, double stemHeight,
 
 Tree::~Tree() {
 	// TODO Auto-generated destructor stub
+	delete _crownRadiusNodeTable;
+	delete _rootRadiusNodeTable;
 }
 
 double Tree::iniHir() {

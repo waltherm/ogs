@@ -13,7 +13,7 @@ Avicennia::Avicennia(GeoLib::Point const &point, Land &aLand, double age) :
 				getIniRootDepth(), getIniCrownRadius(),
 				getIniFineRootPermeability(), getIniMinimumLeafWaterPotential(),
 				getIniXylemConductivity(), getIniHalfMaxHeightGrowthWeight(),
-				getIniMaintenanceFactor(), this, age) {
+				getIniMaintenanceFactor(), age) {
 //	(GeoLib::Point const &point, unsigned int id, Land const &aLand,
 //	double stemHeight, double crownHeight, double rootDepth,
 //	double crownRadius, double fineRootPermeability,
@@ -21,6 +21,9 @@ Avicennia::Avicennia(GeoLib::Point const &point, Land &aLand, double age) :
 //	double halfMaxHeightGrowthWeight, double maintanceFactor)
 
 // TODO Auto-generated constructor stub
+
+	_crownRadiusNodeTable = new NearestNodeTable(this, NearestNodeTableClass::Crown);
+	_rootRadiusNodeTable = new NearestNodeTable(this, NearestNodeTableClass::Root);
 
 }
 

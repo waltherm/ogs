@@ -13,8 +13,12 @@ Rhizophora::Rhizophora(GeoLib::Point const &point, Land &aLand, double age) :
 				getIniRootDepth(), getIniCrownRadius(),
 				getIniFineRootPermeability(), getIniMinimumLeafWaterPotential(),
 				getIniXylemConductivity(), getIniHalfMaxHeightGrowthWeight(),
-				getIniMaintenanceFactor(), this, age) {
+				getIniMaintenanceFactor(), age) {
 // TODO Auto-generated constructor stub
+
+	_crownRadiusNodeTable = new NearestNodeTable(this, NearestNodeTableClass::Crown);
+	_rootRadiusNodeTable = new NearestNodeTable(this, NearestNodeTableClass::Root);
+
 }
 
 Rhizophora::~Rhizophora() {
