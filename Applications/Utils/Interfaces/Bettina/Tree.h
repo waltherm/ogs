@@ -254,6 +254,14 @@ public:
 		return _numberOfTrees;
 	}
 
+	double getIniRootRadius() const {
+		return _iniRootRadius;
+	}
+
+	const Land getThisLand() const {
+		return _thisLand;
+	}
+
 	virtual TreeType getTreeType() const = 0;
 	virtual double getMinSeedingAge() const = 0; // this function needs to be implemented in the derived classes
 	virtual double getMinSeedingHeight() const = 0;
@@ -269,13 +277,6 @@ public:
 	virtual double getIniHalfMaxHeightGrowthWeight() const = 0;
 	virtual double getIniMaintenanceFactor() const = 0;
 
-	double getIniRootRadius() const {
-		return _iniRootRadius;
-	}
-
-	const Land getThisLand() const {
-		return _thisLand;
-	}
 
 private:
 	static std::size_t _numberOfTrees;
@@ -336,9 +337,6 @@ private:
 	double const _iniStemRadius;
 	double const _iniSize;
 
-//	NearestNodeTable _crownRadiusNodeTable; //for faster node searching
-//	NearestNodeTable _rootRadiusNodeTable;
-
 	double iniHir();
 	double iniRootRadius();
 	double iniStemRadius();
@@ -360,7 +358,6 @@ private:
 	std::size_t findNearestNodeFromIDs(std::vector<std::size_t> nodeIDs) const;
 	std::vector<std::size_t> const findNodesInRadius(
 			double radius = -1.0) const;
-	void buildNearestNodeTable();
 
 	double getSalinityAtNearestNode() const;
 

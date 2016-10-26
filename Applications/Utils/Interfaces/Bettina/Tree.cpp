@@ -23,7 +23,8 @@ Tree::Tree(GeoLib::Point const &point, Land &aLand, double stemHeight,
 		double fineRootPermeability, double minimumLeafWaterPotential,
 		double xylemConductivity, double halfMaxHeightGrowthWeight,
 		double maintenanceFactor, double age) :
-		_position(point), _age(age), _crownRadius(crownRadius), _stemHeight(
+		_position(point), _age(age), _stemRadius(-1), _crownRadius(
+						crownRadius), _rootRadius(-1), _stemHeight(
 				stemHeight), _crownHeight(crownHeight), _rootDepth(rootDepth), _leafVolume(
 				-1), _branchVolume(-1), _stemVolume(-1), _cableRootVolume(-1), _fineRootVolume(
 				-1), _treeVolume(-1), _radialFluxResistence(-1), _lateralFluxResistence(
@@ -53,8 +54,9 @@ Tree::Tree(GeoLib::Point const &point, Land &aLand, double stemHeight,
 	// initializing
 
 	//buildNearestNodeTable();
+	_stemRadius = _iniStemRadius;
+	_rootRadius = _iniRootRadius;
 	_numberOfTrees++;
-
 }
 
 Tree::~Tree() {
@@ -91,28 +93,6 @@ double Tree::iniStemRadius() {
 
 double Tree::iniSize() {
 	return 2 * _crownRadius * _sizeFactor;
-}
-
-void Tree::buildNearestNodeTable() {
-
-	//find mesh nodes around tree for a list of different radii
-	//_thisLand.getSubsurface()->getMinEdgeLength();
-	//for (double rad(_crownRadius); rad<_crownRadius*100; rad+=(_crownRadius/10))
-
-//	for (std::size_t i(0); i < 100; i++) {
-//		double const crownRadius(getIniCrownRadius() + i / 10);
-//		std::vector<std::size_t> crownIDs(
-//				_thisLand.findNodesInRadius(crownRadius * _sizeFactor,
-//						_position));
-//		_CrownRadiusNodeTable.addNodeList(crownIDs);
-//
-//		double const rootRadius = _iniRootRadius + i / 10;
-//		std::vector<std::size_t> rootIDs(
-//				_thisLand.findNodesInRadius(rootRadius * _sizeFactor,
-//						_position));
-//		_CrownRadiusNodeTable.addNodeList(rootIDs);
-//	}
-
 }
 
 std::size_t Tree::recruitment() {
