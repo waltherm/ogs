@@ -383,7 +383,7 @@ private:
 protected:
 	NearestNodeTable *_crownRadiusNodeTable; //for faster node searching
 	NearestNodeTable *_rootRadiusNodeTable;
-//	int ab;
+	NearestNodeTable *_vicinityNodeTable;
 
 };
 

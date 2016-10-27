@@ -18,6 +18,7 @@ Rhizophora::Rhizophora(GeoLib::Point const &point, Land &aLand, double age) :
 
 	_crownRadiusNodeTable = new NearestNodeTable(this, NearestNodeTableClass::Crown);
 	_rootRadiusNodeTable = new NearestNodeTable(this, NearestNodeTableClass::Root);
+	_vicinityNodeTable = new NearestNodeTable(this, NearestNodeTableClass::Vicinity);
 
 }
 

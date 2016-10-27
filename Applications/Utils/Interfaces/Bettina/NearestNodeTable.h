@@ -13,7 +13,7 @@
 class Tree;
 
 enum class NearestNodeTableClass {
-	Crown, Root
+	Crown, Root, Vicinity
 };
 
 class NearestNodeTable {

@@ -66,6 +66,7 @@ Tree::~Tree() {
 	// TODO Auto-generated destructor stub
 	delete _crownRadiusNodeTable;
 	delete _rootRadiusNodeTable;
+	delete _vicinityNodeTable;
 }
 
 double Tree::iniHir() {
@@ -124,9 +125,7 @@ std::size_t Tree::recruitment() {
 }
 
 void Tree::checkAboveGroundCompetition() {
-	_nodesWithinCrownRadius = findMinOneNodeInSearchRadius(
-			_crownRadius * _sizeFactor);
-	//_nodesWithinCrownRadius = _CrownRadiusNodeTable.getNearestNodeList();
+	_nodesWithinCrownRadius = _crownRadiusNodeTable->getNearestNodeList();
 	setAboveGroundCompetition();
 }
 
@@ -137,7 +136,6 @@ std::vector<std::size_t> Tree::findMinOneNodeInSearchRadius(
 			findNodesInRadius(searchRadius));
 
 	while (searchRadiusNodeIDs.size() < 1) { //no nodes found within search radius -> search for nearest node(s)
-		//searchRadius *= BettinaConstants::searchRadiusIncrement;
 		searchRadius += _thisLand.getSubsurface()->getMinEdgeLength();
 		searchRadiusNodeIDs = findNodesInRadius(searchRadius);
 		if (searchRadiusNodeIDs.size() < 1) {
@@ -199,26 +197,24 @@ void Tree::calcAboveGroundCompetition() {
 	//calc above_c again
 	// set above_c above_c + (1 - above_c) * (count patches in-radius ( 2 * 5 * size-factor ) with [compete-above < 0] ) / (2 * count patches in-radius ( 2 * 5 * size-factor ) )
 	//count nodes, where no above competition in vicinity
-	double searchRadius(1 * _sizeFactor);	// 10 is arbitrary magic number?
-	std::vector<std::size_t> vicinityNodeIDs(findNodesInRadius(searchRadius));
-	if (vicinityNodeIDs.size() > 0) {
+
+	if (_vicinityNodeTable->getNearestNodeList().size() > 0) {
 		std::size_t vicinityNodes(0);
-		for (auto id : vicinityNodeIDs) {
+		for (auto id : _vicinityNodeTable->getNearestNodeList()) {
 			if (_thisLand.getAboveGroundCompetitionAtNodeID(id) == nullptr) {
 				vicinityNodes++;
 			}
 		}
 		_aboveGroundCompetitionCoefficient += (1
 				- _aboveGroundCompetitionCoefficient) * vicinityNodes
-				/ (2 * vicinityNodeIDs.size());
+				/ (2 * _vicinityNodeTable->getNearestNodeList().size());
 	}
 
 }
 
 void Tree::checkBelowGroundCompetition() {
 	// count nodes within rootRadius
-	_nodesWithinRootRadius = findMinOneNodeInSearchRadius(
-			_rootRadius * _sizeFactor);
+	_nodesWithinRootRadius = _rootRadiusNodeTable->getNearestNodeList();
 	// increment belowGroundCompetition
 	setBelowGroundCompetition();
 }
@@ -498,6 +494,7 @@ std::vector<std::size_t> const Tree::findNodesInRadius(
 }
 
 double Tree::getSalinity() const {
+	//TODO take inverse-distance mean from all nodes in root radius
 	return getSalinityAtNearestNode();
 }
 
