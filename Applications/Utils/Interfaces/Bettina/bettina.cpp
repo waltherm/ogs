@@ -21,7 +21,7 @@ int main() {
 
 	ApplicationsLib::LogogSetup logog_setup;
 
-	std::string const salinityString = "Salinity", aboveGroundCompetitionString(
+	std::string const salinityString = "Salinity2", aboveGroundCompetitionString(
 			"CompeteAbove"), belowGroundCompetitionString("CompeteBelow");
 
 	// reading
@@ -39,7 +39,7 @@ int main() {
 	//thisOutput.writeLand(thisLand, 0);
 
 	// run through time steps
-	double timeBegin(0), timeEnd(200), timeDiff(1), currentTime(timeBegin);
+	double timeBegin(0), timeEnd(3000), timeDiff(1), currentTime(timeBegin);
 
 	while (currentTime < timeEnd) {
 

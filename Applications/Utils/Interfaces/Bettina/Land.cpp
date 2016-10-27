@@ -27,7 +27,7 @@ Land::Land(std::string const &fileName,
 				MeshLib::IO::readMeshFromFile(fileName)), _searchLength(
 				_subsurface->getMinEdgeLength()), _meshSearcher(*_subsurface,
 				_searchLength) {
-	// TODO Auto-generated constructor stub
+
 	//readMesh(fileName);
 	checkPropertyExists(_salinityPropertyString);
 	checkPropertyExists(_aboveGroundCompetitionString);
@@ -37,7 +37,6 @@ Land::Land(std::string const &fileName,
 }
 
 Land::~Land() {
-	// TODO Auto-generated destructor stub
 	delete _subsurface;
 }
 
@@ -110,7 +109,7 @@ void Land::incrementBelowGroundCompetition(std::size_t nodeID) {
 }
 
 void Land::invertBelowGroundCompetition() {
-	// TODO calc inverse if belowGroundCompetition > 1
+	// calc inverse if belowGroundCompetition > 1
 
 	MeshLib::PropertyVector<double>* property(
 			_subsurface->getProperties().getPropertyVector<double>(
@@ -142,17 +141,3 @@ std::vector<std::size_t> Land::findNodesInRadius(double radius,
 	return idVector;
 }
 
-// obsolete
-//double Land::getSalinityAtPoint(GeoLib::Point const &point) const {
-//	//GeoLib::Point const point(x, y, z);
-//	MeshGeoToolsLib::SearchLength searchLength(
-//			_subsurface->getMinEdgeLength() / 5);
-//	//MeshGeoToolsLib::MeshNodeSearcher _meshSearcher(*_subsurface, searchLength);
-//	_meshSearcher.setSearchLength(searchLength);
-//	auto idVector(_meshSearcher.getMeshNodeIDs(point));
-//	auto nearestNode = idVector[0];	//TODO: get nearest point from list of points
-//	std::string const property("Salinity");	//TODO: check if "Salinity" available as property
-//	boost::optional<MeshLib::PropertyVector<double>&> const salinities(
-//			_subsurface->getProperties().getPropertyVector<double>(property));
-//	return (*salinities)[nearestNode];
-//}

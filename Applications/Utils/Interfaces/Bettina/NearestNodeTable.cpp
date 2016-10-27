@@ -26,6 +26,12 @@ void NearestNodeTable::initializeNearestNodeTable() {
 const std::vector<std::size_t> NearestNodeTable::getNearestNodeList() {
 	std::size_t listID(
 			std::floor((getCurrentRadius() - _iniRadius) / _minEdgeLength));
+	/* TODO optimize node list:
+	 * save search radius per list entry (also for extension of search radius)
+	 * check whether current search radius is greater than last entry
+	 * extend, if former is true
+	 * for all found nodes in new search, check whether they are farther away from tree than last search radius and save only these
+	 */
 	while (listID >= _nearestNodeTable.size()) {
 		appendNearestNodeTable();
 	}

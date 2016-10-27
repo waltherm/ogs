@@ -14,7 +14,6 @@ Rhizophora::Rhizophora(GeoLib::Point const &point, Land &aLand, double age) :
 				getIniFineRootPermeability(), getIniMinimumLeafWaterPotential(),
 				getIniXylemConductivity(), getIniHalfMaxHeightGrowthWeight(),
 				getIniMaintenanceFactor(), age) {
-// TODO Auto-generated constructor stub
 
 	_crownRadiusNodeTable = new NearestNodeTable(this, NearestNodeTableClass::Crown);
 	_rootRadiusNodeTable = new NearestNodeTable(this, NearestNodeTableClass::Root);
@@ -23,6 +22,6 @@ Rhizophora::Rhizophora(GeoLib::Point const &point, Land &aLand, double age) :
 }
 
 Rhizophora::~Rhizophora() {
-	// TODO Auto-generated destructor stub
+
 }
 

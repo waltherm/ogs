@@ -28,12 +28,11 @@ Output::Output(std::string baseFileName) :
 				_baseFileName + "_flora_"), _landOutFileName(
 				_baseFileName + "_land_"), _floraFileEnding(".vtu"), _landFileEnding(
 				".vtu") {
-	// TODO Auto-generated constructor stub
 
 }
 
 Output::~Output() {
-	// TODO Auto-generated destructor stub
+
 }
 
 void Output::writeFlora(Flora const & aFlora, std::size_t currentTimeStep) {

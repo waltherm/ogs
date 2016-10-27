@@ -56,14 +56,12 @@ Tree::Tree(GeoLib::Point const &point, Land &aLand, double stemHeight,
 				-1), _aboveGroundCompetitionCoefficient(1), _belowGroundCompetitionCoefficient(
 				1), mindist(-1), _size(-1), _crownRadiusNodeTable(nullptr), _rootRadiusNodeTable(
 				nullptr), _vicinityNodeTable(nullptr) {
-	// TODO Auto-generated constructor stub
 	// initializing
 
 	_numberOfTrees++;
 }
 
 Tree::~Tree() {
-	// TODO Auto-generated destructor stub
 	delete _crownRadiusNodeTable;
 	delete _rootRadiusNodeTable;
 	delete _vicinityNodeTable;
@@ -184,7 +182,7 @@ void Tree::setAboveGroundCompetition() {
 void Tree::calcAboveGroundCompetition() {
 
 	//find nodes in crown radius (if no nodes found, only use nearest node)
-	_aboveGroundCompetitionWins = 0;	// TODO could be local var
+	_aboveGroundCompetitionWins = 0;
 	for (auto id : _nodesWithinCrownRadius) {
 		if (_thisLand.getAboveGroundCompetitionAtNodeID(id) == this) {
 			_aboveGroundCompetitionWins++;
@@ -445,11 +443,10 @@ double Tree::stemRadiusGrowth() {
 }
 
 std::size_t Tree::findNearestNodeToTree() const {
-	//std::vector<std::size_t> const idVector(findNodesInRadius());
 	std::vector<std::size_t> const idVector(findMinOneNodeInSearchRadius(_thisLand.getSubsurface()->getMinEdgeLength()));
 
 	if (idVector.size() == 0) {
-		INFO("No nearest node found to tree with ID %i", _ID);//FIXME do something about this!
+		INFO("No nearest node found to tree with ID %i", _ID);
 	}
 	return findNearestNodeFromIDs(idVector);
 }

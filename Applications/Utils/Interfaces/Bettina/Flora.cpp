@@ -16,12 +16,11 @@
 Flora::Flora(Land &aLand) :
 		_treeCounter(0), _random_number_generator(_rd()), _rnd(0, 1), _thisLand(
 				aLand) {
-	// TODO Auto-generated constructor stub
 	initialPopulate();
 }
 
 Flora::~Flora() {
-	// TODO Auto-generated destructor stub
+
 	for (auto at : _aliveTrees)
 		delete at;
 
@@ -33,7 +32,7 @@ void Flora::initialPopulate() {
 
 //	//random distribution
 	for (std::size_t i(0); i < 20; i++) {
-		plantAviRandomRectangle(20, 20, 0);
+		plantAviRandomRectangle(50, 50, 0, 20, 20, 0);
 	}
 
 //// uniform distribution
@@ -106,7 +105,7 @@ void Flora::plantAviRandomCircle(double x, double y, double z, double radius) {
 
 void Flora::plantAvi(double x, double y, double z) {
 	GeoLib::Point const newTreePosition(x, y, z);
-	_aliveTrees.push_back(new Avicennia(newTreePosition, _thisLand)); // TODO guess, this is a bad way to get the tree counting correct
+	_aliveTrees.push_back(new Avicennia(newTreePosition, _thisLand));
 }
 
 void Flora::recruitment() {
