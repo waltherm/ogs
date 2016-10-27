@@ -33,7 +33,7 @@ void Flora::initialPopulate() {
 
 //	//random distribution
 	for (std::size_t i(0); i < 20; i++) {
-		plantAviRandomRectangle(100, 100, 0);
+		plantAviRandomRectangle(20, 20, 0);
 	}
 
 //// uniform distribution
@@ -167,7 +167,7 @@ void Flora::die() {
 
 	for (auto & aliveTree : _aliveTrees) {
 		if (aliveTree->getDeathFlag()) {
-			_deadTrees.push_back(aliveTree); //copy aliveTrees with deathflag to deadTrees
+			//_deadTrees.push_back(aliveTree); //copy aliveTrees with deathflag to deadTrees
 			aliveTree = nullptr; //write nullpointer to aliveTree with deathflag
 		}
 	}
