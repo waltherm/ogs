@@ -55,7 +55,7 @@ namespace BettinaConstants {
 
 	//unsigned int _countDead;
 
-};
+}
 
 
 class Globals {

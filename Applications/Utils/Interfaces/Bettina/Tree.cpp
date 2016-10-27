@@ -29,13 +29,13 @@ Tree::Tree(GeoLib::Point const &point, Land &aLand, double stemHeight,
 				findNearestNodeToTree()),
 
 		_minimumLeafWaterPotential(minimumLeafWaterPotential), _crownHeight(
-				crownHeight), _rootDepth(rootDepth), _crownRadius(crownRadius), _iniHir(
+				crownHeight), _rootDepth(rootDepth), _crownRadius(crownRadius), _stemHeight(stemHeight), _iniHir(
 				iniHir()),
 
 		_fineRootPermeability(fineRootPermeability), _iniRootRadius(
 				iniRootRadius()),
 
-		_stemHeight(stemHeight), _rootRadius(_iniRootRadius), _xylemConductivity(
+		_rootRadius(_iniRootRadius), _xylemConductivity(
 				xylemConductivity), _iniStemRadius(iniStemRadius()),
 
 		_sizeFactor(BettinaConstants::aviSizeFactor), _iniSize(iniSize()),
@@ -55,7 +55,7 @@ Tree::Tree(GeoLib::Point const &point, Land &aLand, double stemHeight,
 				1), _aboveGroundCompetitionWins(-1), _nodesWithinRootRadius(1), _belowGroundCompetitionWins(
 				-1), _aboveGroundCompetitionCoefficient(1), _belowGroundCompetitionCoefficient(
 				1), mindist(-1), _size(-1), _crownRadiusNodeTable(nullptr), _rootRadiusNodeTable(
-				nullptr) {
+				nullptr), _vicinityNodeTable(nullptr) {
 	// TODO Auto-generated constructor stub
 	// initializing
 
@@ -69,7 +69,7 @@ Tree::~Tree() {
 	delete _vicinityNodeTable;
 }
 
-double Tree::iniHir() {
+double Tree::iniHir() const {
 
 	return 0
 			- (_minimumLeafWaterPotential
@@ -77,9 +77,10 @@ double Tree::iniHir() {
 					+ 85 * getSalinity())
 					/ (BettinaConstants::solarRadiation * BettinaConstants::pi
 							* std::pow(_crownRadius, 2)) / 9.81 / 2;
+
 }
 
-double Tree::iniRootRadius() {
+double Tree::iniRootRadius() const {
 
 	return 1.05
 			/ std::pow(
@@ -87,7 +88,7 @@ double Tree::iniRootRadius() {
 							* BettinaConstants::pi * _iniHir * _rootDepth, 0.5);//TODO: double-check functions
 }
 
-double Tree::iniStemRadius() {
+double Tree::iniStemRadius() const {
 	return std::pow(
 			(_stemHeight + BettinaConstants::oneOverSqrtTwo * _rootRadius
 					+ 2 * _crownRadius)
@@ -95,7 +96,7 @@ double Tree::iniStemRadius() {
 			0.5);	//TODO: double-check functions
 }
 
-double Tree::iniSize() {
+double Tree::iniSize() const {
 	return 2 * _crownRadius * _sizeFactor;
 }
 
@@ -130,7 +131,7 @@ void Tree::checkAboveGroundCompetition() {
 }
 
 std::vector<std::size_t> Tree::findMinOneNodeInSearchRadius(
-		double searchRadius) {
+		double searchRadius) const {
 
 	std::vector<std::size_t> searchRadiusNodeIDs(
 			findNodesInRadius(searchRadius));
@@ -444,7 +445,9 @@ double Tree::stemRadiusGrowth() {
 }
 
 std::size_t Tree::findNearestNodeToTree() const {
-	std::vector<std::size_t> const idVector(findNodesInRadius());
+	//std::vector<std::size_t> const idVector(findNodesInRadius());
+	std::vector<std::size_t> const idVector(findMinOneNodeInSearchRadius(_thisLand.getSubsurface()->getMinEdgeLength()));
+
 	if (idVector.size() == 0) {
 		INFO("No nearest node found to tree with ID %i", _ID);//FIXME do something about this!
 	}
@@ -486,7 +489,7 @@ std::size_t Tree::findNearestNodeFromIDs(
 	return nearestNodeID;
 }
 
-std::vector<std::size_t> const Tree::findNodesInRadius(
+std::vector<std::size_t> Tree::findNodesInRadius(
 		double radius /*=-1.0*/) const {
 
 	return _thisLand.findNodesInRadius(radius, _position);

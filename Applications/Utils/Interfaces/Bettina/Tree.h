@@ -31,7 +31,7 @@ public:
 	std::size_t recruitment();
 
 	void checkAboveGroundCompetition();
-	std::vector<std::size_t> findMinOneNodeInSearchRadius(double searchRadius);
+	std::vector<std::size_t> findMinOneNodeInSearchRadius(double searchRadius) const;
 	void setAboveGroundCompetition();
 	void calcAboveGroundCompetition();
 
@@ -292,12 +292,12 @@ private:
 	double _crownHeight;	//h_crown
 	double _rootDepth;	//h_root
 	double _crownRadius;	//r_crown
+	double _stemHeight;	//h_stem
 	double const _iniHir;
 
 	double _fineRootPermeability;	//L_p
 	double const _iniRootRadius;
 
-	double _stemHeight;	//h_stem
 	double _rootRadius;	//r_root
 	double _xylemConductivity;	//k_f_sap, => permeability?
 	double const _iniStemRadius;
@@ -341,10 +341,10 @@ private:
 	double mindist;
 	double _size;	//size
 
-	double iniHir();
-	double iniRootRadius();
-	double iniStemRadius();
-	double iniSize();
+	double iniHir() const;
+	double iniRootRadius() const;
+	double iniStemRadius() const;
+	double iniSize() const;
 	void growTree();
 	void calcGrowth();
 	void growInVolume();
@@ -360,7 +360,7 @@ private:
 
 	std::size_t findNearestNodeToTree() const;
 	std::size_t findNearestNodeFromIDs(std::vector<std::size_t> nodeIDs) const;
-	std::vector<std::size_t> const findNodesInRadius(
+	std::vector<std::size_t> findNodesInRadius(
 			double radius = -1.0) const;
 
 	double getSalinityAtNearestNode() const;
