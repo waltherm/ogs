@@ -20,6 +20,10 @@ public:
 		return TreeType::Avicennia;
 	}
 
+	double getTreeTypeDouble() const override {
+			return 1;
+	}
+
 	double getMinSeedingAge() const override {
 		return 20;
 	}

@@ -21,7 +21,7 @@ int main() {
 
 	ApplicationsLib::LogogSetup logog_setup;
 
-	std::string const salinityString = "Salinity2", aboveGroundCompetitionString(
+	std::string const salinityString = "Salinity4", aboveGroundCompetitionString(
 			"CompeteAbove"), belowGroundCompetitionString("CompeteBelow");
 
 	// reading
@@ -35,24 +35,26 @@ int main() {
 			belowGroundCompetitionString);
 	Flora thisFlora(thisLand);
 
-	//thisOutput.writeFlora(thisFlora, 0);
-	//thisOutput.writeLand(thisLand, 0);
+	thisOutput.writeFlora(thisFlora, 0);
+	thisOutput.writeLand(thisLand, 0);
 
 	// run through time steps
-	double timeBegin(0), timeEnd(3000), timeDiff(1), currentTime(timeBegin);
+	std::size_t timeBegin(0), timeEnd(10000), timeDiff(1), currentTime(timeBegin);
 
 	while (currentTime < timeEnd) {
 
-		INFO("Time: %1.0f", currentTime);
+		INFO("Time  - %i", currentTime);
 
 		thisFlora.competition();
-		thisFlora.grow(timeDiff);
 		thisFlora.recruitment();
+		thisFlora.grow(timeDiff);
 		thisFlora.die();
-		INFO("%i ", thisFlora.getAliveTrees().size());
+		INFO("Trees - %i ", thisFlora.getAliveTrees().size());
 
-		//thisOutput.writeFlora(thisFlora, currentTime+1);
-		//thisOutput.writeLand(thisLand, currentTime+1);
+		if ( currentTime %10 == 0){
+			thisOutput.writeFlora(thisFlora, currentTime+1);
+		//	thisOutput.writeLand(thisLand, currentTime+1);
+		}
 
 		if (!(thisFlora.checkForActivePopulation()))
 			std::abort();

@@ -263,6 +263,7 @@ public:
 	}
 
 	virtual TreeType getTreeType() const = 0;
+	virtual double getTreeTypeDouble() const = 0;
 	virtual double getMinSeedingAge() const = 0; // this function needs to be implemented in the derived classes
 	virtual double getMinSeedingHeight() const = 0;
 	virtual double getMinSeedingResources() const = 0;

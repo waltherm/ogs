@@ -31,8 +31,12 @@ Flora::~Flora() {
 void Flora::initialPopulate() {
 
 //	//random distribution
-	for (std::size_t i(0); i < 20; i++) {
-		plantAviRandomRectangle(50, 50, 0, 20, 20, 0);
+	for (std::size_t i(0); i < 10; i++) {
+		plantTreeRandomRectangle(TreeType::Avicennia, 90, 90, 0, 10, 10, 0);
+	}
+
+	for (std::size_t i(0); i < 10; i++) {
+		plantTreeRandomRectangle(TreeType::Rhizophora, 90, 90, 0, 10, 10, 0);
 	}
 
 //// uniform distribution
@@ -52,8 +56,8 @@ void Flora::initialPopulate() {
 
 }
 
-void Flora::plantAviRandomRectangle(double xMax, double yMax, double zMax,
-		double xMin, double yMin, double zMin) {
+void Flora::plantTreeRandomRectangle(TreeType treeType, double xMax,
+		double yMax, double zMax, double xMin, double yMin, double zMin) {
 
 	std::random_device rd;
 	std::mt19937 random_number_generator(rd());
@@ -64,11 +68,24 @@ void Flora::plantAviRandomRectangle(double xMax, double yMax, double zMax,
 	double const y(uniformDoubleY(random_number_generator));
 	std::uniform_real_distribution<double> uniformDoubleZ(zMin, zMax);
 	double const z(uniformDoubleZ(random_number_generator));
-	plantAvi(x, y, z);
+
+	switch (treeType) {
+	case TreeType::Avicennia:
+		plantAvi(x, y, z);
+		break;
+	case TreeType::Rhizophora:
+		plantRhi(x, y, z);
+		break;
+	default:
+		ERR("Unknown tree type when planting seed.")
+		;
+		break;
+	}
+
 }
 
-void Flora::plantTreeRandomCircle(double x, double y, double z, double radius,
-		Tree const &aTree) {
+void Flora::plantTreeRandomCircle(TreeType treeType, double x, double y,
+		double z, double radius) {
 
 	double const distance(
 			radius * BettinaConstants::aviSizeFactor
@@ -79,9 +96,12 @@ void Flora::plantTreeRandomCircle(double x, double y, double z, double radius,
 	double const xdiff(std::cos(angle) * distance);
 	double const ydiff(std::sin(angle) * distance);
 
-	switch (aTree.getTreeType()) {
+	switch (treeType) {
 	case TreeType::Avicennia:
 		plantAvi(x + xdiff, y + ydiff, z);
+		break;
+	case TreeType::Rhizophora:
+		plantRhi(x + xdiff, y + ydiff, z);
 		break;
 	default:
 		ERR("Unknown tree type when planting seed.")
@@ -91,21 +111,15 @@ void Flora::plantTreeRandomCircle(double x, double y, double z, double radius,
 
 }
 
-void Flora::plantAviRandomCircle(double x, double y, double z, double radius) {
-	double const distance(
-			radius * BettinaConstants::aviSizeFactor
-					* _rnd(_random_number_generator));
-	double const angle(
-			2 * BettinaConstants::pi * _rnd(_random_number_generator));
-
-	double const xdiff(std::cos(angle) * distance);
-	double const ydiff(std::sin(angle) * distance);
-	plantAvi(x + xdiff, y + ydiff, z);
-}
 
 void Flora::plantAvi(double x, double y, double z) {
 	GeoLib::Point const newTreePosition(x, y, z);
 	_aliveTrees.push_back(new Avicennia(newTreePosition, _thisLand));
+}
+
+void Flora::plantRhi(double x, double y, double z) {
+	GeoLib::Point const newTreePosition(x, y, z);
+	_aliveTrees.push_back(new Rhizophora(newTreePosition, _thisLand));
 }
 
 void Flora::recruitment() {
@@ -123,9 +137,9 @@ void Flora::recruitment() {
 }
 
 void Flora::plantSeed(Tree const &aTree) {
-	plantTreeRandomCircle(aTree.getPosition()[0], aTree.getPosition()[1],
-			aTree.getPosition()[2],
-			aTree.getCrownRadius() * BettinaConstants::seedSpreadFactor, aTree);
+	plantTreeRandomCircle(aTree.getTreeType(), aTree.getPosition()[0],
+			aTree.getPosition()[1], aTree.getPosition()[2],
+			aTree.getCrownRadius() * BettinaConstants::seedSpreadFactor);
 }
 
 void Flora::competition() {		//memleak here
@@ -167,6 +181,7 @@ void Flora::die() {
 	for (auto & aliveTree : _aliveTrees) {
 		if (aliveTree->getDeathFlag()) {
 			//_deadTrees.push_back(aliveTree); //copy aliveTrees with deathflag to deadTrees
+			delete aliveTree;
 			aliveTree = nullptr; //write nullpointer to aliveTree with deathflag
 		}
 	}

@@ -14,11 +14,10 @@
 //#include <boost/random/uniform_real.hpp>
 //#include <boost/random/mersenne_twister.hpp>
 
-
-
 //#include "Land.h"
 #include "Tree.h"
 #include "Avicennia.h"
+#include "Rhizophora.h"
 
 class Land;
 
@@ -30,12 +29,14 @@ public:
 	void initialPopulate();
 	bool checkForActivePopulation();
 
-	void plantAviRandomRectangle(double xMax, double yMax, double zMax,
-			double xMin = 0, double yMin = 0, double zMin = 0);
-	void plantAviRandomCircle(double x, double y, double z, double radius);
-	void plantTreeRandomCircle(double x, double y, double z, double radius, Tree const &aTree);
+	void plantTreeRandomRectangle(TreeType treeType, double xMax,
+			double yMax, double zMax, double xMin = 0, double yMin = 0,
+			double zMin = 0);
+	void plantTreeRandomCircle(TreeType treeType, double x, double y, double z,
+			double radius);
 	void plantSeed(Tree const &aTree);
 	void plantAvi(double x, double y, double z);
+	void plantRhi(double x, double y, double z);
 
 	void recruitment();
 	void competition();

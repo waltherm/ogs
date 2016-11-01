@@ -20,24 +20,28 @@ public:
 		return TreeType::Rhizophora;
 	}
 
+	double getTreeTypeDouble() const override {
+			return 2;
+	}
+
 	double getMinSeedingAge() const override {
-		return 20;
+		return 30;
 	}
 
 	double getMinSeedingHeight() const override {
-		return 10;
+		return 12;
 	}
 
 	double getMinSeedingResources() const override {
-		return 1e-3;
+		return 0.5e-3;
 	}
 
 	double getSeedsPerUnitArea() const override {
-		return 1;
+		return 2;
 	}
 
 	double getIniStemHeight() const override {
-		return 0.001;
+		return 0.002;
 	}
 	double getIniCrownHeight() const override {
 		return 0.04;
@@ -46,22 +50,22 @@ public:
 		return 0.04;
 	}
 	double getIniCrownRadius() const override {
-		return 0.3;
+		return 0.35;
 	}
 	double getIniFineRootPermeability() const override {
-		return 0.04;
+		return 0.08;
 	}
 	double getIniMinimumLeafWaterPotential() const override {
-		return -7860;
+		return -6860;
 	}
 	double getIniXylemConductivity() const override {
-		return 1.48;
+		return 1.78;
 	}
 	double getIniHalfMaxHeightGrowthWeight() const override {
-		return 0.1;
+		return 0.15;
 	}
 	double getIniMaintenanceFactor() const override {
-		return 0.28;
+		return 0.26;
 	}
 
 //private:
