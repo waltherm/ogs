@@ -146,6 +146,12 @@ public:
                 thermal_conductivity_solid * (1 - porosity) +
                 thermal_conductivity_fluid * porosity;
 
+            auto const thermal_dispersivity_longitudinal =
+                _process_data.thermal_dispersivity_longitudinal(t, pos)[0];
+            auto const thermal_dispersivity_transversal =
+                _process_data.thermal_dispersivity_transversal(t, pos)[0];
+
+
             auto const& sm = _shape_matrices[ip];
             auto const& wp = _integration_method.getWeightedPoint(ip);
             auto Ktt = local_K.template block<num_nodes, num_nodes>(0, 0);
@@ -172,12 +178,22 @@ public:
             Eigen::Matrix<double, -1, 1, 0, -1, 1> const velocity =
                 -perm_visc * (sm.dNdx * p_nodal_values - density_water_T * b);
 
+            auto const velocity_magnitude = velocity.transpose() * velocity;
+            auto const thermal_dispersivity =
+                density_fluid * specific_heat_capacity_fluid * 
+                    ( thermal_dispersivity_transversal * velocity_magnitude +
+                        (thermal_dispersivity_longitudinal - thermal_dispersivity_transversal) *
+
+                    )
+            auto const thermal_hydrodynamic_dispersion = thermal_conductivity + thermal_dispersivity;
+
+
             auto const integral_term =
                 sm.integralMeasure * sm.detJ * wp.getWeight();
             // matrix assembly
             Ktt.noalias() +=
                 integral_term *
-                (sm.dNdx.transpose() * thermal_conductivity * sm.dNdx +
+                (sm.dNdx.transpose() * thermal_hydrodynamic_dispersion * sm.dNdx +
                  sm.N.transpose() * velocity.transpose() * sm.dNdx *
                      density_fluid * specific_heat_capacity_fluid);
             Kpp.noalias() +=

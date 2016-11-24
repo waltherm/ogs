@@ -107,6 +107,25 @@ std::unique_ptr<Process> createHTProcess(
     DBUG("Use \'%s\' as specific_heat_capacity_fluid parameter.",
          specific_heat_capacity_fluid.name.c_str());
 
+
+    // Parameter for the thermal conductivity of the solid (only one scalar per
+    // element, i.e., the isotropic case is handled at the moment)
+    auto& thermal_dispersivity_longitudinal = findParameter<double>(
+        config,
+        //! \ogs_file_param_special{process__HT__thermal_dispersivity_longitudinal}
+        "thermal_dispersivity_longitudinal", parameters, 1);
+    DBUG("Use \'%s\' as thermal_dispersivity_longitudinal parameter.",
+         thermal_dispersivity_longitudinal.name.c_str());
+
+    // Parameter for the thermal conductivity of the solid (only one scalar per
+    // element, i.e., the isotropic case is handled at the moment)
+    auto& thermal_dispersivity_transversal = findParameter<double>(
+        config,
+        //! \ogs_file_param_special{process__HT__thermal_dispersivity_transversal}
+        "thermal_dispersivity_transversal", parameters, 1);
+    DBUG("Use \'%s\' as thermal_dispersivity_transversal parameter.",
+         thermal_dispersivity_transversal.name.c_str());
+
     // Parameter for the thermal conductivity of the solid (only one scalar per
     // element, i.e., the isotropic case is handled at the moment)
     auto& thermal_conductivity_solid = findParameter<double>(
@@ -151,6 +170,8 @@ std::unique_ptr<Process> createHTProcess(
         density_fluid,
         specific_heat_capacity_solid,
         specific_heat_capacity_fluid,
+        thermal_dispersivity_longitudinal,
+        thermal_dispersivity_transversal,
         thermal_conductivity_solid,
         thermal_conductivity_fluid,
         thermal_expansion_coefficient_fluid,
