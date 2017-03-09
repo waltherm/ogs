@@ -48,6 +48,9 @@ APPEND_SOURCE_FILES(SOURCES RichardsFlow)
 add_subdirectory(HT)
 APPEND_SOURCE_FILES(SOURCES HT)
 
+add_subdirectory(HC)
+APPEND_SOURCE_FILES(SOURCES HC)
+
 add_subdirectory(CalculateSurfaceFlux)
 APPEND_SOURCE_FILES(SOURCES CalculateSurfaceFlux)
 

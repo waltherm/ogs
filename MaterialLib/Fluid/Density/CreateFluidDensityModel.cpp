@@ -16,6 +16,7 @@
 #include "BaseLib/Error.h"
 
 #include "IdealGasLaw.h"
+#include "LinearConcentrationDependentDensity.h"
 #include "LinearTemperatureDependentDensity.h"
 #include "LiquidDensity.h"
 #include "WaterDensityIAPWSIF97Region1.h"
@@ -72,6 +73,27 @@ static std::unique_ptr<FluidProperty> createLinearTemperatureDependentDensity(
         new LinearTemperatureDependentDensity(rho0, T0, beta));
 }
 
+/**
+ *     \param config  ConfigTree object which contains the input data
+ *                    `<type>ConcentrationDependent</type>`
+ *                     and it has a tag of `<density>`
+ */
+static std::unique_ptr<FluidProperty> createLinearConcentrationDependentDensity(
+    BaseLib::ConfigTree const& config)
+{
+    //! \ogs_file_param{material__fluid__density__type}
+    config.checkConfigParameter("type", "ConcentrationDependent");
+
+    //! \ogs_file_param{material__fluid__density__ConcentrationDependent__rho0}
+    const double rho0 = config.getConfigParameter<double>("rho0");
+    //! \ogs_file_param{material__fluid__density__ConcentrationDependent__concentration0}
+    const double C0 = config.getConfigParameter<double>("concentration0");
+    //! \ogs_file_param{material__fluid__density__ConcentrationDependent__beta}
+    const double beta = config.getConfigParameter<double>("beta");
+    return std::unique_ptr<FluidProperty>(
+        new LinearConcentrationDependentDensity(rho0, C0, beta));
+}
+
 std::unique_ptr<FluidProperty> createFluidDensityModel(
     BaseLib::ConfigTree const& config)
 {
@@ -90,6 +112,8 @@ std::unique_ptr<FluidProperty> createFluidDensityModel(
         return createLiquidDensity(config);
     else if (type == "TemperatureDependent")
         return createLinearTemperatureDependentDensity(config);
+    else if (type == "ConcentrationDependent")
+        return createLinearConcentrationDependentDensity(config);
     else if (type == "IdealGasLaw")
     {
         //! \ogs_file_param{material__fluid__density__type}
@@ -108,8 +132,8 @@ std::unique_ptr<FluidProperty> createFluidDensityModel(
         OGS_FATAL(
             "The density type %s is unavailable.\n"
             "The available types are: \n\tConstant, \n\tLiquidDensity, "
-            "\n\tTemperatureDependent, \n\tIdealGasLaw."
-            "\n\tWaterDensityIAPWSIF97Region1\n",
+            "\n\tTemperatureDependent, \n\tConcentrationDependent,"
+            "\n\tIdealGasLaw, \n\tWaterDensityIAPWSIF97Region1\n",
             type.data());
     }
 }

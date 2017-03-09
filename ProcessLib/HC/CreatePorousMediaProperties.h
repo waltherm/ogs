@@ -1,18 +1,29 @@
 /**
+ * \file
+ *
  * \copyright
  * Copyright (c) 2012-2017, OpenGeoSys Community (http://www.opengeosys.org)
  *            Distributed under a Modified BSD License.
  *              See accompanying file LICENSE.txt or
  *              http://www.opengeosys.org/project/license
  *
- * File:   PorousPropertyHeaders.h
- *
- * Created on August 18, 2016, 11:12 AM
  */
 
 #pragma once
 
-#include "Permeability/createPermeabilityModel.h"
-#include "Porosity/createPorosityModel.h"
-#include "Tortuosity/createTortuosityModel.h"
-#include "Storage/createStorageModel.h"
+#include "BaseLib/ConfigTree.h"
+#include "PorousMediaProperties.h"
+
+namespace MeshLib
+{
+class Mesh;
+}
+
+namespace ProcessLib
+{
+namespace HC
+{
+PorousMediaProperties createPorousMediaProperties(
+    MeshLib::Mesh& mesh, BaseLib::ConfigTree const& porous_media_config);
+}
+}
