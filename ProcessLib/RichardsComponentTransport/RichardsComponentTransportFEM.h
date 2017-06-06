@@ -228,6 +228,7 @@ public:
                               .getCapillaryPressureSaturationModel(t, pos)
                               .getdPcdS(Sw)
                     : 0.;
+
             // \todo the first argument has to be changed for non constant
             // porosity model
             auto const porosity =
@@ -262,7 +263,6 @@ public:
             // Use the viscosity model to compute the viscosity
             auto const mu = _process_data.fluid_properties->getValue(
                 MaterialLib::Fluid::FluidPropertyType::Viscosity, vars);
-
             auto const K_times_k_rel_over_mu = K * (k_rel/mu);
 
             GlobalDimVectorType const velocity =
@@ -328,7 +328,6 @@ public:
 
         auto const mu = _process_data.fluid_properties->getValue(
             MaterialLib::Fluid::FluidPropertyType::Viscosity, vars);
-        GlobalDimMatrixType const K_over_mu = K / mu;
 
         unsigned const n_integration_points =
             _integration_method.getNumberOfPoints();
@@ -342,13 +341,28 @@ public:
             auto const& N = ip_data.N;
             auto const& dNdx = ip_data.dNdx;
 
-            GlobalDimVectorType velocity = -K_over_mu * dNdx * p_nodal_values;
+            double C_int_pt = 0.0;
+            double p_int_pt = 0.0;
+            NumLib::shapeFunctionInterpolate(local_x, N, C_int_pt, p_int_pt);
+
+            // saturation
+            double const pc_int_pt = -p_int_pt;
+            double const Sw =
+                (pc_int_pt > 0)
+                    ? _process_data.porous_media_properties
+                          .getCapillaryPressureSaturationModel(t, pos)
+                          .getSaturation(pc_int_pt)
+                    : 1.0;
+            _saturation[ip] = Sw;
+
+            auto const& k_rel = _process_data.porous_media_properties
+                                    .getRelativePermeability(t, pos)
+                                    .getValue(Sw);
+
+            // velocity
+            GlobalDimVectorType velocity = -dNdx * p_nodal_values;
             if (_process_data.has_gravity)
             {
-                double C_int_pt = 0.0;
-                double p_int_pt = 0.0;
-                NumLib::shapeFunctionInterpolate(local_x, N, C_int_pt,
-                                                 p_int_pt);
                 vars[static_cast<int>(
                     MaterialLib::Fluid::PropertyVariableType::C)] = C_int_pt;
                 vars[static_cast<int>(
@@ -358,8 +372,9 @@ public:
                     MaterialLib::Fluid::FluidPropertyType::Density, vars);
                 auto const b = _process_data.specific_body_force;
                 // here it is assumed that the vector b is directed 'downwards'
-                velocity += K_over_mu * rho_w * b;
+                velocity += rho_w * b;
             }
+            velocity = k_rel/mu * (K * velocity);
 
             for (unsigned d = 0; d < GlobalDim; ++d)
             {
