@@ -46,7 +46,10 @@ The figure below shows breakthrough curves vs experimental result at the bottom 
 
 It can be seen, that with decreasing saturation, breakthrough curves exhibit stronger dispersion through the decreased angle of the breakthrough curve. Both simulation results follow the experimental observations closely; deviations, especially in the unsaturated case, can be attributed to known tailing effects from secondary porosity.
 
+Here are digitized data from the [NaCl1](../../../../../Tests/Data/Parabolic/RichardsComponentTransport/Padilla_NaCl1_poreVolume-conc.csv) and [NaCl6](../../../../../Tests/Data/Parabolic/RichardsComponentTransport/Padilla_NaCl6_poreVolume-conc.csv) experiments and a [ParaView state file](../../../../../Tests/Data/Parabolic/RichardsComponentTransport/Padilla_state.pvsm) for comparison.
+
 
 ## References
 
 Padilla, I. Y., T.-C. J. Yeh, and M. H. Conklin (1999), The effect of water content on solute transport in unsaturated porous media, Water Resour. Res., 35(11), 3303–3313, doi:10.1029/1999WR900171.
+
