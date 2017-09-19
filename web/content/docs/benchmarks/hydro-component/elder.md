@@ -23,14 +23,14 @@ For the setup and parameterization, see the chapter "Density dependent flow - Th
 
 ## Problem description
 
-The Elder benchmark describes free convection of a dense fluid in mixable, single-phase environment. A high-concentration solute increases fluid density on the upper boundary and perpetrates the domain by evolving concentration fingers. Here, we compare numerical results of ogs6 to those of OGS5.
+The Elder benchmark describes free convection of a dense fluid in mixable, single-phase environment. A high-concentration solute increases fluid density on the upper boundary and perpetrates the domain by evolving concentration fingers. Here, we compare numerical results of OGS-6 to those of OGS-5. Settings of both simulators were chosen to be as identical as possible. Simulation times were $3300 s$ and $7800 s$ for OGS-6 and OGS-5, respectively.
 
 
 ### Model results
 
-A comparison of the numerical data is shown in the figure below. The numerical results of ogs6 coincide with those of OGS5.
+A comparison of the numerical data is shown in the figure below. The numerical results of OGS-6 coincide with those of OGS-5. 
 
-{{< img src="../gif/elder.png" title="Results for numerical (OGS5 - green, ogs6 - white) results together with concentration distribution in the domain and mesh resolution for different time steps.">}}
+{{< img src="../gif/elder.png" title="Results for numerical (OGS-5 - green, OGS-6 - white) results together with concentration distribution in the domain and mesh resolution for different time steps.">}}
 
 [The project files are here. ](../../../../../Tests/Data/Parabolic/ComponentTransport/elder)
 
