@@ -96,7 +96,7 @@
                 <convergence_criterion>
                     <type>DeltaX</type>
                     <norm_type>NORM2</norm_type>
-                    <reltol>1e-8</reltol>
+                    <reltol>1e-14</reltol>
                 </convergence_criterion>
                 <time_discretization>
                     <type>BackwardEuler</type>
@@ -114,12 +114,13 @@
             </process>
         </processes>
         <output>
-            <type>VTK</type>
-            <prefix>out_ex1</prefix>
+             <type>VTK</type>
+            <prefix>out_ex1_pcs_{:process_id}</prefix>
+            <suffix>_ts_{:timestep}_t_{:time}</suffix>
             <timesteps>
                 <pair>
                     <repeat>1</repeat>
-                    <each_steps>50</each_steps>
+                    <each_steps>35</each_steps>
                 </pair>
             </timesteps>
             <variables>
